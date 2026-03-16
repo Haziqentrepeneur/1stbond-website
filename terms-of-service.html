@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — 1STBOND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fafafa;
+      --bg-card: #f3f0fb;
+      --mint: #8a00d4;
+      --mint-bright: #a020f0;
+      --silver: #4a3f6b;
+      --muted: rgba(50,30,70,.60);
+      --cream: #1a0b2e;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: #fafafa; color: #1a0b2e; line-height: 1.7; min-height: 100vh; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.012'/%3E%3C/svg%3E");
+      background-size: 300px 300px; pointer-events: none; z-index: 0;
+    }
+    .grid-bg { position: fixed; inset: 0; background-image: none; pointer-events: none; z-index: 0; }
+    .ambient { position: fixed; pointer-events: none; z-index: 0; border-radius: 50%; filter: blur(110px); }
+    .ambient-1 { width: 700px; height: 700px; background: rgba(160,32,240,.08); top: -200px; right: -180px; }
+    .ambient-2 { width: 600px; height: 600px; background: rgba(120,0,200,.06); bottom: 5%; left: -120px; }
+    .ambient-3 { width: 400px; height: 400px; background: rgba(80,0,140,.04); top: 40%; left: 30%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 40px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(60,0,120,.30);
+      background: rgba(120,0,200,.97); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      flex-wrap: nowrap; min-width: 0;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      flex-shrink: 0; text-decoration: none;
+    }
+    .nav-logo-mark {
+      height: 48px;
+      width: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-logo-mark img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      mix-blend-mode: screen;
+      filter: brightness(1.6);
+    }
+    .nav-logo-name {
+      font-family: var(--font-display); font-weight: 800; font-size: 15px;
+      letter-spacing: .15em; color: #ffffff; white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 7px; flex-shrink: 0;
+      font-family: var(--font-display); font-size: 12px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+      color: rgba(255,255,255,.90); padding: 10px 20px; border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.40); background: rgba(255,255,255,.12); transition: all .22s;
+    }
+    .nav-back:hover { border-color: rgba(255,255,255,.70); background: rgba(255,255,255,.22); color: #ffffff; transform: translateY(-1px); }
+    .nav-back svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .nav-back-text { display: inline; }
+    @media (max-width: 480px) {
+      nav { padding: 0 16px; }
+      .nav-logo-name { display: none; }
+      .nav-back-text { display: none; }
+      .nav-back { padding: 10px 14px; gap: 0; }
+    }
+    @media (max-width: 860px) and (min-width: 481px) {
+      nav { padding: 0 24px; }
+      .nav-back { font-size: 11px; padding: 9px 16px; }
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      position: relative; z-index: 1; padding-top: 72px;
+      display: grid; grid-template-columns: 256px 1fr;
+      width: min(1180px, calc(100% - 48px)); margin: 0 auto; gap: 0 56px;
+    }
+
+    /* ── DOC HERO ── */
+    .doc-hero {
+      grid-column: 1 / -1; padding: 64px 0 48px;
+      border-bottom: 1px solid rgba(138,0,212,.15); margin-bottom: 56px;
+    }
+    .doc-label {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: .20em; text-transform: uppercase;
+      color: #8a00d4; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .doc-label::before { content: ''; width: 28px; height: 1px; background: #8a00d4; opacity: .5; }
+    .doc-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(38px, 4.5vw, 58px); line-height: 1.05; letter-spacing: -.01em; color: #1a0b2e; margin-bottom: 24px; }
+    .doc-meta { display: flex; gap: 28px; flex-wrap: wrap; }
+    .doc-meta-item { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: rgba(60,40,90,.60); }
+    .doc-meta-dot { width: 5px; height: 5px; border-radius: 50%; background: #8a00d4; opacity: .7; }
+
+    /* ── SIDEBAR / TOC ── */
+    .sidebar { position: sticky; top: 92px; align-self: start; height: calc(100vh - 112px); overflow-y: auto; padding-bottom: 40px; }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(138,0,212,.25); border-radius: 3px; }
+    .toc-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(80,55,110,.55); margin-bottom: 14px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+    .toc-list a { display: block; padding: 7px 12px; font-size: 13px; font-weight: 500; color: rgba(50,30,70,.65); border-radius: 8px; border-left: 2px solid transparent; transition: all .18s; line-height: 1.4; }
+    .toc-list a:hover { color: #1a0b2e; background: rgba(138,0,212,.06); border-left-color: rgba(138,0,212,.40); }
+    .toc-list a.active { color: #8a00d4; background: rgba(138,0,212,.08); border-left-color: #8a00d4; font-weight: 600; }
+
+    /* ── CONTENT ── */
+    .doc-content { padding-bottom: 100px; }
+    .doc-section { margin-bottom: 64px; scroll-margin-top: 96px; }
+    .section-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: #8a00d4; margin-bottom: 8px; display: block; opacity: .85; }
+    .section-heading { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 1.2; color: #1a0b2e; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(138,0,212,.12); }
+    .section-sub { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: #4a3f6b; margin: 28px 0 10px; letter-spacing: .02em; }
+
+    p { font-size: 15px; line-height: 1.75; color: rgba(40,25,65,.72); margin-bottom: 14px; }
+    p strong { color: #1a0b2e; font-weight: 600; }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: rgba(138,0,212,.05); border: 1px solid rgba(138,0,212,.18); border-left: 3px solid #8a00d4;
+      border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 20px 0;
+      font-size: 14px; color: rgba(40,25,65,.75); line-height: 1.65;
+    }
+    .highlight-box strong { color: #1a0b2e; font-weight: 700; }
+
+    /* ── DATA LIST ── */
+    .data-list { background: #ffffff; border: 1px solid rgba(138,0,212,.14); border-radius: 14px; overflow: hidden; margin: 16px 0; box-shadow: 0 2px 16px rgba(100,0,180,.07); }
+    .data-list-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 18px; border-bottom: 1px solid rgba(138,0,212,.08); font-size: 14px; color: rgba(40,25,65,.72); line-height: 1.55; }
+    .data-list-item:last-child { border-bottom: none; }
+    .data-list-item strong { color: #1a0b2e; font-weight: 600; }
+    .dot { width: 5px; height: 5px; border-radius: 50%; background: #8a00d4; flex-shrink: 0; margin-top: 8px; opacity: .85; }
+
+    /* ── SPLIT GRID ── */
+    .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+    .split-card { background: #ffffff; border: 1px solid rgba(138,0,212,.14); border-radius: 14px; padding: 20px 22px; box-shadow: 0 2px 16px rgba(100,0,180,.06); }
+    .split-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px; }
+    .split-label.yes { color: #8a00d4; }
+    .split-label.no  { color: #dc2626; }
+    .split-card ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .split-card ul li { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: rgba(40,25,65,.70); line-height: 1.5; }
+    .split-card ul li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+    .yes-card ul li::before { background: #8a00d4; }
+    .no-card  ul li::before { background: #dc2626; }
+
+    /* ── RETENTION TABLE ── */
+    .ret-table { width: 100%; border-collapse: collapse; background: #ffffff; border-radius: 14px; overflow: hidden; margin: 16px 0; border: 1px solid rgba(138,0,212,.14); box-shadow: 0 2px 16px rgba(100,0,180,.07); }
+    .ret-table th { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(80,55,110,.60); background: rgba(138,0,212,.05); padding: 13px 18px; text-align: left; border-bottom: 1px solid rgba(138,0,212,.10); }
+    .ret-table td { padding: 13px 18px; font-size: 13.5px; color: rgba(40,25,65,.70); border-bottom: 1px solid rgba(138,0,212,.07); vertical-align: top; line-height: 1.55; }
+    .ret-table tr:last-child td { border-bottom: none; }
+    .ret-table td:first-child { font-weight: 600; color: #1a0b2e; }
+
+    /* ── RIGHTS GRID ── */
+    .rights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+    .right-card { background: #ffffff; border: 1px solid rgba(138,0,212,.13); border-radius: 14px; padding: 18px 20px; box-shadow: 0 2px 12px rgba(100,0,180,.06); transition: border-color .2s, box-shadow .2s; }
+    .right-card:hover { border-color: rgba(138,0,212,.30); box-shadow: 0 4px 20px rgba(100,0,180,.10); }
+    .right-card-icon { width: 34px; height: 34px; border-radius: 10px; background: rgba(138,0,212,.08); border: 1px solid rgba(138,0,212,.18); display: grid; place-items: center; margin-bottom: 12px; }
+    .right-card-icon svg { width: 15px; height: 15px; color: #8a00d4; }
+    .right-card-title { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: #1a0b2e; margin-bottom: 5px; }
+    .right-card-desc { font-size: 12px; color: rgba(50,30,70,.62); line-height: 1.5; }
+
+    /* ── CONTACT CARD ── */
+    .contact-card { background: #ffffff; border: 1px solid rgba(138,0,212,.15); border-radius: 14px; padding: 24px 28px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 16px rgba(100,0,180,.07); margin-top: 16px; }
+    .contact-icon { width: 46px; height: 46px; border-radius: 13px; background: rgba(138,0,212,.08); border: 1px solid rgba(138,0,212,.18); display: grid; place-items: center; flex-shrink: 0; }
+    .contact-icon svg { width: 20px; height: 20px; color: #8a00d4; }
+    .contact-type { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(80,55,110,.60); margin-bottom: 5px; }
+    .contact-email { font-weight: 600; font-size: 15px; color: #1a0b2e; }
+    .contact-email a { color: #8a00d4; }
+    .contact-email a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    .doc-footer { border-top: 1px solid rgba(138,0,212,.12); padding: 40px 0 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; grid-column: 1 / -1; position: relative; z-index: 1; }
+    .doc-footer-copy { font-size: 12px; color: rgba(70,50,100,.55); letter-spacing: .04em; }
+    .doc-footer-links { display: flex; gap: 24px; }
+    .doc-footer-links a { font-size: 13px; font-weight: 500; color: rgba(70,50,100,.65); transition: color .2s; }
+    .doc-footer-links a:hover { color: #8a00d4; }
+
+    /* Tablet */
+    @media (max-width: 860px) {
+      .page-wrap { grid-template-columns: 1fr; gap: 0; }
+      .sidebar { display: none; }
+      .doc-hero { grid-column: 1; padding: 40px 0 32px; }
+      .doc-title { font-size: clamp(28px, 7vw, 44px); }
+      .split-grid, .rights-grid { grid-template-columns: 1fr 1fr; }
+      .doc-section { margin-bottom: 48px; }
+    }
+
+    /* Mobile */
+    @media (max-width: 520px) {
+      .page-wrap { width: calc(100% - 32px); padding-top: 72px; }
+      .doc-hero { padding: 28px 0 24px; margin-bottom: 32px; }
+      .doc-title { font-size: clamp(26px, 8vw, 36px); margin-bottom: 16px; }
+      .doc-meta { gap: 12px; flex-direction: column; }
+      .doc-meta-item { font-size: 11px; }
+      .section-heading { font-size: 18px; }
+      .section-sub { font-size: 13px; }
+      p { font-size: 14px; }
+      .split-grid, .rights-grid { grid-template-columns: 1fr; gap: 10px; }
+      .ret-table { font-size: 12px; }
+      .ret-table th, .ret-table td { padding: 10px 12px; font-size: 12px; }
+      .data-list-item { padding: 11px 14px; font-size: 13px; }
+      .highlight-box { padding: 14px 16px; font-size: 13px; }
+      .contact-card { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px; }
+      .doc-footer { flex-direction: column; align-items: flex-start; gap: 16px; padding: 28px 0 36px; }
+      .doc-footer-links { flex-wrap: wrap; gap: 16px; }
+      .doc-content { padding-bottom: 60px; }
+      .doc-section { margin-bottom: 40px; scroll-margin-top: 80px; }
+      .right-card { padding: 14px 16px; }
+      .split-card { padding: 16px 18px; }
+    }
+
+    /* Very small phones */
+    @media (max-width: 380px) {
+      .doc-title { font-size: 24px; }
+    }
+
+
+    /* ── CONTACT FORM ── */
+    .contact-form-wrap {
+      background: #ffffff;
+      border: 1px solid rgba(138,0,212,.16);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(100,0,180,.08);
+      margin-top: 24px;
+    }
+    .contact-form-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(138,0,212,.10);
+    }
+    .contact-form-icon {
+      width: 46px; height: 46px;
+      border-radius: 13px;
+      background: rgba(138,0,212,.08);
+      border: 1px solid rgba(138,0,212,.18);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .contact-form-icon svg { width: 20px; height: 20px; color: #8a00d4; }
+    .contact-form-title { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: #1a0b2e; }
+    .contact-form-subtitle { font-size: 13px; color: rgba(80,55,110,.60); margin-top: 2px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(80,55,110,.65);
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: #fafafa;
+      border: 1.5px solid rgba(138,0,212,.18);
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: #1a0b2e;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      resize: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(100,70,140,.35); }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #8a00d4;
+      box-shadow: 0 0 0 3px rgba(138,0,212,.10);
+      background: #ffffff;
+    }
+    .form-group textarea { min-height: 120px; line-height: 1.6; }
+
+    .form-submit {
+      width: 100%;
+      padding: 14px 24px;
+      background: #8a00d4;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .22s;
+      margin-top: 4px;
+      box-shadow: 0 4px 20px rgba(138,0,212,.25);
+    }
+    .form-submit:hover { background: #a020f0; box-shadow: 0 6px 28px rgba(138,0,212,.35); transform: translateY(-1px); }
+    .form-submit:active { transform: translateY(0); }
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 28px 20px;
+    }
+    .form-success-icon {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      background: rgba(138,0,212,.10);
+      border: 1px solid rgba(138,0,212,.22);
+      display: grid; place-items: center;
+      margin: 0 auto 16px;
+    }
+    .form-success-icon svg { width: 24px; height: 24px; color: #8a00d4; }
+    .form-success h3 { font-family: var(--font-display); font-weight: 800; font-size: 20px; color: #1a0b2e; margin-bottom: 8px; }
+    .form-success p { font-size: 14px; color: rgba(60,40,90,.65); margin: 0; }
+    @media (max-width: 520px) {
+      .contact-form-wrap { padding: 20px 16px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+    /* Jurisdiction pill */
+    .jurisdiction-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid rgba(138,0,212,.18);
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a0b2e;
+      box-shadow: 0 2px 12px rgba(100,0,180,.07);
+      margin-top: 4px;
+    }
+    .jurisdiction-pill svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: #8a00d4;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="ambient ambient-1" aria-hidden="true"></div>
+  <div class="ambient ambient-2" aria-hidden="true"></div>
+  <div class="ambient ambient-3" aria-hidden="true"></div>
+
+  <nav>
+    <a href="./index.html" class="nav-logo">
+      <div class="nav-logo-mark"><img src="./logo.png" alt="1STBOND" /></div>
+      <span class="nav-logo-name"><span style="font-size:1.2em;line-height:1;">1</span>STBOND</span>
+    </a>
+    <a href="./index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="nav-back-text">Back to Home</span>
+    </a>
+  </nav>
+
+  <div class="page-wrap">
+    <header class="doc-hero">
+      <div class="doc-label">Legal</div>
+      <h1 class="doc-title">Terms of Service</h1>
+      <div class="doc-meta">
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Effective: February 22, 2026</div>
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Revised: February 24, 2026</div>
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>1STBOND, LLC</div>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="toc-label">On this page</div>
+      <ul class="toc-list">
+        <li><a href="#acceptance">1. Acceptance of Terms</a></li>
+        <li><a href="#eligibility">2. Eligibility</a></li>
+        <li><a href="#verification">3. Identity Verification</a></li>
+        <li><a href="#biometric">4. Biometric Acknowledgment</a></li>
+        <li><a href="#payments">5. Marketplace Payments</a></li>
+        <li><a href="#risk">6. Assumption of Risk</a></li>
+        <li><a href="#panic">7. Panic Feature Disclaimer</a></li>
+        <li><a href="#conduct">8. User Conduct</a></li>
+        <li><a href="#admin">9. Administrative Authority</a></li>
+        <li><a href="#warranties">10. Disclaimer of Warranties</a></li>
+        <li><a href="#liability">11. Limitation of Liability</a></li>
+        <li><a href="#indemnification">12. Indemnification</a></li>
+        <li><a href="#arbitration">13. Arbitration &amp; Class Action Waiver</a></li>
+        <li><a href="#governing-law">14. Governing Law</a></li>
+        <li><a href="#general">15–17. General Provisions</a></li>
+      </ul>
+    </aside>
+
+    <main class="doc-content">
+      <section class="doc-section" id="acceptance">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Acceptance of Terms</h2>
+        <p>By accessing or using the 1STBOND mobile application and related services (the "Services"), you agree to be legally bound by these Terms of Service ("Terms"). These Terms constitute a binding agreement between you and 1STBOND, LLC ("1STBOND," "we," "our," or "us").</p>
+        <div class="warning-box"><strong>If you do not agree, you must not use the Services.</strong></div>
+      </section>
+
+      <section class="doc-section" id="eligibility">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Eligibility</h2>
+        <p>To use the Services, you must meet all of the following requirements:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>Be at least 16 years of age</div>
+          <div class="data-list-item"><span class="dot"></span>Have the legal capacity to enter into a binding agreement</div>
+          <div class="data-list-item"><span class="dot"></span>Provide accurate information</div>
+          <div class="data-list-item"><span class="dot"></span>Complete required identity verification</div>
+          <div class="data-list-item"><span class="dot"></span>Not be previously suspended or banned from the Services</div>
+        </div>
+        <p>If you are under 16, you represent that you have parental or legal guardian consent where required by law. This requires the parent or legal guardian to also agree to these Terms and the Privacy Policy.</p>
+      </section>
+
+      <section class="doc-section" id="verification">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Identity Verification</h2>
+        <p>Participation in meetups and certain payment features requires:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>Submission of government-issued identification</div>
+          <div class="data-list-item"><span class="dot"></span>Completion of meetup-time face verification</div>
+          <div class="data-list-item"><span class="dot"></span>Explicit consent from both parties</div>
+        </div>
+        <div class="highlight-box"><strong>Verification confirms identity at the time of verification only</strong> — it does not guarantee behavior, character, or safety. 1STBOND reserves the right to approve, deny, suspend, or revoke verification at its discretion.</div>
+      </section>
+
+      <section class="doc-section" id="biometric">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Biometric Acknowledgment</h2>
+        <p>By submitting identity verification materials, including facial images, you acknowledge and consent to the use of facial comparison technology for identity verification and fraud prevention purposes, as described in our Privacy Policy.</p>
+        <div class="highlight-box"><strong>1STBOND does not sell biometric data</strong> and does not use biometric data for advertising or profiling.</div>
+      </section>
+
+      <section class="doc-section" id="payments">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Marketplace Payments (Stripe Connect)</h2>
+        <div class="section-sub">A. Payment Processing</div>
+        <p>1STBOND enables peer-to-peer payments through Stripe Connect. All payment processing, fund holding, KYC verification, AML compliance, chargeback handling, and payout processing are conducted by Stripe or its affiliated financial institutions. 1STBOND does not hold user funds, operate as a bank, act as a money transmitter, or provide custodial wallet services.</p>
+
+        <div class="section-sub">B. User Responsibility</div>
+        <p>Users are solely responsible for the accuracy of payment amounts, compliance with applicable laws, ensuring payment recipient accuracy, and any taxes arising from transactions. 1STBOND is not responsible for payment disputes between users.</p>
+
+        <div class="section-sub">C. Application Fees</div>
+        <p>1STBOND may charge service or application fees on transactions. Fees will be disclosed prior to transaction confirmation.</p>
+
+        <div class="section-sub">D. Disputes &amp; Chargebacks</div>
+        <p>Payment disputes, chargebacks, and reversals are handled according to Stripe's policies and applicable card network rules. 1STBOND may deduct chargeback amounts or fees from payouts where permitted.</p>
+
+        <div class="section-sub">E. Refunds</div>
+        <p>Refunds are subject to Stripe's policies and may be granted at our discretion or where required by law.</p>
+      </section>
+
+      <section class="doc-section" id="risk">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Assumption of Risk</h2>
+        <p>Users acknowledge that in-person interactions involve inherent risks including fraud, misconduct, personal injury, or criminal activity.</p>
+        <div class="warning-box"><strong>You voluntarily assume all risks</strong> associated with real-world meetups and related transactions. 1STBOND provides safety tools but cannot guarantee outcomes.</div>
+      </section>
+
+      <section class="doc-section" id="panic">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Panic Feature Disclaimer</h2>
+        <p>1STBOND provides safety notification tools only. We are not law enforcement, an emergency dispatch provider, or a crisis response organization. We do not guarantee delivery of notifications or intervention outcomes.</p>
+        <div class="warning-box"><strong>For emergencies, contact 911 or your local authorities immediately.</strong> The panic feature is a supplemental safety tool, not a replacement for emergency services.</div>
+      </section>
+
+      <section class="doc-section" id="conduct">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">User Conduct</h2>
+        <p>You agree not to engage in any of the following:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot red"></span>Submit fraudulent identification</div>
+          <div class="data-list-item"><span class="dot red"></span>Engage in illegal activity</div>
+          <div class="data-list-item"><span class="dot red"></span>Use payments for unlawful purposes</div>
+          <div class="data-list-item"><span class="dot red"></span>Misuse the panic system</div>
+          <div class="data-list-item"><span class="dot red"></span>Interfere with platform operations</div>
+          <div class="data-list-item"><span class="dot red"></span>Circumvent verification systems</div>
+        </div>
+        <p>Violation may result in account suspension or permanent termination.</p>
+      </section>
+
+      <section class="doc-section" id="admin">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Administrative Authority</h2>
+        <p>1STBOND reserves the right to:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>Suspend or terminate accounts</div>
+          <div class="data-list-item"><span class="dot"></span>Remove meetups or transactions</div>
+          <div class="data-list-item"><span class="dot"></span>Retain incident records</div>
+          <div class="data-list-item"><span class="dot"></span>Cooperate with law enforcement</div>
+          <div class="data-list-item"><span class="dot"></span>Freeze access pending investigation</div>
+        </div>
+        <p>We are not obligated to monitor activity but may do so at our discretion.</p>
+      </section>
+
+      <section class="doc-section" id="warranties">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Disclaimer of Warranties</h2>
+        <p>The Services are provided <strong>"AS IS"</strong> and <strong>"AS AVAILABLE."</strong></p>
+        <div class="warning-box">We disclaim all warranties including merchantability, fitness for a particular purpose, and non-infringement. We do not guarantee uninterrupted or error-free service.</div>
+      </section>
+
+      <section class="doc-section" id="liability">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Limitation of Liability</h2>
+        <p>To the fullest extent permitted by law, 1STBOND is not liable for user conduct, in-person interactions, criminal acts, payment disputes, chargebacks, financial losses, or indirect or consequential damages.</p>
+        <p>In no event shall total liability exceed the greater of:</p>
+        <div class="cap-card">
+          <div class="cap-label">Maximum Liability Cap</div>
+          <div class="cap-amount">$100 USD</div>
+          <div class="cap-sub">or the amount paid to 1STBOND in the prior 12 months, whichever is greater.</div>
+        </div>
+      </section>
+
+      <section class="doc-section" id="indemnification">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Indemnification</h2>
+        <p>You agree to indemnify and hold harmless 1STBOND and its affiliates from claims arising from:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>Your conduct on or off the platform</div>
+          <div class="data-list-item"><span class="dot"></span>Your misuse of the Services</div>
+          <div class="data-list-item"><span class="dot"></span>Your violation of applicable law</div>
+          <div class="data-list-item"><span class="dot"></span>Payment disputes or fraud involving your account</div>
+        </div>
+      </section>
+
+      <section class="doc-section" id="arbitration">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Arbitration &amp; Class Action Waiver</h2>
+        <p>All disputes shall be resolved through binding arbitration on an individual basis.</p>
+        <div class="warning-box"><strong>You waive the right to participate in class actions.</strong> Small claims court claims are permitted where applicable.</div>
+      </section>
+
+      <section class="doc-section" id="governing-law">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Governing Law</h2>
+        <p>These Terms are governed by the laws of:</p>
+        <div class="jurisdiction-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          State of Colorado, United States
+        </div>
+      </section>
+
+      <section class="doc-section" id="general">
+        <span class="section-num">15–17</span>
+        <h2 class="section-heading">General Provisions</h2>
+        <div class="section-sub">Severability</div>
+        <p>If any provision of these Terms is found unenforceable, the remainder continues in full force and effect.</p>
+        <div class="section-sub">Assignment</div>
+        <p>1STBOND may assign these Terms without restriction. Users may not assign rights or obligations without prior written consent from 1STBOND.</p>
+        <div class="section-sub">Modifications</div>
+        <p>We may update these Terms at any time. Continued use of the Services after changes are posted constitutes acceptance of the updated Terms.</p>
+        <div class="section-sub">Questions?</div>
+        <p>Send us a message and we'll get back to you.</p>
+        <div class="contact-form-wrap">
+          <div class="contact-form-header">
+            <div class="contact-form-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="contact-form-title">Get in Touch</div>
+              <div class="contact-form-subtitle">We'll respond to admin@1st-bond.com</div>
+            </div>
+          </div>
+
+          <div id="contactSuccess" class="form-success">
+            <div class="form-success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Message Sent!</h3>
+            <p>Thanks for reaching out. We'll get back to you shortly.</p>
+          </div>
+
+          <form id="contactForm" onsubmit="submitContactForm(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cf-name">Your Name</label>
+                <input type="text" id="cf-name" name="name" placeholder="John Doe" required />
+              </div>
+              <div class="form-group">
+                <label for="cf-email">Your Email</label>
+                <input type="email" id="cf-email" name="email" placeholder="you@example.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cf-subject">Subject</label>
+              <select id="cf-subject" name="subject">
+                <option value="General Question">General Question</option>
+                <option value="Privacy Request">Privacy Request</option>
+                <option value="Legal Inquiry">Legal Inquiry</option>
+                <option value="Account Issue">Account Issue</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" placeholder="Tell us how we can help..." required></textarea>
+            </div>
+            <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+          </form>
+        </div>
+
+        <script>
+        function submitContactForm(e) {
+          e.preventDefault();
+          var btn = document.getElementById('submitBtn');
+          btn.textContent = 'Sending...';
+          btn.disabled = true;
+
+          var name    = document.getElementById('cf-name').value;
+          var email   = document.getElementById('cf-email').value;
+          var subject = document.getElementById('cf-subject').value;
+          var message = document.getElementById('cf-message').value;
+
+          fetch('https://formsubmit.co/ajax/admin@1st-bond.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              name: name,
+              email: email,
+              subject: '1STBOND Website — ' + subject,
+              message: message,
+              _captcha: 'false'
+            })
+          })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            document.getElementById('contactForm').style.display = 'none';
+            document.getElementById('contactSuccess').style.display = 'block';
+          })
+          .catch(function() {
+            // Fallback to mailto if fetch fails
+            var mailto = 'mailto:admin@1st-bond.com?subject=' + encodeURIComponent('1STBOND — ' + subject) + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+            window.location.href = mailto;
+            btn.textContent = 'Send Message';
+            btn.disabled = false;
+          });
+        }
+        </script>
+      </section>
+    </main>
+
+    <footer class="doc-footer">
+      <span class="doc-footer-copy">© 2026 1STBOND, LLC. All rights reserved.</span>
+      <div class="doc-footer-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./terms-of-service.html">Terms of Service</a>
+        <a href="#general" onclick="event.preventDefault(); document.getElementById('general').scrollIntoView({behavior:'smooth'})">Contact Us</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('.doc-section');
+    const links = document.querySelectorAll('.toc-list a');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+          const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+          if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
