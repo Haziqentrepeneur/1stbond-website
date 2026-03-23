@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — 1STBOND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #faf9f7;
+      --bg-card: #f5f4f1;
+      --mint: #8a00d4;
+      --mint-bright: #a020f0;
+      --silver: #4a3f6b;
+      --muted: rgba(50,30,70,.60);
+      --cream: #1a0b2e;
+      --font-display: 'Inter', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: #faf9f7; color: #1a0b2e; line-height: 1.7; min-height: 100vh; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.012'/%3E%3C/svg%3E");
+      background-size: 300px 300px; pointer-events: none; z-index: 0;
+    }
+    .grid-bg { position: fixed; inset: 0; background-image: none; pointer-events: none; z-index: 0; }
+    .ambient { position: fixed; pointer-events: none; z-index: 0; border-radius: 50%; filter: blur(110px); }
+    .ambient-1 { width: 700px; height: 700px; background: rgba(200,195,185,.08); top: -200px; right: -180px; }
+    .ambient-2 { width: 600px; height: 600px; background: rgba(200,195,185,.06); bottom: 5%; left: -120px; }
+    .ambient-3 { width: 400px; height: 400px; background: rgba(200,195,185,.04); top: 40%; left: 30%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 40px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(0,0,0,.10);
+      background: #e8e6e1; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      flex-wrap: nowrap; min-width: 0;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      flex-shrink: 0; text-decoration: none;
+    }
+    .nav-logo-mark {
+      height: 42px;
+      width: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: visible;
+    }
+    .nav-logo-mark img {
+      height: 110px;
+      width: 110px;
+      max-width: none;
+      object-fit: contain;
+      mix-blend-mode: normal;
+      filter: none;
+    }
+    .nav-logo-name {
+      font-family: var(--font-display); font-weight: 800; font-size: 15px;
+      letter-spacing: .15em; color: #1a0b2e; white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 7px; flex-shrink: 0;
+      font-family: var(--font-display); font-size: 12px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+      color: #8a00d4; padding: 10px 20px; border-radius: 999px;
+      border: 2px solid rgba(138,0,212,.40); background: transparent; transition: all .22s;
+    }
+    .nav-back:hover { border-color: #a020f0; background: rgba(160,32,240,.08); color: #7000b8; transform: translateY(-1px); }
+    .nav-back svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .nav-back-text { display: inline; }
+    @media (max-width: 480px) {
+      nav { padding: 0 16px; }
+      .nav-logo-name { display: none; }
+      .nav-back-text { display: none; }
+      .nav-back { padding: 10px 14px; gap: 0; }
+    }
+    @media (max-width: 860px) and (min-width: 481px) {
+      nav { padding: 0 24px; }
+      .nav-back { font-size: 11px; padding: 9px 16px; }
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      position: relative; z-index: 1; padding-top: 72px;
+      display: grid; grid-template-columns: 256px 1fr;
+      width: min(1180px, calc(100% - 48px)); margin: 0 auto; gap: 0 56px;
+    }
+
+    /* ── DOC HERO ── */
+    .doc-hero {
+      grid-column: 1 / -1; padding: 64px 0 48px;
+      border-bottom: 1px solid rgba(138,0,212,.15); margin-bottom: 56px;
+    }
+    .doc-label {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: .20em; text-transform: uppercase;
+      color: #8a00d4; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
+    }
+    .doc-label::before { content: ''; width: 28px; height: 1px; background: #8a00d4; opacity: .5; }
+    .doc-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(38px, 4.5vw, 58px); line-height: 1.05; letter-spacing: -.03em; color: #1a0b2e; margin-bottom: 24px; }
+    .doc-meta { display: flex; gap: 28px; flex-wrap: wrap; }
+    .doc-meta-item { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: rgba(60,40,90,.60); }
+    .doc-meta-dot { width: 5px; height: 5px; border-radius: 50%; background: #8a00d4; opacity: .7; }
+
+    /* ── SIDEBAR / TOC ── */
+    .sidebar { position: sticky; top: 92px; align-self: start; height: calc(100vh - 112px); overflow-y: auto; padding-bottom: 40px; }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(138,0,212,.25); border-radius: 3px; }
+    .toc-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(80,55,110,.55); margin-bottom: 14px; }
+    .toc-list { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+    .toc-list a { display: block; padding: 7px 12px; font-size: 13px; font-weight: 500; color: rgba(50,30,70,.65); border-radius: 8px; border-left: 2px solid transparent; transition: all .18s; line-height: 1.4; }
+    .toc-list a:hover { color: #1a0b2e; background: rgba(138,0,212,.06); border-left-color: rgba(138,0,212,.40); }
+    .toc-list a.active { color: #8a00d4; background: rgba(245,244,241,.80); border-left-color: #8a00d4; font-weight: 600; }
+
+    /* ── CONTENT ── */
+    .doc-content { padding-bottom: 100px; }
+    .doc-section { margin-bottom: 64px; scroll-margin-top: 96px; }
+    .section-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; color: #8a00d4; margin-bottom: 8px; display: block; opacity: .85; }
+    .section-heading { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 1.2; color: #1a0b2e; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(138,0,212,.12); }
+    .section-sub { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: #4a3f6b; margin: 28px 0 10px; letter-spacing: .02em; }
+
+    p { font-size: 15px; line-height: 1.75; color: rgba(40,25,65,.72); margin-bottom: 14px; }
+    p strong { color: #1a0b2e; font-weight: 600; }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: rgba(138,0,212,.05); border: 1px solid rgba(138,0,212,.18); border-left: 3px solid #8a00d4;
+      border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 20px 0;
+      font-size: 14px; color: rgba(40,25,65,.75); line-height: 1.65;
+    }
+    .highlight-box strong { color: #1a0b2e; font-weight: 700; }
+
+    /* ── DATA LIST ── */
+    .data-list { background: #f5f4f1; border: 1px solid rgba(138,0,212,.14); border-radius: 14px; overflow: hidden; margin: 16px 0; box-shadow: 0 2px 16px rgba(100,0,180,.07); }
+    .data-list-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 18px; border-bottom: 1px solid rgba(138,0,212,.08); font-size: 14px; color: rgba(40,25,65,.72); line-height: 1.55; }
+    .data-list-item:last-child { border-bottom: none; }
+    .data-list-item strong { color: #1a0b2e; font-weight: 600; }
+    .dot { width: 5px; height: 5px; border-radius: 50%; background: #8a00d4; flex-shrink: 0; margin-top: 8px; opacity: .85; }
+
+    /* ── SPLIT GRID ── */
+    .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+    .split-card { background: #f5f4f1; border: 1px solid rgba(138,0,212,.14); border-radius: 14px; padding: 20px 22px; box-shadow: 0 2px 16px rgba(100,0,180,.06); }
+    .split-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px; }
+    .split-label.yes { color: #8a00d4; }
+    .split-label.no  { color: #dc2626; }
+    .split-card ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .split-card ul li { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: rgba(40,25,65,.70); line-height: 1.5; }
+    .split-card ul li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+    .yes-card ul li::before { background: #8a00d4; }
+    .no-card  ul li::before { background: #dc2626; }
+
+    /* ── RETENTION TABLE ── */
+    .ret-table { width: 100%; border-collapse: collapse; background: #f5f4f1; border-radius: 14px; overflow: hidden; margin: 16px 0; border: 1px solid rgba(138,0,212,.14); box-shadow: 0 2px 16px rgba(100,0,180,.07); }
+    .ret-table th { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(80,55,110,.60); background: rgba(138,0,212,.05); padding: 13px 18px; text-align: left; border-bottom: 1px solid rgba(138,0,212,.10); }
+    .ret-table td { padding: 13px 18px; font-size: 13.5px; color: rgba(40,25,65,.70); border-bottom: 1px solid rgba(138,0,212,.07); vertical-align: top; line-height: 1.55; }
+    .ret-table tr:last-child td { border-bottom: none; }
+    .ret-table td:first-child { font-weight: 600; color: #1a0b2e; }
+
+    /* ── RIGHTS GRID ── */
+    .rights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+    .right-card { background: #f5f4f1; border: 1px solid rgba(138,0,212,.13); border-radius: 14px; padding: 18px 20px; box-shadow: 0 2px 12px rgba(100,0,180,.06); transition: border-color .2s, box-shadow .2s; }
+    .right-card:hover { border-color: rgba(138,0,212,.30); box-shadow: 0 4px 20px rgba(100,0,180,.10); }
+    .right-card-icon { width: 34px; height: 34px; border-radius: 10px; background: rgba(245,244,241,.80); border: 1px solid rgba(138,0,212,.18); display: grid; place-items: center; margin-bottom: 12px; }
+    .right-card-icon svg { width: 15px; height: 15px; color: #8a00d4; }
+    .right-card-title { font-family: var(--font-display); font-weight: 700; font-size: 13px; color: #1a0b2e; margin-bottom: 5px; }
+    .right-card-desc { font-size: 12px; color: rgba(50,30,70,.62); line-height: 1.5; }
+
+    /* ── CONTACT CARD ── */
+    .contact-card { background: #f5f4f1; border: 1px solid rgba(138,0,212,.15); border-radius: 14px; padding: 24px 28px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 16px rgba(100,0,180,.07); margin-top: 16px; }
+    .contact-icon { width: 46px; height: 46px; border-radius: 13px; background: rgba(245,244,241,.80); border: 1px solid rgba(138,0,212,.18); display: grid; place-items: center; flex-shrink: 0; }
+    .contact-icon svg { width: 20px; height: 20px; color: #8a00d4; }
+    .contact-type { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(80,55,110,.60); margin-bottom: 5px; }
+    .contact-email { font-weight: 600; font-size: 15px; color: #1a0b2e; }
+    .contact-email a { color: #8a00d4; }
+    .contact-email a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    .doc-footer { border-top: 1px solid rgba(138,0,212,.12); padding: 40px 0 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; grid-column: 1 / -1; position: relative; z-index: 1; }
+    .doc-footer-copy { font-size: 12px; color: rgba(70,50,100,.55); letter-spacing: .04em; }
+    .doc-footer-links { display: flex; gap: 24px; }
+    .doc-footer-links a { font-size: 13px; font-weight: 500; color: rgba(70,50,100,.65); transition: color .2s; }
+    .doc-footer-links a:hover { color: #8a00d4; }
+
+    /* Tablet */
+
+    /* ── CONTACT FORM ── */
+    .contact-form-wrap {
+      background: #f5f4f1;
+      border: 1px solid rgba(138,0,212,.16);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(100,0,180,.08);
+      margin-top: 24px;
+    }
+    .contact-form-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(138,0,212,.10);
+    }
+    .contact-form-icon {
+      width: 46px; height: 46px;
+      border-radius: 13px;
+      background: rgba(245,244,241,.80);
+      border: 1px solid rgba(138,0,212,.18);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .contact-form-icon svg { width: 20px; height: 20px; color: #8a00d4; }
+    .contact-form-title { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: #1a0b2e; }
+    .contact-form-subtitle { font-size: 13px; color: rgba(80,55,110,.60); margin-top: 2px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(80,55,110,.65);
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: #faf9f7;
+      border: 1.5px solid rgba(138,0,212,.18);
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: #1a0b2e;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      resize: none;
+    }
+    .form-group select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a00d4' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    .form-group select option {
+      background: #f5f4f1;
+      color: #1a0b2e;
+      font-family: var(--font-body);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(100,70,140,.35); }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #8a00d4;
+      box-shadow: 0 0 0 3px rgba(138,0,212,.10);
+      background: #ffffff;
+    }
+    /* ── CUSTOM DROPDOWN ── */
+    .custom-select-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .custom-select-trigger {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      background: #faf9f7;
+      border: 1.5px solid rgba(138,0,212,.18);
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: #1a0b2e;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color .2s, box-shadow .2s;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    .custom-select-wrap.open .custom-select-trigger {
+      border-color: #8a00d4;
+      box-shadow: 0 0 0 3px rgba(138,0,212,.10);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .custom-select-chevron {
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      transition: transform .2s;
+      color: #8a00d4;
+    }
+    .custom-select-wrap.open .custom-select-chevron { transform: rotate(180deg); }
+    .custom-select-options {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      background: #faf9f7;
+      border: 1.5px solid #8a00d4;
+      border-top: none;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      overflow: hidden;
+      z-index: 50;
+      box-shadow: 0 8px 24px rgba(138,0,212,.12);
+    }
+    .custom-select-wrap.open .custom-select-options { display: block; }
+    .custom-select-option {
+      padding: 11px 16px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: #1a0b2e;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      border-bottom: 1px solid rgba(138,0,212,.08);
+    }
+    .custom-select-option:last-child { border-bottom: none; }
+    .custom-select-option:hover { background: rgba(138,0,212,.07); color: #8a00d4; }
+    .custom-select-option.selected { color: #8a00d4; font-weight: 600; background: rgba(138,0,212,.05); }
+    .form-group textarea { min-height: 120px; line-height: 1.6; }
+
+    .form-submit {
+      width: 100%;
+      padding: 14px 24px;
+      background: #8a00d4;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .22s;
+      margin-top: 4px;
+      box-shadow: 0 4px 20px rgba(138,0,212,.25);
+    }
+    .form-submit:hover { background: #a020f0; box-shadow: 0 6px 28px rgba(138,0,212,.35); transform: translateY(-1px); }
+    .form-submit:active { transform: translateY(0); }
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 28px 20px;
+    }
+    .form-success-icon {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      background: rgba(240,239,236,.90);
+      border: 1px solid rgba(138,0,212,.22);
+      display: grid; place-items: center;
+      margin: 0 auto 16px;
+    }
+    .form-success-icon svg { width: 24px; height: 24px; color: #8a00d4; }
+    .form-success h3 { font-family: var(--font-display); font-weight: 800; font-size: 20px; color: #1a0b2e; margin-bottom: 8px; }
+    .form-success p { font-size: 14px; color: rgba(60,40,90,.65); margin: 0; }
+    @media (max-width: 520px) {
+      .contact-form-wrap { padding: 20px 16px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+    @media (max-width: 860px) {
+      .page-wrap { grid-template-columns: 1fr; gap: 0; }
+      .sidebar { display: none; }
+      .doc-hero { grid-column: 1; padding: 40px 0 32px; }
+      .doc-title { font-size: clamp(28px, 7vw, 44px); }
+      .split-grid, .rights-grid { grid-template-columns: 1fr 1fr; }
+      .doc-section { margin-bottom: 48px; }
+    }
+
+    /* Mobile */
+    @media (max-width: 520px) {
+      .page-wrap { width: calc(100% - 32px); padding-top: 72px; }
+      .doc-hero { padding: 28px 0 24px; margin-bottom: 32px; }
+      .doc-title { font-size: clamp(26px, 8vw, 36px); margin-bottom: 16px; }
+      .doc-meta { gap: 12px; flex-direction: column; }
+      .doc-meta-item { font-size: 11px; }
+      .section-heading { font-size: 18px; }
+      .section-sub { font-size: 13px; }
+      p { font-size: 14px; }
+      .split-grid, .rights-grid { grid-template-columns: 1fr; gap: 10px; }
+      .ret-table { font-size: 12px; }
+      .ret-table th, .ret-table td { padding: 10px 12px; font-size: 12px; }
+      .data-list-item { padding: 11px 14px; font-size: 13px; }
+      .highlight-box { padding: 14px 16px; font-size: 13px; }
+      .contact-card { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px; }
+      .doc-footer { flex-direction: column; align-items: flex-start; gap: 16px; padding: 28px 0 36px; }
+      .doc-footer-links { flex-wrap: wrap; gap: 16px; }
+      .doc-content { padding-bottom: 60px; }
+      .doc-section { margin-bottom: 40px; scroll-margin-top: 80px; }
+      .right-card { padding: 14px 16px; }
+      .split-card { padding: 16px 18px; }
+    }
+
+    /* Very small phones */
+    @media (max-width: 380px) {
+      .doc-title { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="ambient ambient-1" aria-hidden="true"></div>
+  <div class="ambient ambient-2" aria-hidden="true"></div>
+  <div class="ambient ambient-3" aria-hidden="true"></div>
+
+  <nav>
+    <a href="./index.html" class="nav-logo">
+      <div class="nav-logo-mark"><img src="./logo.png" alt="1STBOND" /></div>
+      <span class="nav-logo-name"><span style="font-size:1.2em;line-height:1;">1</span>STBOND</span>
+    </a>
+    <a href="./index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="nav-back-text">Back to Home</span>
+    </a>
+  </nav>
+
+  <div class="page-wrap">
+    <header class="doc-hero">
+      <div class="doc-label">Legal</div>
+      <h1 class="doc-title">Privacy Policy</h1>
+      <div class="doc-meta">
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Effective: February 22, 2026</div>
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Revised: February 24, 2026</div>
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>1STBOND, LLC</div>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <div class="toc-label">On this page</div>
+      <ul class="toc-list">
+        <li><a href="#intro">1. Introduction</a></li>
+        <li><a href="#collection">2. Information We Collect</a></li>
+        <li><a href="#use">3. How We Use Information</a></li>
+        <li><a href="#legal-bases">4. Legal Bases for Processing</a></li>
+        <li><a href="#sharing">5. How We Share Information</a></li>
+        <li><a href="#retention">6. Data Retention</a></li>
+        <li><a href="#security">7. Security</a></li>
+        <li><a href="#rights">8. Your Rights</a></li>
+        <li><a href="#us-rights">9. U.S. State Privacy Rights</a></li>
+        <li><a href="#international">10. International Users</a></li>
+        <li><a href="#children">11. Children</a></li>
+        <li><a href="#changes">12. Changes</a></li>
+        <li><a href="#contact">13. Contact</a></li>
+      </ul>
+    </aside>
+
+    <main class="doc-content">
+      <section class="doc-section" id="intro">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Introduction</h2>
+        <p>1STBOND, LLC ("1STBOND," "we," "our," or "us") provides a mobile-first safety platform that enables identity-verified real-world meetups, safety monitoring, emergency escalation tools, and peer-to-peer payment functionality (the "Services").</p>
+        <p>This Privacy Policy explains how we collect, use, process, disclose, retain, and protect personal information. 1STBOND, LLC is the data controller for personal information processed under this Privacy Policy unless otherwise stated.</p>
+        <div class="highlight-box"><strong>By using the Services, you agree to this Privacy Policy.</strong> If you do not agree, please do not use the Services.</div>
+      </section>
+
+      <section class="doc-section" id="collection">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Information We Collect</h2>
+        <div class="section-sub">A. Information You Provide</div>
+        <p>We collect information you provide directly to us, including:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>Name, email address, and phone number</div>
+          <div class="data-list-item"><span class="dot"></span>Account credentials</div>
+          <div class="data-list-item"><span class="dot"></span>Meetup details (time, location label, notes)</div>
+          <div class="data-list-item"><span class="dot"></span>Emergency contact information</div>
+          <div class="data-list-item"><span class="dot"></span>Consent confirmations</div>
+          <div class="data-list-item"><span class="dot"></span>Customer support communications</div>
+        </div>
+        <p>You are responsible for ensuring emergency contacts consent to being listed.</p>
+
+        <div class="section-sub">B. Identity &amp; Verification Information (Mandatory)</div>
+        <p>To participate in meetups or certain payment features, users must submit:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>Government-issued identification images</div>
+          <div class="data-list-item"><span class="dot"></span>Identity selfie</div>
+          <div class="data-list-item"><span class="dot"></span>Meetup-time selfie during verification window</div>
+        </div>
+        <p>Identity verification may involve automated facial comparison technology and/or review by authorized personnel. Processing includes validating government-issued ID authenticity, comparing facial geometry between ID and selfie, and fraud detection.</p>
+        <div class="highlight-box">Identity data is processed solely for <strong>identity confirmation</strong>, <strong>fraud prevention</strong>, and <strong>safety enforcement</strong>.</div>
+
+        <div class="section-sub">C. Biometric &amp; Facial Verification</div>
+        <p>Facial comparison technology is used to confirm identity at the time of verification.</p>
+        <div class="split-grid">
+          <div class="split-card yes-card">
+            <div class="split-label yes">We do</div>
+            <ul>
+              <li>Use facial data for identity verification</li>
+              <li>Use facial data for safety enforcement</li>
+              <li>Obtain consent where required by biometric privacy laws</li>
+            </ul>
+          </div>
+          <div class="split-card no-card">
+            <div class="split-label no">We never</div>
+            <ul>
+              <li>Sell biometric identifiers</li>
+              <li>Use facial data for advertising</li>
+              <li>Use facial data for behavioral profiling</li>
+              <li>Use facial data to train AI systems</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-sub">D. Marketplace &amp; Payment Information</div>
+        <p>1STBOND enables peer-to-peer payments through Stripe Connect. Payment credentials are processed directly by Stripe — we do not store full credit card numbers, bank account numbers, or CVV codes. We may collect transaction amounts, timestamps, status, application fee amounts, and partial payment identifiers.</p>
+        <div class="highlight-box"><strong>Stripe acts as an independent payment processor</strong> and may act as a separate data controller under its own privacy policy. Users must review Stripe's privacy policy when using payment features.</div>
+
+        <div class="section-sub">E. Safety Monitoring Information</div>
+        <p>During active meetup windows, we collect check-in responses, completion confirmations, monitoring state transitions, and incident classification records. Unresolved meetups may generate safety incident records.</p>
+
+        <div class="section-sub">F. Location Information (Opt-In)</div>
+        <p>Location data is collected only during active meetup windows, only with operating system permission, and only when enabled by the user. Users may disable location sharing at any time. Default retention is 24–72 hours; extended retention applies if tied to an incident or required by law.</p>
+
+        <div class="section-sub">G. Automatically Collected Information</div>
+        <p>We may collect device type, operating system, app version, IP address, log data, and crash diagnostics — used for fraud prevention, performance monitoring, and security.</p>
+
+        <div class="section-sub">H. Tracking &amp; Analytics</div>
+        <p>We may use limited analytics tools for performance and reliability. We do not use personal information for third-party behavioral advertising and we do not sell personal information.</p>
+      </section>
+
+      <section class="doc-section" id="use">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">How We Use Information</h2>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>Verify identity</div>
+          <div class="data-list-item"><span class="dot"></span>Enforce safety protocols</div>
+          <div class="data-list-item"><span class="dot"></span>Facilitate marketplace payments</div>
+          <div class="data-list-item"><span class="dot"></span>Prevent fraud</div>
+          <div class="data-list-item"><span class="dot"></span>Comply with legal obligations</div>
+          <div class="data-list-item"><span class="dot"></span>Improve reliability and performance</div>
+        </div>
+      </section>
+
+      <section class="doc-section" id="legal-bases">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Legal Bases for Processing</h2>
+        <p>For international users (e.g., EEA/UK), we process personal information on the following legal grounds:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span><strong>Performance of a contract</strong> — to provide and maintain the Services</div>
+          <div class="data-list-item"><span class="dot"></span><strong>User consent</strong> — for biometric processing and optional features</div>
+          <div class="data-list-item"><span class="dot"></span><strong>Legitimate interests</strong> — fraud prevention, security, safety</div>
+          <div class="data-list-item"><span class="dot"></span><strong>Legal obligations</strong> — compliance with applicable law</div>
+        </div>
+      </section>
+
+      <section class="doc-section" id="sharing">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">How We Share Information</h2>
+        <p>We may share information in the following limited circumstances:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>With emergency contacts during panic events</div>
+          <div class="data-list-item"><span class="dot"></span>With Stripe for payment processing</div>
+          <div class="data-list-item"><span class="dot"></span>With service providers supporting infrastructure</div>
+          <div class="data-list-item"><span class="dot"></span>With identity verification vendors</div>
+          <div class="data-list-item"><span class="dot"></span>With law enforcement when legally required</div>
+        </div>
+        <div class="highlight-box"><strong>We do not sell personal information.</strong></div>
+      </section>
+
+      <section class="doc-section" id="retention">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Data Retention</h2>
+        <p>We retain information only as long as necessary to provide Services, maintain safety records, prevent fraud, and comply with legal obligations.</p>
+        <table class="ret-table">
+          <thead><tr><th>Data Category</th><th>Retention Period</th></tr></thead>
+          <tbody>
+            <tr><td>Government ID &amp; verification selfies</td><td>While account active; longer if required for fraud or compliance</td></tr>
+            <tr><td>Biometric identifiers</td><td>Permanently deleted when purpose is satisfied, or within a reasonable period after account deletion</td></tr>
+            <tr><td>Payment transaction records</td><td>As required for accounting, tax, fraud prevention, and compliance</td></tr>
+            <tr><td>Location data</td><td>24–72 hours unless linked to an incident</td></tr>
+            <tr><td>Incident records</td><td>Retained for safety audits and compliance</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="doc-section" id="security">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Security</h2>
+        <p>We implement robust safeguards to protect your personal information:</p>
+        <div class="data-list">
+          <div class="data-list-item"><span class="dot"></span>TLS 1.2+ encryption in transit</div>
+          <div class="data-list-item"><span class="dot"></span>Encryption at rest</div>
+          <div class="data-list-item"><span class="dot"></span>Secure cloud infrastructure</div>
+          <div class="data-list-item"><span class="dot"></span>Role-based access controls</div>
+          <div class="data-list-item"><span class="dot"></span>Audit logging</div>
+        </div>
+        <p>In the event of a data security incident, we will provide notice as required by applicable law.</p>
+      </section>
+
+      <section class="doc-section" id="rights">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Your Rights</h2>
+        <p>Depending on your jurisdiction, you may have the following rights regarding your personal information:</p>
+        <div class="rights-grid">
+          <div class="right-card"><div class="right-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="right-card-title">Access</div><div class="right-card-desc">Request a copy of your personal information</div></div>
+          <div class="right-card"><div class="right-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="right-card-title">Correct</div><div class="right-card-desc">Correct inaccurate personal data we hold</div></div>
+          <div class="right-card"><div class="right-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg></div><div class="right-card-title">Delete</div><div class="right-card-desc">Request deletion of your personal data</div></div>
+          <div class="right-card"><div class="right-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="right-card-title">Restrict</div><div class="right-card-desc">Restrict how we process your data</div></div>
+          <div class="right-card"><div class="right-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><div class="right-card-title">Portability</div><div class="right-card-desc">Receive your data in a portable format</div></div>
+          <div class="right-card"><div class="right-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div class="right-card-title">Object</div><div class="right-card-desc">Object to certain processing activities</div></div>
+        </div>
+        <p style="margin-top:16px;">Deletion requests may require identity verification. Certain records may be retained for legal compliance or fraud prevention.</p>
+      </section>
+
+      <section class="doc-section" id="us-rights">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">U.S. State Privacy Rights</h2>
+        <p>Residents of certain U.S. states (including California) may have rights to know categories of information collected, request deletion, correct inaccurate information, and opt out of certain data sharing.</p>
+        <div class="highlight-box"><strong>We do not sell personal information.</strong></div>
+      </section>
+
+      <section class="doc-section" id="international">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">International Users</h2>
+        <p>Information may be transferred to and processed in the United States. By using the Services, you consent to this transfer. We implement appropriate safeguards for international data transfers as required by applicable law.</p>
+      </section>
+
+      <section class="doc-section" id="children">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Children</h2>
+        <p>The Services are not intended for individuals under 16 years of age. We do not knowingly collect personal information from children under 16. If we learn we have collected such information, we will delete it promptly.</p>
+      </section>
+
+      <section class="doc-section" id="changes">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Changes to This Policy</h2>
+        <p>We may update this Privacy Policy periodically. When we make material changes, we will update the "Revised Date" at the top of this page and notify users as required by applicable law. Continued use of the Services after changes are posted constitutes acceptance of the updated policy.</p>
+      </section>
+
+      <section class="doc-section" id="contact">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Contact</h2>
+        <p>For questions, requests, or concerns regarding this Privacy Policy or your personal information, send us a message below.</p>
+        <div class="contact-form-wrap">
+          <div class="contact-form-header">
+            <div class="contact-form-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="contact-form-title">Get in Touch</div>
+              <div class="contact-form-subtitle">Your message will be sent to admin@1st-bond.com</div>
+            </div>
+          </div>
+
+          <div id="contactSuccess" class="form-success">
+            <div class="form-success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Message Sent!</h3>
+            <p>Thanks for reaching out. We'll get back to you shortly.</p>
+          </div>
+
+          <form id="contactForm" onsubmit="submitContactForm(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cf-name">Your Name</label>
+                <input type="text" id="cf-name" name="name" placeholder="John Doe" required />
+              </div>
+              <div class="form-group">
+                <label for="cf-email">Your Email</label>
+                <input type="email" id="cf-email" name="email" placeholder="you@example.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <div class="custom-select-wrap" id="subjectWrap">
+                <div class="custom-select-trigger" tabindex="0" id="subjectTrigger">
+                  <span id="subjectLabel">General Question</span>
+                  <svg class="custom-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="custom-select-options" id="subjectOptions">
+                  <div class="custom-select-option selected" data-value="General Question">General Question</div>
+                  <div class="custom-select-option" data-value="Privacy Request">Privacy Request</div>
+                  <div class="custom-select-option" data-value="Legal Inquiry">Legal Inquiry</div>
+                  <div class="custom-select-option" data-value="Account Issue">Account Issue</div>
+                  <div class="custom-select-option" data-value="Other">Other</div>
+                </div>
+                <input type="hidden" id="cf-subject" name="subject" value="General Question" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" placeholder="Tell us how we can help..." required></textarea>
+            </div>
+            <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+          </form>
+        </div>
+
+        <script>
+        // Custom dropdown logic
+        (function() {
+          var wrap = document.getElementById("subjectWrap");
+          var trigger = document.getElementById("subjectTrigger");
+          var label = document.getElementById("subjectLabel");
+          var hidden = document.getElementById("cf-subject");
+          var options = document.querySelectorAll(".custom-select-option");
+          trigger.addEventListener("click", function(e) {
+            e.stopPropagation();
+            wrap.classList.toggle("open");
+          });
+          trigger.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); wrap.classList.toggle("open"); }
+            if (e.key === "Escape") wrap.classList.remove("open");
+          });
+          options.forEach(function(opt) {
+            opt.addEventListener("click", function() {
+              options.forEach(function(o) { o.classList.remove("selected"); });
+              opt.classList.add("selected");
+              label.textContent = opt.dataset.value;
+              hidden.value = opt.dataset.value;
+              wrap.classList.remove("open");
+            });
+          });
+          document.addEventListener("click", function() { wrap.classList.remove("open"); });
+        })();
+        function submitContactForm(e) {
+          e.preventDefault();
+          var btn = document.getElementById('submitBtn');
+          btn.textContent = 'Sending...';
+          btn.disabled = true;
+
+          var name    = document.getElementById('cf-name').value;
+          var email   = document.getElementById('cf-email').value;
+          var subject = document.getElementById('cf-subject').value;
+          var message = document.getElementById('cf-message').value;
+
+          fetch('https://formsubmit.co/ajax/admin@1st-bond.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              name: name,
+              email: email,
+              subject: '1STBOND Website — ' + subject,
+              message: message,
+              _captcha: 'false'
+            })
+          })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            document.getElementById('contactForm').style.display = 'none';
+            document.getElementById('contactSuccess').style.display = 'block';
+          })
+          .catch(function() {
+            // Fallback to mailto if fetch fails
+            var mailto = 'mailto:admin@1st-bond.com?subject=' + encodeURIComponent('1STBOND — ' + subject) + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+            window.location.href = mailto;
+            btn.textContent = 'Send Message';
+            btn.disabled = false;
+          });
+        }
+        </script>
+      </section>
+    </main>
+
+    <footer class="doc-footer">
+      <span class="doc-footer-copy">© 2026 1STBOND, LLC. All rights reserved.</span>
+      <div class="doc-footer-links">
+        <a href="./privacy-policy.html">Privacy Policy</a>
+        <a href="./terms-of-service.html">Terms of Service</a>
+        <a href="#contact" onclick="event.preventDefault(); document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Us</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('.doc-section');
+    const links = document.querySelectorAll('.toc-list a');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+          const a = document.querySelector(`.toc-list a[href="#${e.target.id}"]`);
+          if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-80px 0px -60% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
