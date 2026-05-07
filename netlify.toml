@@ -2,7 +2,39 @@
   publish = "."
   functions = "netlify/functions"
 
-# Pretty URL redirects — /terms → /terms.html, etc.
+# ── Security headers (all pages) ──────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options            = "DENY"
+    X-Content-Type-Options     = "nosniff"
+    Referrer-Policy            = "strict-origin-when-cross-origin"
+    Permissions-Policy         = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    Strict-Transport-Security  = "max-age=63072000; includeSubDomains; preload"
+    Content-Security-Policy    = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+# ── Auth pages: never cache (tokens in URLs) ──────────────────────────────────
+[[headers]]
+  for = "/reset-password"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+[[headers]]
+  for = "/reset-password.html"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+[[headers]]
+  for = "/email-confirmed"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+[[headers]]
+  for = "/email-confirmed.html"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+# ── Pretty URL rewrites ───────────────────────────────────────────────────────
 [[redirects]]
   from = "/terms"
   to   = "/terms.html"
@@ -23,7 +55,7 @@
   to   = "/email-confirmed.html"
   status = 200
 
-# Legacy legal page redirects
+# ── Legacy redirects ──────────────────────────────────────────────────────────
 [[redirects]]
   from = "/privacy-policy"
   to   = "/privacy"
@@ -34,6 +66,4 @@
   to   = "/terms"
   status = 301
 
-# Set env vars in the Netlify dashboard under Site → Environment variables.
-# Never put real values here — this file is committed to git.
-# Required: SUPABASE_URL, SUPABASE_ANON_KEY
+# Env vars: set SUPABASE_URL and SUPABASE_ANON_KEY in Netlify dashboard only.

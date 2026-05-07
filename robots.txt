@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /reset-password
+Disallow: /reset-password.html
+Disallow: /email-confirmed
+Disallow: /email-confirmed.html
+Disallow: /.netlify/
+
+Allow: /
+Allow: /terms
+Allow: /privacy
