@@ -14,17 +14,17 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --purple:       #7C3AED;
-      --purple-dark:  #5B21B6;
-      --purple-deep:  #3B0F8C;
-      --purple-mid:   #6D28D9;
-      --purple-light: #EDE9FE;
-      --purple-faint: #F5F3FF;
-      --text:         #111827;
-      --muted:        #6B7280;
-      --subtle:       #9CA3AF;
-      --border:       #E5E7EB;
-      --white:        #FFFFFF;
+      --mg:          #a020f0;
+      --mg-dark:     #7a00cc;
+      --mg-light:    #f3e8ff;
+      --mg-faint:    #fdf6ff;
+      --navy:        #07101f;
+      --navy-mid:    #0c1a30;
+      --text:        #0f0a1e;
+      --muted:       #64748b;
+      --subtle:      #94a3b8;
+      --border:      #e2e8f0;
+      --white:       #ffffff;
     }
     html { scroll-behavior: smooth; }
     body {
@@ -43,91 +43,90 @@
       height: 64px;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 40px;
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
     .nav-logo { display: flex; align-items: center; gap: 10px; }
-    .nav-logo img { width: 30px; height: 30px; border-radius: 8px; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 9px; }
     .nav-logo-text { font-size: 15px; font-weight: 800; letter-spacing: 0.4px; color: var(--text); }
     .nav-links { display: flex; align-items: center; gap: 32px; }
     .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color .15s; }
     .nav-links a:hover { color: var(--text); }
     .nav-pill {
-      font-size: 13px; font-weight: 600; color: var(--purple);
-      padding: 7px 16px; border-radius: 8px;
-      background: var(--purple-faint); border: 1px solid var(--purple-light);
+      font-size: 13px; font-weight: 600; color: var(--mg);
+      padding: 8px 18px; border-radius: 9px;
+      background: var(--mg-light); border: 1px solid #dbb6f8;
       transition: background .15s;
     }
-    .nav-pill:hover { background: var(--purple-light); color: var(--purple); }
+    .nav-pill:hover { background: #ead5fd; }
 
     /* ── HERO ── */
     .hero {
-      background: linear-gradient(155deg, #3B0F8C 0%, #5B21B6 30%, #7C3AED 65%, #8B5CF6 100%);
-      padding: 88px 24px 0;
+      background: #ffffff;
+      padding: 80px 24px 0;
       text-align: center;
-      color: white;
       position: relative;
       overflow: hidden;
     }
-    .hero::after {
+    /* Soft radial behind logo only — subtle, not a glow */
+    .hero::before {
       content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% -10%, rgba(255,255,255,0.1) 0%, transparent 70%);
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse at 50% 30%, rgba(160,32,240,.07) 0%, transparent 65%);
       pointer-events: none;
     }
-    .hero-inner {
-      position: relative; z-index: 1;
-      max-width: 700px; margin: 0 auto;
-    }
+    .hero-inner { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; }
     .hero-icon {
-      width: 82px; height: 82px; border-radius: 22px;
+      width: 100px; height: 100px; border-radius: 26px;
       margin: 0 auto 36px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.1);
+      box-shadow: 0 4px 24px rgba(160,32,240,.25), 0 1px 4px rgba(0,0,0,.1);
     }
     h1 {
-      font-size: clamp(46px, 7.5vw, 82px);
+      font-size: clamp(44px, 7vw, 80px);
       font-weight: 900;
-      line-height: 1.04;
+      line-height: 1.03;
       letter-spacing: -3px;
-      color: white;
-      margin-bottom: 22px;
+      color: var(--text);
+      margin-bottom: 20px;
     }
     .hero-sub {
-      font-size: clamp(16px, 2vw, 19px);
-      color: rgba(255,255,255,0.72);
+      font-size: clamp(16px, 2vw, 18px);
+      color: var(--muted);
       line-height: 1.75;
-      max-width: 520px;
+      max-width: 500px;
       margin: 0 auto 44px;
       font-weight: 400;
     }
     .store-badge {
       display: inline-flex; align-items: center; gap: 14px;
-      background: rgba(255,255,255,0.1);
-      border: 1.5px solid rgba(255,255,255,0.22);
+      background: var(--navy);
       border-radius: 16px;
       padding: 14px 24px;
-      margin-bottom: 80px;
-      transition: background .2s;
+      margin-bottom: 72px;
+      transition: background .2s, transform .2s;
     }
-    .store-badge:hover { background: rgba(255,255,255,0.16); }
+    .store-badge:hover { background: var(--navy-mid); transform: translateY(-2px); }
     .badge-icon { width: 26px; height: 26px; flex-shrink: 0; fill: white; }
     .badge-copy { text-align: left; }
-    .badge-copy span { display: block; font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.65); line-height: 1; margin-bottom: 3px; letter-spacing: 0.2px; }
+    .badge-copy span { display: block; font-size: 11px; font-weight: 500; color: rgba(255,255,255,.6); line-height: 1; margin-bottom: 3px; }
     .badge-copy strong { display: block; font-size: 17px; font-weight: 700; color: white; line-height: 1; }
 
-    /* Trust bar — bottom of hero */
+    /* Trust strip */
     .hero-trust {
       position: relative; z-index: 1;
       display: flex; align-items: center; justify-content: center;
-      flex-wrap: wrap; gap: 8px 20px;
-      padding: 20px 24px;
-      background: rgba(0,0,0,0.18);
-      border-top: 1px solid rgba(255,255,255,0.1);
+      flex-wrap: wrap; gap: 6px 20px;
+      padding: 18px 24px;
+      background: var(--mg-faint);
+      border-top: 1px solid #ead5fd;
     }
-    .trust-item { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.85); }
-    .trust-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.4); flex-shrink: 0; }
-    .trust-sep { width: 1px; height: 14px; background: rgba(255,255,255,0.18); }
+    .trust-item { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+    .trust-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--mg); flex-shrink: 0; opacity: .7; }
+    .trust-sep { width: 1px; height: 14px; background: #dbb6f8; }
 
     /* ── SHARED SECTION ── */
     .section { padding: 96px 24px; }
@@ -135,12 +134,12 @@
     .section-label {
       display: inline-block;
       font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
-      text-transform: uppercase; color: var(--purple); margin-bottom: 12px;
+      text-transform: uppercase; color: var(--mg); margin-bottom: 12px;
     }
     .section-title {
       font-size: clamp(28px, 4vw, 44px);
       font-weight: 800; letter-spacing: -1px; line-height: 1.1;
-      color: var(--text); margin-bottom: 16px;
+      color: var(--text); margin-bottom: 14px;
     }
     .section-sub {
       font-size: 17px; color: var(--muted); line-height: 1.75; max-width: 500px;
@@ -149,139 +148,105 @@
 
     /* ── FEATURES ── */
     .features-section { background: var(--white); }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
+    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
     .feature-card {
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 36px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.04);
-      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 16px rgba(0,0,0,.03);
+      transition: transform .25s, box-shadow .25s, border-color .25s;
     }
     .feature-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 40px rgba(124,58,237,0.1);
-      border-color: #C4B5FD;
+      box-shadow: 0 8px 36px rgba(160,32,240,.1);
+      border-color: #dbb6f8;
     }
     .feature-icon {
       width: 52px; height: 52px; border-radius: 14px;
-      background: var(--purple-faint); color: var(--purple);
+      background: var(--mg-faint); color: var(--mg);
+      border: 1px solid #ead5fd;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px; flex-shrink: 0;
+      margin-bottom: 20px;
     }
     .feature-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
     .feature-body { font-size: 15px; color: var(--muted); line-height: 1.75; }
 
     /* ── HOW IT WORKS ── */
-    .steps-section { background: var(--purple-faint); }
+    .steps-section { background: var(--mg-faint); border-top: 1px solid #ead5fd; border-bottom: 1px solid #ead5fd; }
     .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      position: relative;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 36px; position: relative;
     }
     .steps-grid::before {
       content: '';
       position: absolute;
-      top: 27px;
-      left: calc(16.67% + 8px);
-      right: calc(16.67% + 8px);
-      height: 1px;
-      background: var(--purple-light);
+      top: 27px; left: calc(16.67% + 8px); right: calc(16.67% + 8px);
+      height: 1px; background: #dbb6f8;
     }
     .step-num {
       width: 56px; height: 56px; border-radius: 16px;
-      background: white;
-      border: 1.5px solid var(--purple-light);
+      background: white; border: 1.5px solid #dbb6f8;
       display: flex; align-items: center; justify-content: center;
-      font-size: 19px; font-weight: 900; color: var(--purple);
-      margin-bottom: 20px;
-      position: relative; z-index: 1;
+      font-size: 20px; font-weight: 900; color: var(--mg);
+      margin-bottom: 20px; position: relative; z-index: 1;
     }
     .step-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
     .step-body { font-size: 15px; color: var(--muted); line-height: 1.75; }
 
     /* ── PRICING ── */
     .pricing-section { background: var(--white); }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      max-width: 660px;
-    }
-    .pricing-card {
-      border-radius: 20px;
-      padding: 36px;
-      border: 1.5px solid var(--border);
-    }
-    .pricing-card.featured {
-      background: var(--purple);
-      border-color: var(--purple);
-    }
+    .pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 660px; }
+    .pricing-card { border-radius: 20px; padding: 36px; border: 1.5px solid var(--border); }
+    .pricing-card.featured { background: var(--mg); border-color: var(--mg); }
     .pricing-plan {
       font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
       color: var(--subtle); margin-bottom: 20px; display: block;
     }
-    .pricing-card.featured .pricing-plan { color: rgba(255,255,255,0.6); }
+    .pricing-card.featured .pricing-plan { color: rgba(255,255,255,.6); }
     .pricing-price {
       font-size: 54px; font-weight: 900; letter-spacing: -2.5px;
       color: var(--text); line-height: 1; margin-bottom: 4px;
     }
     .pricing-card.featured .pricing-price { color: white; }
     .pricing-per { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
-    .pricing-card.featured .pricing-per { color: rgba(255,255,255,0.65); }
+    .pricing-card.featured .pricing-per { color: rgba(255,255,255,.65); }
     .pricing-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
     .pricing-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; color: var(--muted); }
-    .pricing-card.featured .pricing-list li { color: rgba(255,255,255,0.85); }
-    .pricing-check { flex-shrink: 0; margin-top: 2px; color: var(--purple); }
-    .pricing-card.featured .pricing-check { color: rgba(255,255,255,0.7); }
+    .pricing-card.featured .pricing-list li { color: rgba(255,255,255,.85); }
+    .chk { flex-shrink: 0; margin-top: 2px; color: var(--mg); }
+    .pricing-card.featured .chk { color: rgba(255,255,255,.75); }
 
-    /* ── CONTACT CTA ── */
-    .cta-section {
-      background: #0F0A1E;
-      padding: 96px 24px;
-      text-align: center;
-    }
-    .cta-inner { max-width: 560px; margin: 0 auto; }
+    /* ── CTA ── */
+    .cta-section { background: var(--navy); padding: 96px 24px; text-align: center; }
+    .cta-inner { max-width: 520px; margin: 0 auto; }
     .cta-section h2 {
-      font-size: clamp(32px, 5vw, 52px);
+      font-size: clamp(30px, 5vw, 50px);
       font-weight: 900; letter-spacing: -1.5px; line-height: 1.1;
       color: white; margin-bottom: 14px;
     }
-    .cta-section p {
-      font-size: 17px; color: rgba(255,255,255,0.55);
-      line-height: 1.75; margin-bottom: 36px;
-    }
+    .cta-section p { font-size: 17px; color: rgba(255,255,255,.5); line-height: 1.75; margin-bottom: 36px; }
     .cta-btn {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--purple); color: white;
+      background: var(--mg); color: white;
       font-size: 16px; font-weight: 700;
       padding: 16px 32px; border-radius: 14px;
       transition: background .15s, transform .15s;
     }
-    .cta-btn:hover { background: var(--purple-dark); transform: translateY(-2px); }
+    .cta-btn:hover { background: var(--mg-dark); transform: translateY(-2px); }
 
     /* ── FOOTER ── */
-    footer {
-      background: var(--purple-faint);
-      border-top: 1px solid var(--border);
-      padding: 36px 24px;
-    }
+    footer { background: var(--mg-faint); border-top: 1px solid #ead5fd; padding: 36px 24px; }
     .footer-inner {
       max-width: 1080px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 16px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
     }
     .footer-logo { display: flex; align-items: center; gap: 8px; }
-    .footer-logo img { width: 24px; height: 24px; border-radius: 6px; }
+    .footer-logo img { width: 26px; height: 26px; border-radius: 7px; }
     .footer-logo span { font-size: 13px; font-weight: 800; color: var(--text); }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
     .footer-links a { font-size: 13px; color: var(--muted); font-weight: 500; transition: color .15s; }
-    .footer-links a:hover { color: var(--purple); }
+    .footer-links a:hover { color: var(--mg); }
     .footer-copy { font-size: 12px; color: var(--subtle); }
 
     /* ── FADE IN ── */
@@ -362,51 +327,34 @@
       <p class="section-sub fade-up">Every layer of 1STBOND is designed to give you confidence before you ever show up in person.</p>
     </div>
     <div class="features-grid">
-
       <div class="feature-card fade-up">
         <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="5" width="20" height="14" rx="2"/>
-            <circle cx="8.5" cy="11" r="2"/>
-            <path d="M14 9h4M14 13h3"/>
-          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M14 9h4M14 13h3"/></svg>
         </div>
         <div class="feature-title">Government ID Verification</div>
         <div class="feature-body">Every user verifies with a real government-issued ID before accessing the platform. No exceptions. You always know you're dealing with a confirmed, real person.</div>
       </div>
-
       <div class="feature-card fade-up d1">
         <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M3 7V4.5A1.5 1.5 0 014.5 3H7M17 3h2.5A1.5 1.5 0 0121 4.5V7M21 17v2.5a1.5 1.5 0 01-1.5 1.5H17M7 21H4.5A1.5 1.5 0 013 19.5V17"/>
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M9 9h.01M15 9h.01"/>
-          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V4.5A1.5 1.5 0 014.5 3H7M17 3h2.5A1.5 1.5 0 0121 4.5V7M21 17v2.5a1.5 1.5 0 01-1.5 1.5H17M7 21H4.5A1.5 1.5 0 013 19.5V17"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
         <div class="feature-title">Pre-Meetup Face Scan</div>
         <div class="feature-body">Before every meetup, a live face scan confirms the person showing up is the verified account holder. Not just once at signup — every single time.</div>
       </div>
-
       <div class="feature-card fade-up d2">
         <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         </div>
         <div class="feature-title">Verified Messaging</div>
         <div class="feature-body">Message only with identity-verified users. You know exactly who you're talking to before any plans are made — zero anonymous interactions.</div>
       </div>
-
       <div class="feature-card fade-up d3">
         <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
         <div class="feature-title">Trust Ratings</div>
         <div class="feature-body">Rate every meetup. Build a real, verifiable reputation over time. Good actors rise to the top — and the community takes care of the rest.</div>
       </div>
-
     </div>
   </div>
 </section>
@@ -448,47 +396,26 @@
       <p class="section-sub fade-up">No hidden fees. Cancel anytime through your App Store settings.</p>
     </div>
     <div class="pricing-grid">
-
       <div class="pricing-card fade-up">
         <span class="pricing-plan">Free</span>
         <div class="pricing-price">$0</div>
         <div class="pricing-per">forever</div>
         <ul class="pricing-list">
-          <li>
-            <svg class="pricing-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Full identity verification
-          </li>
-          <li>
-            <svg class="pricing-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Verified profile &amp; messaging
-          </li>
-          <li>
-            <svg class="pricing-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Your first meetup, free
-          </li>
+          <li><svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Full identity verification</li>
+          <li><svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Verified profile &amp; messaging</li>
+          <li><svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Your first meetup, free</li>
         </ul>
       </div>
-
       <div class="pricing-card featured fade-up d1">
         <span class="pricing-plan">Premium</span>
         <div class="pricing-price">$4.99</div>
         <div class="pricing-per">per month · billed via App Store</div>
         <ul class="pricing-list">
-          <li>
-            <svg class="pricing-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Everything in Free
-          </li>
-          <li>
-            <svg class="pricing-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Unlimited meetups
-          </li>
-          <li>
-            <svg class="pricing-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-            Cancel anytime in App Store
-          </li>
+          <li><svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Everything in Free</li>
+          <li><svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Unlimited meetups</li>
+          <li><svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Cancel anytime in App Store</li>
         </ul>
       </div>
-
     </div>
   </div>
 </section>
