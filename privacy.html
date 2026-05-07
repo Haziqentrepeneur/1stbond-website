@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Privacy Policy — 1STBOND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --p: #a020f0;
+      --p-dim: rgba(160,32,240,.1);
+      --p-border: rgba(160,32,240,.25);
+      --bg: #060608;
+      --surface: #0f0f12;
+      --surface2: #16161a;
+      --border: rgba(255,255,255,.07);
+      --text: #f0f0f5;
+      --text2: rgba(240,240,245,.65);
+      --text3: rgba(240,240,245,.38);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 60px;
+      background: rgba(6,6,8,.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .nav-logo img { width: 28px; height: 28px; border-radius: 7px; }
+    .nav-logo span { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: 0.4px; }
+    .nav-back {
+      font-size: 13px; font-weight: 600; color: var(--text3);
+      text-decoration: none; transition: color .15s;
+    }
+    .nav-back:hover { color: var(--p); }
+
+    /* LAYOUT */
+    .page {
+      max-width: 760px; margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* HEADER */
+    .doc-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .doc-badge {
+      display: inline-block; background: var(--p-dim); border: 1px solid var(--p-border);
+      color: var(--p); font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; padding: 5px 12px; border-radius: 20px; margin-bottom: 20px;
+    }
+    .doc-title { font-size: 34px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
+    .doc-meta { display: flex; flex-wrap: wrap; gap: 20px; }
+    .doc-meta-item { font-size: 13px; color: var(--text3); }
+    .doc-meta-item strong { color: var(--text2); font-weight: 600; }
+
+    /* INTRO BOX */
+    .intro-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--p); border-radius: 12px;
+      padding: 22px 26px; margin-bottom: 48px;
+    }
+    .intro-box p { font-size: 14px; color: var(--text2); margin: 0; }
+    .intro-box p + p { margin-top: 10px; }
+
+    /* CONTENT */
+    .section { margin-bottom: 44px; }
+    h2 {
+      font-size: 20px; font-weight: 800; color: var(--text);
+      margin-bottom: 16px; padding-top: 8px;
+    }
+    h3 { font-size: 15px; font-weight: 700; color: var(--text2); margin: 20px 0 10px; }
+    p { font-size: 15px; color: var(--text2); margin-bottom: 14px; }
+    ul.doc-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 16px; }
+    ul.doc-list li { font-size: 15px; color: var(--text2); padding-left: 20px; position: relative; }
+    ul.doc-list li::before { content: '•'; position: absolute; left: 0; color: var(--text3); }
+
+    /* STATE NOTICE BOXES */
+    .state-notice {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 24px; margin: 20px 0;
+    }
+    .state-notice-title {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+      color: var(--p); margin-bottom: 12px; display: block;
+    }
+    .state-notice ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .state-notice li { font-size: 14px; color: var(--text2); padding-left: 18px; position: relative; }
+    .state-notice li::before { content: '•'; position: absolute; left: 0; color: var(--p); }
+
+    /* CALLOUT */
+    .callout {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 24px; margin: 20px 0;
+    }
+    .callout-warn { border-left: 3px solid #f59e0b; background: rgba(245,158,11,.06); }
+    .callout p { font-size: 14px; margin: 0; }
+    .callout-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+      color: var(--text3); margin-bottom: 8px; display: block;
+    }
+
+    /* DIVIDER */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* CONTACT BOX */
+    .contact-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+    }
+    .contact-box a { color: var(--p); font-weight: 600; text-decoration: none; }
+    .contact-box a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text3); font-size: 13px;
+    }
+    footer a { color: var(--p); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+
+    /* TOC */
+    .toc {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px 28px; margin-bottom: 48px;
+    }
+    .toc h3 {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+      color: var(--text3); margin-bottom: 14px;
+    }
+    .toc ol { list-style: none; counter-reset: toc-counter; display: flex; flex-direction: column; gap: 6px; }
+    .toc li { counter-increment: toc-counter; font-size: 14px; }
+    .toc li a {
+      color: var(--text2); text-decoration: none;
+      display: flex; align-items: baseline; gap: 10px;
+      transition: color .15s;
+    }
+    .toc li a:hover { color: var(--p); }
+    .toc li a::before {
+      content: counter(toc-counter, decimal-leading-zero);
+      font-size: 11px; color: var(--text3); font-weight: 700; min-width: 22px;
+    }
+
+    /* FEATURE NOT YET ACTIVE */
+    .not-active {
+      background: rgba(255,255,255,.03); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 18px; margin: 16px 0;
+    }
+    .not-active p { font-size: 13px; color: var(--text3); margin: 0; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .page { padding: 40px 16px 80px; }
+      .doc-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" alt="1stBond" />
+    <span>1STBOND</span>
+  </a>
+  <a class="nav-back" href="/">← Back to Home</a>
+</nav>
+
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-badge">Legal</div>
+    <h1 class="doc-title">Privacy Policy</h1>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><strong>Effective:</strong> April 3, 2026</div>
+      <div class="doc-meta-item"><strong>Governing Law:</strong> State of Colorado</div>
+      <div class="doc-meta-item"><strong>Contact:</strong> privacy@1st-bond.com</div>
+    </div>
+  </div>
+
+  <div class="intro-box">
+    <p>This Privacy Policy applies to the 1STBOND LLC mobile application and all related services ("Services"). By creating an account or using 1STBOND, you agree to the practices described in this policy. Where required by law — including for biometric data — we will obtain your separate, affirmative consent before collection.</p>
+    <p>Note: This policy reflects the current version of 1STBOND. In-app payments and live GPS session tracking are planned for future releases and are not currently active. User-entered meetup location addresses (entered when creating or joining a meetup) are collected and stored as part of meetup records as described in Section 6. This policy will be updated before payment or GPS tracking features launch.</p>
+  </div>
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#s1">Introduction</a></li>
+      <li><a href="#s2">Information We Collect</a></li>
+      <li><a href="#s3">How We Use Your Information</a></li>
+      <li><a href="#s4">Third-Party Service Providers</a></li>
+      <li><a href="#s5">Consent</a></li>
+      <li><a href="#s6">Data Retention</a></li>
+      <li><a href="#s7">Data Security</a></li>
+      <li><a href="#s8">Sharing of Information</a></li>
+      <li><a href="#s9">Your Privacy Rights</a></li>
+      <li><a href="#s10">International Users</a></li>
+      <li><a href="#s11">Children's Privacy</a></li>
+      <li><a href="#s12">Changes to This Policy</a></li>
+      <li><a href="#s13">Governing Law and Jurisdiction</a></li>
+      <li><a href="#s14">Contact</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="s1">
+    <h2>1. Introduction</h2>
+    <p>1STBOND ("we," "our," or "us") provides tools designed to enhance safety and trust during in-person interactions. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.</p>
+    <p>We are committed to transparency and responsible handling of personal data, including sensitive categories such as biometric information. We collect only the minimum information necessary to provide the Services.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 2 -->
+  <div class="section" id="s2">
+    <h2>2. Information We Collect</h2>
+
+    <h3>2.1 Personal Identifiers</h3>
+    <ul class="doc-list">
+      <li>Full legal name</li>
+      <li>Email address</li>
+      <li>Date of birth (used to verify you are 18 or older via government-issued ID)</li>
+      <li>Username and @handle (publicly visible to other verified users, searchable on the platform)</li>
+      <li>Profile photo (optional, uploaded from your photo library or taken with your camera, visible to other verified users)</li>
+      <li>Profile banner photo (optional, uploaded from your photo library or taken with your camera, displayed as a background on your profile, visible to other verified users)</li>
+      <li>Profile bio (optional, written by you, visible to other verified users)</li>
+      <li>Meetup codes (alphanumeric identifiers generated for each meetup session, linked to your account and meetup record)</li>
+    </ul>
+
+    <h3>2.2 Identity Verification Data</h3>
+    <ul class="doc-list">
+      <li>Government-issued identification (e.g., driver's license, passport)</li>
+      <li>Selfie images and verification photos submitted during onboarding</li>
+    </ul>
+    <p>Identity verification services are provided by DIDIT, acting as a data processor on our behalf under a data processing agreement. When you submit a government-issued ID for verification, DIDIT processes the full contents of that document on our behalf, which may include your full legal name, date of birth, ID or license number, issuing jurisdiction, expiration date, and residential address as printed on the document. 1STBOND LLC does not store your residential address, ID number, or expiration date in our own systems and does not use that information in our day-to-day platform operations. This data is retained solely by DIDIT in accordance with their privacy policy and our data processing agreement. We may access or request this information from DIDIT only in limited circumstances, including: (a) investigating suspected fraud or identity impersonation; (b) responding to a valid legal request, court order, or law enforcement inquiry; or (c) resolving a safety incident where identity confirmation is necessary to protect users or comply with applicable law.</p>
+
+    <h3>2.3 Biometric Information</h3>
+    <p>We collect and process biometric identifiers and biometric information in two contexts: (1) during onboarding identity verification, and (2) during pre-meetup face scans. Specifically, we collect facial geometry and liveness detection data derived from images and real-time captures in both of these contexts.</p>
+    <p><strong>Onboarding identity verification:</strong> when you first create your account, we collect facial geometry and liveness detection data to verify your identity against your government-issued ID. Liveness detection confirms that verification is being performed by a live person and not a photograph or spoofed image.</p>
+    <p><strong>Pre-meetup face scan:</strong> before each meetup session begins, we perform a real-time face scan to confirm that the person initiating the meetup is the same verified account holder. This scan matches your face against your verified ID photo and generates a timestamp verification. This is a required step to activate each meetup session.</p>
+    <p>All biometric data is used solely for identity verification and meetup authentication purposes. We do not use biometric data for advertising, profiling, or any purpose beyond these functions. Raw biometric data is processed by DIDIT on our behalf and is not stored directly by 1STBOND LLC.</p>
+
+    <div class="state-notice">
+      <span class="state-notice-title">Illinois Residents — BIPA Notice</span>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:10px;">If you are a resident of Illinois, we collect biometric identifiers and biometric information as defined under the Illinois Biometric Information Privacy Act (BIPA), 740 ILCS 14/.</p>
+      <ul>
+        <li>Biometric data is never sold, leased, traded, or used for advertising or profit</li>
+        <li>Biometric identifiers, including facial geometry and liveness detection data collected during onboarding identity verification and pre-meetup face scans, are destroyed within 90 days of verification completion or account closure, whichever is earlier — unless a longer period is required to resolve a legal dispute or comply with law</li>
+        <li>You will be presented with a separate, written in-app consent screen before any biometric data is collected</li>
+        <li>You may withdraw biometric consent at any time by contacting privacy@1st-bond.com</li>
+      </ul>
+      <p style="font-size:13px;color:var(--text3);margin-top:10px;margin-bottom:0;">This notice satisfies our obligation to provide a written, publicly available retention policy prior to collection.</p>
+    </div>
+
+    <div class="state-notice">
+      <span class="state-notice-title">Texas Residents — CUBI Notice</span>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:10px;">If you are a resident of Texas, we collect biometric identifiers as defined under the Texas Capture or Use of Biometric Identifier Act (CUBI), Tex. Bus. &amp; Com. Code § 503.001.</p>
+      <ul>
+        <li>Biometric identifiers are collected only with your informed consent</li>
+        <li>Biometric data is never sold or disclosed to third parties except as required to provide the Services or as required by law</li>
+        <li>Biometric identifiers collected during onboarding verification and pre-meetup face scans are destroyed within 90 days of verification completion or account closure, whichever is earlier</li>
+        <li>You may contact privacy@1st-bond.com with questions about our biometric data practices</li>
+      </ul>
+    </div>
+
+    <div class="state-notice">
+      <span class="state-notice-title">Washington Residents — My Health My Data Act Notice</span>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:10px;">If you are a resident of Washington, we collect biometric data that may be regulated under the Washington My Health My Data Act (MHMDA), RCW 70.372, to the extent it constitutes consumer health data.</p>
+      <ul>
+        <li>Biometric data collected for identity verification purposes is used solely to verify your identity and is not used for health-related profiling or advertising</li>
+        <li>We do not sell, share, or disclose your biometric data to third parties for their independent purposes</li>
+        <li>Biometric identifiers collected during onboarding verification and pre-meetup face scans are destroyed within 90 days of verification completion or account closure, whichever is earlier</li>
+        <li>You may contact privacy@1st-bond.com to exercise any rights available to you under applicable Washington law</li>
+      </ul>
+    </div>
+
+    <h3>2.4 Messaging Data</h3>
+    <p>To facilitate coordination between users, 1STBOND LLC provides in-app messaging. Message content is stored on our servers to deliver communications between users and to enable safety review in the event of a reported incident. Message content is accessed by 1STBOND staff only when necessary for safety enforcement, violation investigation, or legal compliance. We do not use message content for advertising or sell it to third parties.</p>
+
+    <h3>2.5 Device and Usage Data</h3>
+    <ul class="doc-list">
+      <li>IP address</li>
+      <li>Device type and model</li>
+      <li>Operating system</li>
+      <li>App interaction and diagnostic data</li>
+      <li>Push notification token (collected when you enable push notifications; used to send meetup reminders, message alerts, and safety notifications. You may disable push notifications at any time in your device settings)</li>
+    </ul>
+
+    <div class="not-active">
+      <p><strong>Features Not Yet Active:</strong> In-app payments, live GPS session tracking, and background location are planned for a future version of 1STBOND LLC. Note: user-entered meetup location addresses (street address or place name entered when creating or joining a meetup) are currently collected and stored as part of meetup records. Live device GPS tracking is not active. This policy will be updated with applicable disclosures before those features are enabled. You will be notified of any material changes before they take effect.</p>
+    </div>
+
+    <h3>2.6 Ratings and Feedback</h3>
+    <p>When you submit a star rating or other feedback about another user or a meetup, 1STBOND LLC stores that rating in association with both your account and the rated user's account. Ratings are displayed to other verified users as part of our trust and safety features (for example, the star rating shown on a user's profile and meetup details screen).</p>
+    <p>We do not use ratings data for advertising or profiling, and we do not sell ratings data to third parties. Ratings submitted in violation of these Terms — for example, defamatory or harassing ratings — may be removed and may result in account action.</p>
+
+    <h3>2.7 Subscription and Billing Data</h3>
+    <p>When you subscribe to a paid plan, 1STBOND LLC receives and stores the following data from the Apple App Store or Google Play Store: subscription status (active, cancelled, expired), purchase date, and renewal date. We do not receive, store, or process your payment card number, bank account details, or any other financial credentials. All billing and payment processing is handled entirely by Apple or Google on your device's platform. For billing disputes or refund requests, you must contact Apple or Google directly.</p>
+    <p>Subscription status data is retained while your account is active and deleted within 30 days of account closure. We do not use subscription data for advertising or sell it to third parties.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 3 -->
+  <div class="section" id="s3">
+    <h2>3. How We Use Your Information</h2>
+    <p>We collect only the minimum personal information necessary to provide the Services. We use your information to:</p>
+    <ul class="doc-list">
+      <li>Verify your identity during account creation and authenticate your presence before each meetup session via pre-meetup face scan</li>
+      <li>Enable in-app messaging between users</li>
+      <li>Maintain and display your user profile</li>
+      <li>Display ratings and trust signals on verified user profiles to support informed meetup decisions</li>
+      <li>Make your profile discoverable to other verified users — your name, username, verification status, rating, profile photo, banner photo, and bio are visible to other verified members and searchable by name or @username</li>
+      <li>Prevent fraud, abuse, and unauthorized activity</li>
+      <li>Respond to support requests and resolve disputes</li>
+      <li>Comply with applicable laws and legal obligations</li>
+      <li>Improve the functionality and performance of our Services</li>
+    </ul>
+    <p>We do not sell, rent, or use your personal data for advertising or marketing purposes.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 4 -->
+  <div class="section" id="s4">
+    <h2>4. Third-Party Service Providers</h2>
+    <p>We use the following trusted service providers that act as data processors on our behalf:</p>
+    <ul class="doc-list">
+      <li><strong>DIDIT</strong> — identity verification and facial recognition processing. When you submit a government-issued ID, DIDIT processes the full contents of that document including identity fields such as name, date of birth, ID number, issuing jurisdiction, expiration date, and residential address. DIDIT processes this data on our behalf as a data processor under a data processing agreement. 1STBOND LLC does not store your ID number, expiration date, or residential address in our own systems. We may request access to this data from DIDIT only for fraud investigation, legal compliance, or safety enforcement purposes.</li>
+      <li><strong>Supabase</strong> — backend infrastructure and database services</li>
+    </ul>
+    <p>Each provider is contractually restricted from using your data for any purpose other than providing services to 1STBOND LLC. We conduct vendor due diligence and require data processing agreements with all providers handling personal or biometric data. An up-to-date list of our sub-processors is maintained at <a href="/sub-processors" style="color:var(--p);text-decoration:none;font-weight:600;">https://1st-bond.com/sub-processors</a>. We will provide at least 14 days' advance notice via in-app notification or email before adding any new sub-processor that handles personal or biometric data.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 5 -->
+  <div class="section" id="s5">
+    <h2>5. Consent</h2>
+
+    <h3>5.1 General Consent</h3>
+    <p>By creating an account and using 1STBOND, you consent to the collection and use of your information as described in this Privacy Policy.</p>
+
+    <h3>5.2 Biometric Consent (Separate Affirmative Consent Required)</h3>
+    <p>We collect biometric data in two contexts, each requiring your consent:</p>
+    <p><strong>Onboarding consent:</strong> before we collect biometric data during account creation, you will be presented with a dedicated in-app Biometric Data Consent screen disclosing: (a) the specific biometric data being collected (facial geometry and liveness detection data); (b) the purpose of collection (identity verification only); (c) how the data is processed (by DIDIT on our behalf, not stored directly by 1STBOND LLC); and (d) the retention and destruction schedule (deleted within 90 days). You must affirmatively tap "I Agree — Continue to Verification" to proceed.</p>
+    <p><strong>Pre-meetup scan consent:</strong> by agreeing to these Terms and initiating a meetup session, you consent to pre-meetup face scans as a condition of each meetup. You will be shown a Pre-Meetup Scan screen before each scan that describes the purpose (confirming it is still you before the meetup). You may decline the scan, but doing so will prevent the meetup session from activating.</p>
+    <p>You may withdraw biometric consent at any time by contacting privacy@1st-bond.com, though doing so will prevent access to identity-verified features and meetup functionality.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 6 -->
+  <div class="section" id="s6">
+    <h2>6. Data Retention</h2>
+    <p>We retain different categories of data for defined periods:</p>
+    <ul class="doc-list">
+      <li><strong>Identity verification data:</strong> retained during active account life, deleted within 30 days of account closure</li>
+      <li><strong>Biometric identifiers</strong> (onboarding verification and pre-meetup face scans): deleted within 90 days of the relevant verification or scan event, or account closure, whichever is earlier</li>
+      <li><strong>Messaging data:</strong> retained while your account is active and for up to 90 days following account closure, unless required longer for an open dispute or legal matter</li>
+      <li><strong>Meetup records</strong> (including scheduled time and date, participating accounts, meetup location, meetup code, and any associated safety status or events): retained for up to 90 days after the scheduled meetup date to support safety investigations, dispute resolution, and fraud prevention. When you remove a meetup from your in-app history, the record is hidden from your account view but is not immediately deleted from our systems. Meetup records may be retained during this 90-day period even if one or both participants hide the meetup from their history.</li>
+      <li><strong>Account and profile data:</strong> retained while your account is active, deleted within 30 days of closure</li>
+      <li><strong>Subscription and billing data:</strong> subscription status, purchase date, and renewal date retained while your account is active, deleted within 30 days of account closure</li>
+    </ul>
+    <p>You may request deletion of your data at any time (see Section 9). We will acknowledge your request within 10 business days and complete the deletion within 45 calendar days. Some data, including meetup records involved in an open safety investigation or legal dispute, may be retained longer if required by law or to resolve a pending legal matter.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 7 -->
+  <div class="section" id="s7">
+    <h2>7. Data Security</h2>
+    <p>We implement commercially reasonable safeguards including:</p>
+    <ul class="doc-list">
+      <li>Encryption of data in transit (TLS) and at rest (AES-256)</li>
+      <li>Access controls limiting employee access to personal data on a need-to-know basis</li>
+      <li>Contractual security obligations with all third-party vendors</li>
+    </ul>
+    <p>In the event of a data breach affecting your personal information, we will notify you as required by applicable state and federal law, including within the timeframes mandated by your state of residence. We periodically review our security controls and restrict administrative access to production systems using multi-factor authentication. We may engage independent security assessments as our platform and user base grows.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 8 -->
+  <div class="section" id="s8">
+    <h2>8. Sharing of Information</h2>
+    <p>We do not sell personal data. We may share your information only:</p>
+    <ul class="doc-list">
+      <li>With service providers acting as data processors on our behalf (see Section 4)</li>
+      <li>To comply with a legal obligation, court order, or lawful government request</li>
+      <li>To protect the safety of users or to investigate or prevent fraud or abuse — including requesting identity data from DIDIT where necessary to confirm identity in connection with a safety investigation or fraud case</li>
+      <li>In connection with a merger, acquisition, or asset sale, provided the successor agrees to honor this Privacy Policy</li>
+    </ul>
+    <p><strong>Law Enforcement and Legal Requests.</strong> We respond to law enforcement and other legal requests only to the extent required by applicable law. Where permitted, we require a valid subpoena, court order, or warrant before disclosing personal data. We may make exceptions in emergency situations involving an imminent risk of serious harm to any person. Where legally allowed and practicable, we will notify affected users before disclosing their information in response to a legal request.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 9 -->
+  <div class="section" id="s9">
+    <h2>9. Your Privacy Rights</h2>
+
+    <h3>9.1 General Rights (All Users)</h3>
+    <p>You have the right to:</p>
+    <ul class="doc-list">
+      <li>Access a copy of the personal data we hold about you</li>
+      <li>Request correction of inaccurate personal data</li>
+      <li>Request deletion of your personal data (subject to legal retention obligations)</li>
+      <li>Withdraw consent for biometric data collection at any time</li>
+    </ul>
+    <p>To exercise these rights, contact: privacy@1st-bond.com. We will acknowledge your request within 10 business days and complete your request within 45 calendar days.</p>
+
+    <h3>9.2 California Residents — CCPA / CPRA Rights</h3>
+    <p>If you are a California resident, you have the following rights under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA):</p>
+    <ul class="doc-list">
+      <li><strong>Right to Know:</strong> Request disclosure of the categories and specific pieces of personal information we have collected about you in the past 12 months</li>
+      <li><strong>Right to Delete:</strong> Request deletion of personal information we have collected from you</li>
+      <li><strong>Right to Correct:</strong> Request correction of inaccurate personal information</li>
+      <li><strong>Right to Opt Out of Sale or Sharing:</strong> We do not sell or share your personal information for cross-context behavioral advertising. No opt-out is currently required, but you may contact us to confirm this in writing.</li>
+      <li><strong>Right to Limit Use of Sensitive Personal Information:</strong> We use sensitive personal information — including biometric data — only as necessary to provide the Services</li>
+      <li><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising any of these rights</li>
+    </ul>
+    <p>To submit a CCPA/CPRA request, contact privacy@1st-bond.com with the subject line "CCPA Request." We will acknowledge your request within 10 business days and complete it within 45 calendar days. You may designate an authorized agent to make requests on your behalf by providing written authorization.</p>
+
+    <h3>9.3 Do Not Track</h3>
+    <p>California's CalOPPA requires disclosure of how we respond to browser Do Not Track (DNT) signals. We do not currently respond to DNT signals, as no universal compliance standard has been established. We do not use your data for cross-site behavioral tracking.</p>
+
+    <h3>9.4 Illinois Residents — BIPA Rights</h3>
+    <p>Illinois residents have the right to receive our biometric data retention policy in writing prior to data collection, and to seek relief under BIPA for violations. See Section 2.3 for our full BIPA disclosure.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 10 -->
+  <div class="section" id="s10">
+    <h2>10. International Users</h2>
+    <p>1STBOND LLC is operated in the United States. If you access the Services from outside the United States, your information will be transferred to, stored, and processed in the United States, where data protection laws may differ from those in your country of residence. By using the Services, you consent to the transfer and processing of your information in the United States.</p>
+    <p>We do not currently direct the Services at users in the European Union or other international jurisdictions with distinct regulatory frameworks. If this changes, this policy will be updated accordingly with at least 30 days' advance notice.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 11 -->
+  <div class="section" id="s11">
+    <h2>11. Children's Privacy</h2>
+    <p>1STBOND LLC is intended for users who are 18 years of age or older. Age is verified through our identity verification process, which requires a valid government-issued ID. A self-declaration alone is not sufficient to access the Services. We do not knowingly collect personal information from individuals under 18.</p>
+    <p>If we become aware that a user under 18 has created an account, we will terminate that account and delete their information promptly. Parents or guardians with concerns should contact privacy@1st-bond.com.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 12 -->
+  <div class="section" id="s12">
+    <h2>12. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. For material changes — including the introduction of new data collection practices such as payments or location tracking — we will provide at least 30 days' advance notice via in-app notification and email to the address associated with your account.</p>
+    <p>The updated policy will be posted at <a href="/privacy" style="color:var(--p);text-decoration:none;font-weight:600;">https://1st-bond.com/privacy</a> with a revised effective date. Continued use of 1STBOND after the effective date constitutes acceptance. If you do not agree to a material change, you may close your account before it takes effect.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 13 -->
+  <div class="section" id="s13">
+    <h2>13. Governing Law and Jurisdiction</h2>
+    <p>This Privacy Policy is governed by the laws of the State of Colorado, without regard to conflict of law provisions. Any disputes arising under this policy shall be subject to the exclusive jurisdiction of the courts located in Denver County, Colorado.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 14 -->
+  <div class="section" id="s14">
+    <h2>14. Contact</h2>
+    <p>For privacy inquiries, data access requests, consent withdrawal, or to report a concern:</p>
+    <div class="contact-box">
+      <p style="margin-bottom:12px;">For general support and in-app help: <a href="mailto:support@1st-bond.com">support@1st-bond.com</a></p>
+      <p style="margin-bottom:12px;font-size:13px;color:var(--text3);">Note: The Privacy &amp; Security screen within the 1STBOND app provides a plain-language summary of our data practices. In the event of any conflict between the in-app summary and this Privacy Policy, this Privacy Policy controls.</p>
+      <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="mailto:privacy@1st-bond.com">privacy@1st-bond.com</a></p>
+      <p style="margin-bottom:6px;"><strong>Website:</strong> <a href="https://1st-bond.com/privacy">https://1st-bond.com/privacy</a></p>
+      <p><strong>Mailing Address:</strong> 1500 N Grant St Ste N, Denver, Denver County, CO 80203</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 1STBOND LLC · <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms of Service</a></p>
+  <p style="margin-top:8px;">1500 N Grant St Ste N, Denver, CO 80203 · <a href="mailto:privacy@1st-bond.com">privacy@1st-bond.com</a></p>
+</footer>
+
+</body>
+</html>

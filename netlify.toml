@@ -1,0 +1,39 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Pretty URL redirects — /terms → /terms.html, etc.
+[[redirects]]
+  from = "/terms"
+  to   = "/terms.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to   = "/privacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/reset-password"
+  to   = "/reset-password.html"
+  status = 200
+
+[[redirects]]
+  from = "/email-confirmed"
+  to   = "/email-confirmed.html"
+  status = 200
+
+# Legacy legal page redirects
+[[redirects]]
+  from = "/privacy-policy"
+  to   = "/privacy"
+  status = 301
+
+[[redirects]]
+  from = "/terms-of-service"
+  to   = "/terms"
+  status = 301
+
+# Set env vars in the Netlify dashboard under Site → Environment variables.
+# Never put real values here — this file is committed to git.
+# Required: SUPABASE_URL, SUPABASE_ANON_KEY

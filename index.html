@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="description" content="1STBOND — Meet verified people safely. Every user is government ID-verified. Every meetup starts with a face scan." />
+  <title>1STBOND — Meet People You Can Trust</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --p: #a020f0;
+      --p2: #c041ff;
+      --bg: #060608;
+      --surface: rgba(255,255,255,.04);
+      --border: rgba(255,255,255,.07);
+      --text: #fff;
+      --text2: rgba(255,255,255,.55);
+      --text3: rgba(255,255,255,.3);
+      --r: 18px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Ambient glows ── */
+    .glow-1, .glow-2 {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 0;
+    }
+    .glow-1 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(160,32,240,.18) 0%, transparent 65%);
+      top: -20%; left: 50%; transform: translateX(-50%);
+    }
+    .glow-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(100,0,200,.10) 0%, transparent 65%);
+      bottom: 10%; right: -10%;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(6,6,8,.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+    .nav-logo span { font-size: 15px; font-weight: 800; letter-spacing: 0.4px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 14px; color: var(--text2); font-weight: 500; transition: color .15s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--p); color: #fff;
+      padding: 9px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 700;
+      transition: opacity .15s;
+    }
+    .nav-cta:hover { opacity: .85; color: #fff; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(160,32,240,.12);
+      border: 1px solid rgba(160,32,240,.3);
+      border-radius: 100px; padding: 6px 14px;
+      font-size: 12px; font-weight: 600; color: #c868ff;
+      letter-spacing: 0.3px; margin-bottom: 28px;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px;
+      border-radius: 50%; background: #c868ff;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(.8); }
+    }
+    h1 {
+      font-size: clamp(42px, 7vw, 82px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      margin-bottom: 22px;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,.7) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    h1 span {
+      background: linear-gradient(135deg, var(--p), var(--p2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text2);
+      line-height: 1.65;
+      max-width: 540px;
+      margin: 0 auto 44px;
+      font-weight: 400;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--p); color: #fff;
+      padding: 15px 28px; border-radius: 14px;
+      font-size: 15px; font-weight: 700;
+      transition: opacity .15s, transform .15s;
+      border: none; cursor: pointer;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text2); color: rgba(255,255,255,.75);
+      padding: 15px 28px; border-radius: 14px;
+      font-size: 15px; font-weight: 600;
+      transition: border-color .15s, color .15s, transform .15s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,.18); color: #fff; transform: translateY(-1px); }
+
+    /* ── Trust bar ── */
+    .trust-bar {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 0;
+      padding: 0 24px 100px;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 28px;
+      font-size: 13px; font-weight: 600;
+      color: var(--text3);
+      border-right: 1px solid var(--border);
+    }
+    .trust-item:last-child { border-right: none; }
+    .trust-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--p); flex-shrink: 0; }
+
+    /* ── Sections ── */
+    section { position: relative; z-index: 1; padding: 100px 24px; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--p);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800; letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 16px; color: var(--text2);
+      line-height: 1.65; max-width: 520px;
+      margin-bottom: 60px;
+    }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 30px;
+      transition: border-color .2s, transform .2s;
+    }
+    .feature-card:hover { border-color: rgba(160,32,240,.25); transform: translateY(-3px); }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 13px;
+      background: rgba(160,32,240,.12);
+      border: 1px solid rgba(160,32,240,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 18px;
+    }
+    .feature-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .feature-body { font-size: 14px; color: var(--text2); line-height: 1.65; }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 0; max-width: 600px; }
+    .step { display: flex; gap: 24px; position: relative; padding-bottom: 48px; }
+    .step:last-child { padding-bottom: 0; }
+    .step-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .step-num {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(160,32,240,.12);
+      border: 1px solid rgba(160,32,240,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: #c868ff;
+      flex-shrink: 0;
+    }
+    .step-line { flex: 1; width: 1px; background: var(--border); margin: 8px 0; }
+    .step:last-child .step-line { display: none; }
+    .step-content { padding-top: 10px; }
+    .step-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .step-body { font-size: 14px; color: var(--text2); line-height: 1.65; }
+
+    /* ── Pricing ── */
+    .pricing-wrap { display: flex; gap: 16px; flex-wrap: wrap; }
+    .pricing-card {
+      flex: 1; min-width: 240px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r); padding: 36px;
+    }
+    .pricing-card.featured {
+      background: linear-gradient(135deg, rgba(160,32,240,.15), rgba(100,0,200,.08));
+      border-color: rgba(160,32,240,.35);
+    }
+    .pricing-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
+    .pricing-price { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 4px; }
+    .pricing-price sup { font-size: 20px; font-weight: 700; letter-spacing: 0; vertical-align: super; }
+    .pricing-period { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .pricing-features li { font-size: 14px; color: var(--text2); display: flex; align-items: center; gap: 10px; }
+    .pricing-features li::before { content: '✓'; color: var(--p); font-weight: 800; flex-shrink: 0; }
+    .pricing-badge {
+      display: inline-block;
+      background: var(--p); color: #fff;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 6px; margin-left: 8px; vertical-align: middle;
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+    }
+    .footer-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 9px; }
+    .footer-logo img { width: 26px; height: 26px; border-radius: 6px; }
+    .footer-logo span { font-size: 13px; font-weight: 800; }
+    .footer-copy { font-size: 12px; color: var(--text3); }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--text3); transition: color .15s; }
+    .footer-links a:hover { color: var(--text2); }
+
+    /* ── Animations ── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.delay-1 { transition-delay: .1s; }
+    .fade-up.delay-2 { transition-delay: .2s; }
+    .fade-up.delay-3 { transition-delay: .3s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      section { padding: 70px 20px; }
+      .trust-item { padding: 10px 16px; border-right: none; border-bottom: 1px solid var(--border); }
+      .trust-bar { flex-direction: column; gap: 0; align-items: flex-start; padding: 0 20px 70px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="glow-1"></div>
+<div class="glow-2"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">
+    <img src="logo.png" alt="1stBond" />
+    <span>1STBOND</span>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="mailto:support@1st-bond.com">Contact</a>
+  </div>
+  <a href="#coming-soon" class="nav-cta">Coming Soon</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">Coming Soon to the App Store</div>
+  <h1>Meet people<br />you can <span>trust.</span></h1>
+  <p class="hero-sub">
+    Every user is government ID-verified. Every meetup starts with a face scan. 1STBOND is the only app built around real identity, for real-world interactions.
+  </p>
+  <div class="hero-actions">
+    <a href="#coming-soon" class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Notify Me at Launch
+    </a>
+    <a href="#features" class="btn-secondary">
+      See How It Works
+    </a>
+  </div>
+</section>
+
+<!-- Trust bar -->
+<div class="trust-bar">
+  <div class="trust-item"><div class="trust-dot"></div>Government ID Verified</div>
+  <div class="trust-item"><div class="trust-dot"></div>18+ Only</div>
+  <div class="trust-item"><div class="trust-dot"></div>Pre-Meetup Face Scan</div>
+  <div class="trust-item"><div class="trust-dot"></div>No Ads. No Data Sales.</div>
+  <div class="trust-item"><div class="trust-dot"></div>Colorado LLC</div>
+</div>
+
+<!-- Features -->
+<section id="features">
+  <div class="section-inner">
+    <p class="section-label fade-up">Built Different</p>
+    <h2 class="section-title fade-up">Safety isn't a feature.<br />It's the foundation.</h2>
+    <p class="section-sub fade-up">Every layer of 1STBOND is designed to give you confidence before you ever show up in person.</p>
+
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🪪</div>
+        <div class="feature-title">Government ID Verification</div>
+        <div class="feature-body">Every user verifies with a real government-issued ID. No exceptions, no workarounds. You always know you're dealing with a real, confirmed identity.</div>
+      </div>
+      <div class="feature-card fade-up delay-1">
+        <div class="feature-icon">👁</div>
+        <div class="feature-title">Pre-Meetup Face Scan</div>
+        <div class="feature-body">Before each meetup, a live face scan confirms that the person showing up is the verified account holder. Not just once — every single time.</div>
+      </div>
+      <div class="feature-card fade-up delay-2">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">Verified Messaging</div>
+        <div class="feature-body">Message only with identity-verified users. You know exactly who you're talking to before any plans are made.</div>
+      </div>
+      <div class="feature-card fade-up delay-3">
+        <div class="feature-icon">⭐</div>
+        <div class="feature-title">Trust Ratings</div>
+        <div class="feature-body">Rate every meetup. Build a real, verifiable reputation over time. Good actors rise to the top — bad ones don't stick around.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section id="how-it-works" style="background: rgba(255,255,255,.015); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <p class="section-label fade-up">How It Works</p>
+    <h2 class="section-title fade-up">Three steps to a safer meetup.</h2>
+    <p class="section-sub fade-up">From signup to face-to-face, every step is designed to protect you.</p>
+
+    <div class="steps">
+      <div class="step fade-up">
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Create your account</div>
+          <div class="step-body">Sign up with your name, email, and a secure password. Takes under a minute.</div>
+        </div>
+      </div>
+      <div class="step fade-up delay-1">
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Verify your identity</div>
+          <div class="step-body">Scan your government-issued ID and take a selfie. Our partner Didit confirms your identity — you're now a verified member.</div>
+        </div>
+      </div>
+      <div class="step fade-up delay-2">
+        <div class="step-left">
+          <div class="step-num">3</div>
+          <div class="step-line"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-title">Meet with confidence</div>
+          <div class="step-body">Find verified users, message them, and schedule meetups. A face scan before each session confirms everyone is who they say they are.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="section-inner">
+    <p class="section-label fade-up">Simple Pricing</p>
+    <h2 class="section-title fade-up">Start free. Upgrade anytime.</h2>
+    <p class="section-sub fade-up">No hidden fees. Cancel anytime through the App Store.</p>
+
+    <div class="pricing-wrap">
+      <div class="pricing-card fade-up">
+        <div class="pricing-label">Free</div>
+        <div class="pricing-price">$0</div>
+        <div class="pricing-period">forever</div>
+        <ul class="pricing-features">
+          <li>Full identity verification</li>
+          <li>Verified profile & messaging</li>
+          <li>Your first meetup, free</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured fade-up delay-1">
+        <div class="pricing-label">Premium <span class="pricing-badge">Popular</span></div>
+        <div class="pricing-price"><sup>$</sup>4.99</div>
+        <div class="pricing-period">per month, billed through App Store</div>
+        <ul class="pricing-features">
+          <li>Everything in Free</li>
+          <li>Unlimited meetups</li>
+          <li>Cancel anytime in App Store settings</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Coming soon CTA -->
+<section id="coming-soon" style="text-align:center;">
+  <div class="section-inner" style="display:flex;flex-direction:column;align-items:center;">
+    <p class="section-label fade-up">Launching Soon</p>
+    <h2 class="section-title fade-up" style="max-width:540px;margin:0 auto 16px;">Be first when we drop.</h2>
+    <p class="section-sub fade-up" style="margin:0 auto 40px;">1STBOND is coming to the App Store very soon. Follow us for updates or reach out directly.</p>
+    <div class="hero-actions fade-up">
+      <a href="mailto:support@1st-bond.com" class="btn-primary">
+        Contact Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="logo.png" alt="1stBond" />
+      <span>1STBOND</span>
+    </div>
+    <div class="footer-links">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="mailto:support@1st-bond.com">support@1st-bond.com</a>
+    </div>
+    <p class="footer-copy">© 2026 1STBOND LLC. Denver, CO.</p>
+  </div>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } })
+  }, { threshold: 0.12 })
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el))
+</script>
+</body>
+</html>

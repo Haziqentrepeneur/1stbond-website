@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Terms of Service — 1STBOND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --p: #a020f0;
+      --p-dim: rgba(160,32,240,.1);
+      --p-border: rgba(160,32,240,.25);
+      --bg: #060608;
+      --surface: #0f0f12;
+      --surface2: #16161a;
+      --border: rgba(255,255,255,.07);
+      --text: #f0f0f5;
+      --text2: rgba(240,240,245,.65);
+      --text3: rgba(240,240,245,.38);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 60px;
+      background: rgba(6,6,8,.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .nav-logo img { width: 28px; height: 28px; border-radius: 7px; }
+    .nav-logo span { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: 0.4px; }
+    .nav-back {
+      font-size: 13px; font-weight: 600; color: var(--text3);
+      text-decoration: none; transition: color .15s;
+    }
+    .nav-back:hover { color: var(--p); }
+
+    /* LAYOUT */
+    .page {
+      max-width: 760px; margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* HEADER */
+    .doc-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .doc-badge {
+      display: inline-block; background: var(--p-dim); border: 1px solid var(--p-border);
+      color: var(--p); font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; padding: 5px 12px; border-radius: 20px; margin-bottom: 20px;
+    }
+    .doc-title { font-size: 34px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
+    .doc-meta { display: flex; flex-wrap: wrap; gap: 20px; }
+    .doc-meta-item { font-size: 13px; color: var(--text3); }
+    .doc-meta-item strong { color: var(--text2); font-weight: 600; }
+
+    /* SUMMARY BOX */
+    .summary-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--p); border-radius: 12px;
+      padding: 24px 28px; margin-bottom: 48px;
+    }
+    .summary-box h3 {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+      color: var(--p); margin-bottom: 14px;
+    }
+    .summary-box ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .summary-box li { font-size: 14px; color: var(--text2); padding-left: 18px; position: relative; }
+    .summary-box li::before { content: '•'; position: absolute; left: 0; color: var(--p); }
+
+    /* CONTENT */
+    .section { margin-bottom: 44px; }
+    h2 {
+      font-size: 20px; font-weight: 800; color: var(--text);
+      margin-bottom: 16px; padding-top: 8px;
+    }
+    h3 { font-size: 15px; font-weight: 700; color: var(--text2); margin: 20px 0 10px; }
+    p { font-size: 15px; color: var(--text2); margin-bottom: 14px; }
+    ul.doc-list { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 16px; }
+    ul.doc-list li { font-size: 15px; color: var(--text2); padding-left: 20px; position: relative; }
+    ul.doc-list li::before { content: '•'; position: absolute; left: 0; color: var(--text3); }
+
+    /* CALLOUT */
+    .callout {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 24px; margin: 20px 0;
+    }
+    .callout-warn {
+      border-left: 3px solid #f59e0b;
+      background: rgba(245,158,11,.06);
+    }
+    .callout-danger {
+      border-left: 3px solid #ef4444;
+      background: rgba(239,68,68,.06);
+    }
+    .callout p { font-size: 14px; margin: 0; }
+    .callout strong { color: var(--text); }
+    .callout-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+      color: var(--text3); margin-bottom: 8px; display: block;
+    }
+
+    /* ENFORCEMENT BANNER */
+    .enforcement {
+      background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.2);
+      border-radius: 12px; padding: 18px 22px; margin: 24px 0;
+    }
+    .enforcement p { font-size: 14px; color: var(--text2); margin: 0; }
+
+    /* DIVIDER */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* CONTACT BOX */
+    .contact-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+    }
+    .contact-box a { color: var(--p); font-weight: 600; text-decoration: none; }
+    .contact-box a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text3); font-size: 13px;
+    }
+    footer a { color: var(--p); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+
+    /* TOC */
+    .toc {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px 28px; margin-bottom: 48px;
+    }
+    .toc h3 {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+      color: var(--text3); margin-bottom: 14px;
+    }
+    .toc ol { list-style: none; counter-reset: toc-counter; display: flex; flex-direction: column; gap: 6px; }
+    .toc li { counter-increment: toc-counter; font-size: 14px; }
+    .toc li a {
+      color: var(--text2); text-decoration: none;
+      display: flex; align-items: baseline; gap: 10px;
+      transition: color .15s;
+    }
+    .toc li a:hover { color: var(--p); }
+    .toc li a::before {
+      content: counter(toc-counter, decimal-leading-zero);
+      font-size: 11px; color: var(--text3); font-weight: 700; min-width: 22px;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .page { padding: 40px 16px 80px; }
+      .doc-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" alt="1stBond" />
+    <span>1STBOND</span>
+  </a>
+  <a class="nav-back" href="/">← Back to Home</a>
+</nav>
+
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-badge">Legal</div>
+    <h1 class="doc-title">Terms of Service</h1>
+    <div class="doc-meta">
+      <div class="doc-meta-item"><strong>Effective:</strong> April 3, 2026</div>
+      <div class="doc-meta-item"><strong>Governing Law:</strong> State of Colorado</div>
+      <div class="doc-meta-item"><strong>Contact:</strong> support@1st-bond.com</div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-label">Please read carefully</span>
+    <p>By creating an account or using the 1STBOND mobile application, you agree to be bound by these Terms of Service. If you do not agree, do not use the Services.</p>
+    <p style="margin-top:10px;">1STBOND is a safety tool designed to reduce risk during in-person meetups. It is <strong>not a guarantee of safety.</strong> We strongly encourage all users to exercise independent judgment and take personal precautions during every in-person interaction.</p>
+  </div>
+
+  <div class="summary-box">
+    <h3>Plain-English Summary</h3>
+    <p style="font-size:13px;color:var(--text3);margin-bottom:12px;">Not a substitute for the full Terms below.</p>
+    <ul>
+      <li>You must be 18+ and fully ID-verified to use 1STBOND.</li>
+      <li>We collect your government ID, biometrics, messages, meetup records, and ratings — only to run the service. We do not sell your data or show ads.</li>
+      <li>You assume the risks of in-person meetups. 1STBOND is a safety tool, not a guarantee.</li>
+      <li>Most disputes go to individual binding arbitration (JAMS). You can opt out within 30 days of signing up by emailing support@1st-bond.com.</li>
+      <li>Our liability to you is capped at the greater of what you paid us in the last 12 months or $100.</li>
+      <li>Subscription: your first meetup is free. Unlimited meetups are $4.99/month, billed through the Apple App Store or Google Play Store. Cancel anytime in your device account settings.</li>
+      <li>If your account is terminated and you believe it was in error, you may appeal within 30 days (see Section 12.4).</li>
+    </ul>
+  </div>
+
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#s1">Acceptance of Terms</a></li>
+      <li><a href="#s2">Eligibility</a></li>
+      <li><a href="#s3">Account Registration and Identity Verification</a></li>
+      <li><a href="#s4">Permitted Use of the Services</a></li>
+      <li><a href="#s5">Prohibited Conduct</a></li>
+      <li><a href="#s6">In-App Messaging</a></li>
+      <li><a href="#s7">Safety Disclaimer — No Guarantee of Safety</a></li>
+      <li><a href="#s8">Disclaimers of Warranties</a></li>
+      <li><a href="#s9">Limitation of Liability</a></li>
+      <li><a href="#s10">Indemnification</a></li>
+      <li><a href="#s11">Intellectual Property</a></li>
+      <li><a href="#s12">Termination</a></li>
+      <li><a href="#s13">Third-Party Services</a></li>
+      <li><a href="#s14">Dispute Resolution</a></li>
+      <li><a href="#s15">General Provisions</a></li>
+      <li><a href="#s16">Payment Terms</a></li>
+      <li><a href="#s17">Force Majeure</a></li>
+      <li><a href="#s18">Contact</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="s1">
+    <h2>1. Acceptance of Terms</h2>
+    <p>These Terms constitute a legally binding agreement between you ("User," "you," or "your") and 1STBOND LLC ("1STBOND," "we," "our," or "us") governing your access to and use of the 1STBOND mobile application and all related services (collectively, the "Services").</p>
+    <p>By creating an account, completing identity verification, or otherwise accessing the Services, you confirm that you have read, understood, and agree to these Terms and our Privacy Policy, which is incorporated by reference. By tapping "Sign Up," "Create Account," or "Sign In" in the app, you acknowledge that you have read, understood, and agree to these Terms and our Privacy Policy.</p>
+    <p>We reserve the right to update these Terms at any time. Material changes will be communicated via in-app notification and email at least 30 days before they take effect. Continued use after the effective date of any update constitutes acceptance.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 2 -->
+  <div class="section" id="s2">
+    <h2>2. Eligibility</h2>
+    <p>To use 1STBOND, you must:</p>
+    <ul class="doc-list">
+      <li>Be at least 18 years of age</li>
+      <li>Be a human individual (not a corporation, bot, or automated service)</li>
+      <li>Have the legal capacity to enter into a binding agreement</li>
+      <li>Not be prohibited from using the Services under applicable law</li>
+      <li>Successfully complete identity verification as required by the platform</li>
+    </ul>
+    <p>By using the Services, you represent and warrant that you meet all eligibility requirements. If you do not meet these requirements, you must not use the Services.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 3 -->
+  <div class="section" id="s3">
+    <h2>3. Account Registration and Identity Verification</h2>
+    <h3>3.1 Account Creation</h3>
+    <p>To access most features of 1STBOND, you must create an account and complete identity verification. You agree to provide accurate, current, and complete information during registration and to keep your account information up to date.</p>
+
+    <h3>3.2 Identity Verification</h3>
+    <p>1STBOND requires identity verification before you may participate in meetup sessions. Verification is performed by DIDIT, our third-party identity verification provider. By submitting to identity verification, you consent to:</p>
+    <ul class="doc-list">
+      <li>The collection and processing of your government-issued identification by DIDIT on our behalf, including identity fields that may be contained on that document such as your full name, date of birth, ID number, issuing jurisdiction, expiration date, and residential address. 1STBOND LLC does not store your ID number, expiration date, or residential address in our own systems. This information is retained by DIDIT and is not used by 1STBOND LLC in ordinary platform operations. We may access this information only in connection with fraud investigation, a valid legal request or law enforcement inquiry, or a safety incident requiring identity confirmation.</li>
+      <li>The collection and processing of biometric data, including facial geometry and liveness detection data, during both onboarding identity verification and pre-meetup face scans, as described in our Privacy Policy.</li>
+      <li>Completing a pre-meetup face scan before each meetup session to confirm you are the verified account holder. This scan matches your face against your verified ID photo and generates a timestamp. Declining the scan will prevent the meetup session from activating.</li>
+      <li>Providing false, fraudulent, or misleading information during identity verification is a material violation of these Terms and will result in immediate account termination and may be reported to applicable authorities. If identity verification fails or returns an inconclusive result, access to the Services will be denied until verification is successfully completed. In the event of a false positive or verification error, you may contact us at support@1st-bond.com to request manual review. We are not liable for access delays or denials resulting from verification failures by our third-party provider.</li>
+    </ul>
+
+    <h3>3.3 Account Security</h3>
+    <p>You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account. You agree to notify us immediately at support@1st-bond.com if you become aware of any unauthorized use of your account.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 4 -->
+  <div class="section" id="s4">
+    <h2>4. Permitted Use of the Services</h2>
+    <p>1STBOND grants you a limited, non-exclusive, non-transferable, revocable license to use the Services for their intended purpose: facilitating safer in-person interactions between verified users.</p>
+    <p>You agree to use the Services only for lawful purposes and in a manner consistent with these Terms. You may not use the Services to:</p>
+    <ul class="doc-list">
+      <li>Violate any applicable local, state, national, or international law or regulation</li>
+      <li>Infringe the rights of any third party, including intellectual property rights, privacy rights, or rights of publicity</li>
+      <li>Transmit any unsolicited or unauthorized advertising or promotional material</li>
+      <li>Introduce malware, viruses, or any other harmful code</li>
+      <li>Attempt to gain unauthorized access to any part of the Services or any other user's account</li>
+      <li>Scrape, crawl, or otherwise extract data from the Services without our express written permission</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 5 -->
+  <div class="section" id="s5">
+    <h2>5. Prohibited Conduct</h2>
+    <p>The following conduct is strictly prohibited and constitutes a material violation of these Terms, resulting in immediate account termination without notice or refund:</p>
+
+    <h3>5.1 Fake Identity or Impersonation</h3>
+    <p>You may not create an account using false information, impersonate any person or entity, or misrepresent your identity or affiliation. This includes submitting fraudulent identity documents or using another person's identity to complete verification.</p>
+
+    <h3>5.2 Harassment or Threats</h3>
+    <p>You may not use the Services to harass, threaten, intimidate, stalk, or abuse any other user or third party. This includes sending threatening messages, making repeated unwanted contact after a user has indicated they wish to cease communication, and any conduct that a reasonable person would find objectively hostile or harmful.</p>
+
+    <h3>5.3 Facilitating Illegal Transactions</h3>
+    <p>You may not use 1STBOND to facilitate, arrange, or coordinate any transaction, meetup, or activity that violates applicable law, including but not limited to the sale of controlled substances, stolen goods, illegal weapons, or any other contraband. 1STBOND is intended solely for lawful peer-to-peer interactions.</p>
+
+    <h3>5.4 Misuse of Safety Features</h3>
+    <p>You may not trigger false emergency alerts, submit false safety reports, or misuse any safety feature of the platform in a manner that wastes emergency resources, misleads other users, or undermines the integrity of the platform's safety infrastructure.</p>
+
+    <h3>5.5 Sharing Another User's Personal Information</h3>
+    <p>You may not disclose, share, publish, or otherwise distribute the personal information of another user obtained through your use of the Services, including their name, location, contact details, verification status, or any other identifying information. Unauthorized disclosure of another user's personal information may constitute a violation of applicable privacy law in addition to these Terms.</p>
+
+    <div class="enforcement">
+      <p><strong>Enforcement:</strong> Any violation of Section 5 will result in immediate, permanent account termination without prior notice. We reserve the right to report violations to law enforcement where the conduct may constitute a criminal offense. No refund or credit will be issued upon termination for cause.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 6 -->
+  <div class="section" id="s6">
+    <h2>6. In-App Messaging</h2>
+    <p>1STBOND provides in-app messaging to facilitate coordination between users. By using the messaging feature, you acknowledge that:</p>
+    <ul class="doc-list">
+      <li>Message content is stored on our servers and may be accessed by 1STBOND staff only when necessary for safety enforcement, violation investigation, or legal compliance in connection with a reported safety incident or legal obligation. Message content is not reviewed for advertising, profiling, or any purpose beyond safety and compliance.</li>
+      <li>You may not use messaging to send illegal content, threats, harassment, spam, or any content that violates these Terms or applicable law.</li>
+      <li>1STBOND is not responsible for the content of messages sent between users.</li>
+      <li>Messages may be retained as described in our Privacy Policy. Meetup records and associated safety events may also be retained for a limited period as described in our Privacy Policy to support safety investigations, dispute resolution, and fraud prevention.</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 7 -->
+  <div class="section" id="s7">
+    <h2>7. Safety Disclaimer — No Guarantee of Safety</h2>
+    <div class="callout callout-danger">
+      <span class="callout-label">Important — Please Read</span>
+      <p>1STBOND is a technology platform that provides identity verification, in-app messaging, and safety tooling to help reduce risk during in-person meetups. These tools are designed to lower risk, not eliminate it. <strong>The Services do not and cannot guarantee safety outcomes. It is not a guarantee of safety and does not eliminate risk.</strong></p>
+    </div>
+    <p>By using 1STBOND, you acknowledge and agree that:</p>
+    <ul class="doc-list">
+      <li>In-person meetups with strangers carry inherent risk that technology cannot fully eliminate</li>
+      <li>Identity verification confirms that a user's identity documents are authentic, but does not guarantee the user's intentions or behavior</li>
+      <li>1STBOND is not a law enforcement agency, security service, or emergency responder</li>
+      <li>You are solely responsible for your own safety during any in-person interaction facilitated through the platform</li>
+      <li>You should always meet in public places, inform a trusted person of your plans, and trust your instincts</li>
+    </ul>
+    <p style="font-size:14px;font-weight:600;color:var(--text);">BY USING 1STBOND, YOU KNOWINGLY AND VOLUNTARILY ASSUME ALL RISKS ASSOCIATED WITH IN-PERSON MEETUPS FACILITATED THROUGH THE PLATFORM, INCLUDING THE RISK OF BODILY INJURY, DEATH, OR PROPERTY DAMAGE, WHETHER CAUSED BY THE NEGLIGENCE OF 1STBOND, OTHER USERS, OR OTHERWISE.</p>
+    <div class="callout" style="margin-top:16px;">
+      <p>If you are in immediate danger, <strong>call 911 or your local emergency services.</strong> Do not rely solely on 1STBOND.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 8 -->
+  <div class="section" id="s8">
+    <h2>8. Disclaimers of Warranties</h2>
+    <p>THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, 1STBOND EXPRESSLY DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO:</p>
+    <ul class="doc-list">
+      <li>Implied warranties of merchantability, fitness for a particular purpose, and non-infringement</li>
+      <li>Warranties that the Services will be uninterrupted, error-free, or secure</li>
+      <li>Warranties regarding the accuracy, reliability, or completeness of any content or information on the platform</li>
+      <li>Warranties that identity verification will detect all fraudulent or harmful users</li>
+    </ul>
+    <p>No advice or information, whether oral or written, obtained from 1STBOND or through the Services, shall create any warranty not expressly stated in these Terms.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 9 -->
+  <div class="section" id="s9">
+    <h2>9. Limitation of Liability</h2>
+    <p>TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW:</p>
+    <p>IN NO EVENT SHALL 1STBOND, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR AFFILIATES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICES, INCLUDING BUT NOT LIMITED TO:</p>
+    <ul class="doc-list">
+      <li>Personal injury, death, or property damage arising from an in-person meetup facilitated through the platform</li>
+      <li>Loss of data, revenue, profits, or business opportunity</li>
+      <li>Unauthorized access to or alteration of your account or data</li>
+      <li>Conduct of any third party, including other users, on or off the platform</li>
+    </ul>
+    <p>IN JURISDICTIONS THAT DO NOT ALLOW THE EXCLUSION OF CERTAIN DAMAGES, 1STBOND'S TOTAL LIABILITY TO YOU FOR ALL CLAIMS ARISING UNDER THESE TERMS SHALL NOT EXCEED THE GREATER OF: (A) THE AMOUNT YOU PAID TO 1STBOND IN THE 12 MONTHS PRECEDING THE CLAIM, OR (B) ONE HUNDRED DOLLARS ($100).</p>
+    <p>Some jurisdictions do not allow limitations on implied warranties or exclusion of certain damages. In those jurisdictions, the above limitations apply only to the extent permitted by law.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 10 -->
+  <div class="section" id="s10">
+    <h2>10. Indemnification</h2>
+    <p>You agree to indemnify, defend, and hold harmless 1STBOND and its officers, directors, employees, agents, and affiliates from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or related to:</p>
+    <ul class="doc-list">
+      <li>Your use of or inability to use the Services</li>
+      <li>Your violation of these Terms</li>
+      <li>Your violation of any applicable law or regulation</li>
+      <li>Your violation of any third party's rights, including privacy rights</li>
+      <li>Any in-person interaction you engage in through or facilitated by the platform</li>
+      <li>Any content you submit, post, or transmit through the Services</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 11 -->
+  <div class="section" id="s11">
+    <h2>11. Intellectual Property</h2>
+    <p>All content, features, and functionality of the Services — including but not limited to software, text, graphics, logos, and user interface elements — are owned by or licensed to 1STBOND and are protected by applicable intellectual property laws.</p>
+    <p>You are granted a limited license to use the Services as described in Section 4. You may not copy, modify, distribute, sell, or create derivative works from any part of the Services without our express written consent.</p>
+    <p>You retain ownership of any content you submit through the Services (such as profile information, messages, and ratings or feedback about other users or meetups). By submitting content, you grant 1STBOND a non-exclusive, royalty-free, worldwide license to use, store, and display that content solely to provide the Services.</p>
+    <p>You are solely responsible for any ratings or feedback you submit about other users or meetups. Ratings and feedback must be truthful and may not be defamatory, harassing, retaliatory, or otherwise unlawful. Submitting abusive, false, or harassing ratings constitutes a violation of Section 5 (Prohibited Conduct) and may result in immediate account termination. 1STBOND reserves the right to remove any rating that violates these Terms.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 12 -->
+  <div class="section" id="s12">
+    <h2>12. Termination</h2>
+    <h3>12.1 Termination by 1STBOND</h3>
+    <p>We reserve the right to suspend or permanently terminate your account at any time, with or without notice, for any reason, including but not limited to:</p>
+    <ul class="doc-list">
+      <li>Violation of any provision of these Terms</li>
+      <li>Conduct that poses a risk to the safety of other users or third parties</li>
+      <li>Provision of false or fraudulent information during registration or verification</li>
+      <li>Any activity that exposes 1STBOND to legal liability</li>
+    </ul>
+    <p>Termination for cause (including any violation of Section 5) is immediate and permanent. No prior warning will be given. No refund or credit will be issued.</p>
+
+    <h3>12.2 Termination by You</h3>
+    <p>You may terminate your account at any time by contacting us at support@1st-bond.com or through the account settings in the app. Upon termination, your right to use the Services ceases immediately. Data deletion will be handled as described in our Privacy Policy.</p>
+
+    <h3>12.3 Effect of Termination</h3>
+    <p>Sections 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, and 18 of these Terms survive termination and remain in full force and effect.</p>
+
+    <h3>12.4 Account Appeals</h3>
+    <p>If you believe your account was suspended or terminated in error, you may submit a written appeal to support@1st-bond.com within 30 days of the termination notice. Your appeal must include your account email address and a clear explanation of why you believe the action was taken in error. We will acknowledge your appeal within 5 business days and provide a final decision within 30 calendar days. We reserve the right to uphold terminations for material violations of Section 5. Appeals do not guarantee reinstatement but will be reviewed in good faith.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 13 -->
+  <div class="section" id="s13">
+    <h2>13. Third-Party Services</h2>
+    <p>The Services integrate with third-party providers including DIDIT (identity verification) and Supabase (infrastructure). When you submit a government-issued ID through the verification flow, DIDIT processes the full contents of that document including identity fields such as name, date of birth, ID number, issuing jurisdiction, expiration date, and residential address. 1STBOND LLC does not store your ID number, expiration date, or residential address in our own systems and does not use that information in ordinary platform operations. We may request access to identity data from DIDIT only in connection with fraud investigation, a valid legal or law enforcement request, or a safety incident requiring identity confirmation. Your use of DIDIT's services is also subject to their privacy policy. 1STBOND is not responsible for the practices, availability, or accuracy of any third-party service.</p>
+    <p>Links or references to third-party websites or services do not constitute an endorsement by 1STBOND.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 14 -->
+  <div class="section" id="s14">
+    <h2>14. Dispute Resolution</h2>
+    <h3>14.1 Informal Resolution</h3>
+    <p>Before initiating any formal legal proceeding, you agree to contact us at support@1st-bond.com and attempt to resolve the dispute informally. We will make reasonable efforts to resolve the issue within 30 days of receiving your written notice.</p>
+
+    <h3>14.2 Governing Law</h3>
+    <p>These Terms are governed by the laws of the State of Colorado, without regard to conflict of law provisions. Any dispute not resolved informally shall be subject to the exclusive jurisdiction of the courts located in Denver County, Colorado, and you consent to personal jurisdiction in those courts.</p>
+
+    <h3>14.3 Binding Arbitration</h3>
+    <div class="callout callout-warn">
+      <span class="callout-label">Please read this section carefully — it affects your legal rights</span>
+      <p>Except for disputes that qualify for small claims court, any dispute, claim, or controversy arising out of or relating to these Terms or the Services that is not resolved through informal resolution under Section 14.1 shall be resolved by binding individual arbitration administered by JAMS under its Streamlined Arbitration Rules and Procedures, or such other rules as JAMS may designate. The arbitration shall be conducted in Denver, Colorado. If you are unable to travel to Denver, the arbitration may be conducted remotely by videoconference or, at the arbitrator's discretion, in the county of your primary residence. The arbitrator's decision shall be final and binding and may be entered as a judgment in any court of competent jurisdiction.</p>
+      <p style="margin-top:12px;">You may opt out of this arbitration agreement by sending written notice to support@1st-bond.com within 30 days of first accepting these Terms. Your notice must include your name, account email, and a clear statement that you are opting out of arbitration. If you opt out, Section 14.2 (Governing Law) still applies.</p>
+    </div>
+
+    <h3>14.4 Class Action Waiver</h3>
+    <p>TO THE EXTENT PERMITTED BY APPLICABLE LAW, YOU AGREE THAT ANY DISPUTE RESOLUTION PROCEEDING WILL BE CONDUCTED ONLY ON AN INDIVIDUAL BASIS AND NOT AS A CLASS, CONSOLIDATED, OR REPRESENTATIVE ACTION. YOU WAIVE YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION LAWSUIT OR CLASS-WIDE ARBITRATION.</p>
+
+    <h3>14.5 Limitation on Claims</h3>
+    <p>Any claim arising under these Terms must be brought within one (1) year of the date the cause of action arose, or it is permanently barred.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 15 -->
+  <div class="section" id="s15">
+    <h2>15. General Provisions</h2>
+    <h3>15.1 Entire Agreement</h3>
+    <p>These Terms, together with our Privacy Policy, constitute the entire agreement between you and 1STBOND LLC with respect to the Services and supersede all prior agreements, representations, or understandings. The 1STBOND app may display simplified summaries of these Terms within the app interface. These summaries are provided for convenience only and do not modify, replace, or supersede these Terms or the Privacy Policy. In the event of any conflict between an in-app summary and these Terms, these Terms control.</p>
+
+    <h3>15.2 Severability</h3>
+    <p>If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will remain in full force and effect.</p>
+
+    <h3>15.3 No Waiver</h3>
+    <p>Our failure to enforce any right or provision of these Terms shall not constitute a waiver of that right or provision.</p>
+
+    <h3>15.4 Assignment</h3>
+    <p>You may not assign or transfer your rights or obligations under these Terms without our prior written consent. We may assign our rights and obligations without restriction.</p>
+
+    <h3>15.5 Changes to Terms</h3>
+    <p>We reserve the right to modify these Terms at any time. For material changes, we will provide at least 30 days' advance notice via in-app notification and email. Continued use of the Services after the effective date of any change constitutes your acceptance of the revised Terms.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 16 -->
+  <div class="section" id="s16">
+    <h2>16. Payment Terms</h2>
+    <p>1STBOND LLC offers a subscription plan that unlocks unlimited meetups. This section describes the current subscription terms and the future payment terms that will apply when peer-to-peer payment features are introduced.</p>
+
+    <h3>16.1 Subscription Plan</h3>
+    <ul class="doc-list">
+      <li><strong>Free tier:</strong> your first meetup is free. No payment information is required to use the free tier.</li>
+      <li><strong>Paid subscription:</strong> $4.99 per month, which provides unlimited meetups. Subscription billing is managed through the Apple App Store or Google Play Store, depending on your device.</li>
+      <li>Your subscription automatically renews each month unless cancelled at least 24 hours before the end of the current billing period.</li>
+      <li>You may cancel your subscription at any time through your Apple App Store or Google Play Store account settings. Cancellation takes effect at the end of the current billing period. No partial refunds are issued for unused portions of a billing period, except where required by applicable law.</li>
+      <li>All billing disputes must be directed to Apple or Google, as applicable. 1STBOND LLC does not process subscription payments directly and has no ability to issue refunds for App Store or Google Play purchases.</li>
+      <li>We reserve the right to change subscription pricing with at least 30 days' advance notice. Continued use after a price change takes effect constitutes your acceptance of the new price.</li>
+    </ul>
+
+    <h3>16.2 Future Peer-to-Peer Payment Features</h3>
+    <p>Peer-to-peer payment functionality (enabling users to transact with one another through the platform) is not currently active. When introduced, the following terms will apply and will be provided with at least 30 days' advance notice:</p>
+    <ul class="doc-list">
+      <li>Payment processing will be handled by Stripe, Inc. Your use of payment features will be subject to Stripe's Terms of Service and Privacy Policy.</li>
+      <li>1STBOND LLC is not an escrow agent and does not guarantee transactions between users. All payments are between users and are facilitated through the platform as a convenience only.</li>
+      <li>1STBOND LLC is not responsible for disputes, fraud, chargebacks, or losses arising from transactions between users.</li>
+    </ul>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 17 -->
+  <div class="section" id="s17">
+    <h2>17. Force Majeure</h2>
+    <p>1STBOND LLC shall not be liable for any failure or delay in the performance of the Services arising out of or caused by circumstances beyond our reasonable control, including but not limited to: acts of God, natural disasters, pandemic, war, terrorism, civil unrest, government action, power or internet outages, third-party service failures (including outages by DIDIT, Supabase, Stripe, or other infrastructure providers), cyberattacks, or any other event that makes performance commercially impracticable.</p>
+    <p>In such circumstances, our obligations under these Terms will be suspended for the duration of the force majeure event. We will make reasonable efforts to notify users of any significant service interruption and to restore the Services as promptly as practicable.</p>
+  </div>
+
+  <hr class="section-divider" />
+
+  <!-- 18 -->
+  <div class="section" id="s18">
+    <h2>18. Contact</h2>
+    <p>For questions about these Terms, to report a violation, to appeal an account termination, or for legal notices:</p>
+    <div class="contact-box">
+      <p style="margin-bottom:12px;">For general in-app support and help: <a href="mailto:support@1st-bond.com">support@1st-bond.com</a></p>
+      <p style="margin-bottom:12px;font-size:13px;color:var(--text3);">Note: The 1STBOND app displays a simplified summary of these Terms within the app interface. That summary is provided for convenience only and does not modify these Terms. These Terms control in the event of any conflict.</p>
+      <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="mailto:support@1st-bond.com">support@1st-bond.com</a></p>
+      <p style="margin-bottom:6px;"><strong>Website:</strong> <a href="https://1st-bond.com/terms">https://1st-bond.com/terms</a></p>
+      <p><strong>Mailing Address:</strong> 1500 N Grant St Ste N, Denver, Denver County, CO 80203</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 1STBOND LLC · <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms of Service</a></p>
+  <p style="margin-top:8px;">1500 N Grant St Ste N, Denver, CO 80203 · <a href="mailto:support@1st-bond.com">support@1st-bond.com</a></p>
+</footer>
+
+</body>
+</html>
