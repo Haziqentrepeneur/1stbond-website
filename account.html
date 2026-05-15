@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>My Account — 1STBOND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --p: #a020f0; --p-dim: rgba(160,32,240,.12); --p-border: rgba(160,32,240,.25);
+      --bg: #080808; --surface: #111; --surface2: #181818; --border: rgba(255,255,255,.08);
+      --text: #fff; --text2: rgba(255,255,255,.6); --text3: rgba(255,255,255,.35);
+      --danger: #ff4d4d; --danger-dim: rgba(255,77,77,.12); --danger-border: rgba(255,77,77,.25);
+      --success: #22c55e; --success-dim: rgba(34,197,94,.10); --success-border: rgba(34,197,94,.25);
+      --gold: #f59e0b; --gold-dim: rgba(245,158,11,.12); --gold-border: rgba(245,158,11,.25);
+    }
+    body {
+      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: ''; position: fixed; top: -20%; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(circle, rgba(160,32,240,.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,8,8,.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+    .nav-logo span { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; color: var(--text); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-username { font-size: 13px; color: var(--text2); }
+    .btn-signout {
+      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 14px; color: var(--text2);
+      font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .btn-signout:hover { background: rgba(255,77,77,.12); color: var(--danger); border-color: var(--danger-border); }
+
+    /* ── Loading / auth guard ── */
+    #view-loading {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 80vh; font-size: 14px; color: var(--text3);
+    }
+    .spinner {
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,.15); border-top-color: var(--p);
+      border-radius: 50%; animation: spin .7s linear infinite; margin-right: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Main layout ── */
+    main { max-width: 700px; margin: 0 auto; padding: 32px 24px 64px; position: relative; z-index: 1; }
+
+    /* ── Section headings ── */
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text3); margin-bottom: 12px; margin-top: 32px;
+    }
+    .section-title:first-child { margin-top: 0; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden; margin-bottom: 12px;
+    }
+
+    /* ── Profile header ── */
+    .profile-header { position: relative; }
+    .banner-wrap {
+      width: 100%; height: 120px; background: var(--surface2);
+      cursor: pointer; overflow: hidden; position: relative;
+    }
+    .banner-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .banner-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,.4);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s;
+    }
+    .banner-wrap:hover .banner-overlay { opacity: 1; }
+    .upload-hint { font-size: 12px; color: #fff; font-weight: 600; }
+    .avatar-area {
+      display: flex; align-items: flex-end; gap: 16px;
+      padding: 0 20px 16px; margin-top: -36px;
+    }
+    .avatar-wrap {
+      width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+      border: 3px solid var(--surface); overflow: hidden;
+      background: var(--surface2); cursor: pointer; position: relative;
+    }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,.5);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s; border-radius: 50%;
+    }
+    .avatar-wrap:hover .avatar-overlay { opacity: 1; }
+    .avatar-overlay-icon { font-size: 18px; }
+    .profile-name-area { flex: 1; padding-bottom: 4px; }
+    .profile-name { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+    .profile-username { font-size: 13px; color: var(--text3); }
+
+    /* ── Form rows ── */
+    .form-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+    .form-row:last-child { border-bottom: none; }
+    .form-row-info { flex: 1; }
+    .form-row-label { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
+    .form-row-value { font-size: 15px; color: var(--text); }
+    .form-row-value.muted { color: var(--text2); }
+    .form-row-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--text); font-family: inherit; font-size: 15px; padding: 0;
+      min-width: 0;
+    }
+    .form-row-input::placeholder { color: var(--text3); }
+    .form-row-input:focus { color: var(--text); }
+    .btn-edit {
+      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 14px; color: var(--text2);
+      font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+      white-space: nowrap; transition: background .15s, border-color .15s;
+    }
+    .btn-edit:hover { background: var(--p-dim); border-color: var(--p-border); color: var(--text); }
+
+    /* ── Editable row (expanded) ── */
+    .edit-panel {
+      padding: 0 20px 16px; display: none; flex-direction: column; gap: 10px;
+    }
+    .edit-panel.open { display: flex; }
+    .edit-input {
+      width: 100%; background: rgba(255,255,255,.05); border: 1.5px solid var(--border);
+      border-radius: 11px; padding: 11px 14px; color: var(--text);
+      font-family: inherit; font-size: 14px; outline: none; transition: border-color .15s;
+    }
+    .edit-input:focus { border-color: var(--p-border); }
+    .edit-input[type="password"] { letter-spacing: 2px; }
+    .edit-actions { display: flex; gap: 8px; }
+    .btn-save {
+      flex: 1; background: var(--p); color: #fff; border: none;
+      border-radius: 10px; padding: 11px; font-family: inherit;
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity .15s;
+    }
+    .btn-save:hover { opacity: .88; }
+    .btn-save:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-cancel {
+      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 18px; color: var(--text2);
+      font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .btn-cancel:hover { background: rgba(255,255,255,.10); }
+    .edit-err { color: var(--danger); font-size: 12px; }
+    .edit-ok  { color: var(--success); font-size: 12px; }
+
+    /* ── Subscription card ── */
+    .sub-row { padding: 20px; display: flex; align-items: center; gap: 16px; }
+    .sub-icon { font-size: 28px; flex-shrink: 0; }
+    .sub-info { flex: 1; }
+    .sub-name { font-size: 16px; font-weight: 700; }
+    .sub-desc { font-size: 13px; color: var(--text2); margin-top: 3px; line-height: 1.5; }
+    .badge-premium {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--gold-dim); border: 1px solid var(--gold-border);
+      color: var(--gold); border-radius: 6px; padding: 3px 9px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .badge-free {
+      display: inline-flex; align-items: center;
+      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      color: var(--text3); border-radius: 6px; padding: 3px 9px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .btn-manage-sub {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      text-decoration: none; background: rgba(255,255,255,.06);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 11px 18px; color: var(--text2); font-family: inherit;
+      font-size: 13px; font-weight: 600; transition: background .15s, border-color .15s;
+      margin: 0 20px 20px;
+    }
+    .btn-manage-sub:hover { background: var(--gold-dim); border-color: var(--gold-border); color: var(--gold); }
+    .btn-get-premium {
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; background: var(--p); border-radius: 10px;
+      padding: 12px 18px; color: #fff; font-family: inherit;
+      font-size: 14px; font-weight: 700; margin: 0 20px 20px;
+      transition: opacity .15s;
+    }
+    .btn-get-premium:hover { opacity: .88; }
+
+    /* ── Upload progress ── */
+    .upload-progress {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 20px; font-size: 13px; color: var(--text2);
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5); z-index: 200;
+      opacity: 0; transition: opacity .25s; pointer-events: none;
+    }
+    .upload-progress.show { opacity: 1; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 20px; font-size: 13px; font-weight: 600;
+      box-shadow: 0 8px 32px rgba(0,0,0,.5); z-index: 201;
+      opacity: 0; transition: opacity .25s; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+    .toast.success { border-color: var(--success-border); color: var(--success); background: var(--success-dim); }
+    .toast.error   { border-color: var(--danger-border);  color: var(--danger);  background: var(--danger-dim); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" alt="1stBond" />
+    <span>1STBOND</span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-username" id="nav-username"></span>
+    <button class="btn-signout" onclick="handleSignOut()">Sign out</button>
+  </div>
+</nav>
+
+<div id="view-loading">
+  <span class="spinner"></span> Loading your account…
+</div>
+
+<main id="view-main" class="hidden">
+
+  <!-- ── Profile ── -->
+  <div class="section-title">Profile</div>
+  <div class="card">
+    <div class="profile-header">
+      <!-- Banner -->
+      <div class="banner-wrap" onclick="document.getElementById('banner-input').click()" title="Change banner">
+        <img id="banner-img" src="" alt="" style="display:none" />
+        <div id="banner-placeholder" style="width:100%;height:100%;background:linear-gradient(135deg,rgba(160,32,240,.25),rgba(160,32,240,.05));display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:12px;color:rgba(255,255,255,.3);">Click to add a banner</span>
+        </div>
+        <div class="banner-overlay"><span class="upload-hint">📷 Change Banner</span></div>
+      </div>
+      <!-- Avatar -->
+      <div class="avatar-area">
+        <div class="avatar-wrap" onclick="document.getElementById('avatar-input').click()" title="Change photo">
+          <img id="avatar-img" src="" alt="" />
+          <div class="avatar-overlay"><span class="avatar-overlay-icon">📷</span></div>
+        </div>
+        <div class="profile-name-area">
+          <div class="profile-name" id="profile-name">—</div>
+          <div class="profile-username" id="profile-username"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    <div class="form-row" id="bio-row">
+      <div class="form-row-info">
+        <div class="form-row-label">Bio</div>
+        <div class="form-row-value muted" id="bio-display">No bio yet</div>
+      </div>
+      <button class="btn-edit" onclick="toggleEdit('bio')">Edit</button>
+    </div>
+    <div class="edit-panel" id="bio-panel">
+      <textarea class="edit-input" id="bio-input" rows="3" placeholder="Tell people about yourself…" maxlength="300" style="resize:vertical;line-height:1.5"></textarea>
+      <div class="edit-actions">
+        <button class="btn-cancel" onclick="cancelEdit('bio')">Cancel</button>
+        <button class="btn-save" id="bio-save" onclick="saveBio()">Save</button>
+      </div>
+      <div class="edit-err hidden" id="bio-err"></div>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(this)" />
+  <input type="file" id="banner-input" accept="image/*" class="hidden" onchange="handleBannerUpload(this)" />
+
+  <!-- ── Account ── -->
+  <div class="section-title">Account</div>
+  <div class="card">
+    <!-- Email -->
+    <div class="form-row">
+      <div class="form-row-info">
+        <div class="form-row-label">Email</div>
+        <div class="form-row-value" id="email-display">—</div>
+      </div>
+      <button class="btn-edit" onclick="toggleEdit('email')">Edit</button>
+    </div>
+    <div class="edit-panel" id="email-panel">
+      <input class="edit-input" type="email" id="email-input" placeholder="New email address" maxlength="254" autocomplete="email" />
+      <div class="edit-actions">
+        <button class="btn-cancel" onclick="cancelEdit('email')">Cancel</button>
+        <button class="btn-save" id="email-save" onclick="saveEmail()">Send Confirmation</button>
+      </div>
+      <div class="edit-err hidden" id="email-err"></div>
+      <div class="edit-ok hidden" id="email-ok">Confirmation email sent — check your inbox.</div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-row">
+      <div class="form-row-info">
+        <div class="form-row-label">Password</div>
+        <div class="form-row-value muted">••••••••••</div>
+      </div>
+      <button class="btn-edit" onclick="toggleEdit('password')">Change</button>
+    </div>
+    <div class="edit-panel" id="password-panel">
+      <input class="edit-input" type="password" id="pw-new" placeholder="New password (min. 10 chars)" maxlength="128" autocomplete="new-password" />
+      <input class="edit-input" type="password" id="pw-confirm" placeholder="Confirm new password" maxlength="128" autocomplete="new-password" />
+      <div class="edit-actions">
+        <button class="btn-cancel" onclick="cancelEdit('password')">Cancel</button>
+        <button class="btn-save" id="password-save" onclick="savePassword()">Update Password</button>
+      </div>
+      <div class="edit-err hidden" id="password-err"></div>
+      <div class="edit-ok hidden" id="password-ok">Password updated successfully.</div>
+    </div>
+  </div>
+
+  <!-- ── Subscription ── -->
+  <div class="section-title">Subscription</div>
+  <div class="card" id="sub-card">
+    <div class="sub-row">
+      <div class="sub-icon" id="sub-icon">⭐</div>
+      <div class="sub-info">
+        <div class="sub-name" id="sub-name">Loading…</div>
+        <div class="sub-desc" id="sub-desc"></div>
+      </div>
+    </div>
+    <div id="sub-actions"></div>
+  </div>
+
+  <!-- ── Danger zone ── -->
+  <div class="section-title">Account Actions</div>
+  <div class="card">
+    <div class="form-row" style="flex-direction:column;align-items:flex-start;gap:6px">
+      <div class="form-row-label">Sign out everywhere</div>
+      <div class="form-row-value muted" style="font-size:13px">Signs you out of all active sessions including the mobile app.</div>
+      <button class="btn-edit" style="margin-top:4px;color:var(--danger);border-color:var(--danger-border)" onclick="handleSignOutAll()">Sign Out All Devices</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- Upload progress indicator -->
+<div class="upload-progress" id="upload-progress">
+  <span class="spinner"></span>
+  <span id="upload-progress-text">Uploading…</span>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const SUPABASE_URL = 'https://apwxlfbbngfvvafrnafy.supabase.co'
+  const SUPABASE_KEY = 'sb_publishable_86hMdszoLnTgAuSYNiqqmQ_0_R6YWR_'
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+  let currentUser = null
+  let currentProfile = null
+  let openPanel = null
+
+  // ── Toast ──────────────────────────────────────────────────────────────────
+  let toastTimer = null
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast')
+    t.textContent = msg
+    t.className = 'toast show ' + type
+    clearTimeout(toastTimer)
+    toastTimer = setTimeout(() => { t.className = 'toast' }, 3000)
+  }
+
+  // ── Upload progress ────────────────────────────────────────────────────────
+  function showUpload(text) {
+    document.getElementById('upload-progress-text').textContent = text
+    document.getElementById('upload-progress').classList.add('show')
+  }
+  function hideUpload() {
+    document.getElementById('upload-progress').classList.remove('show')
+  }
+
+  // ── Panel toggle ───────────────────────────────────────────────────────────
+  function toggleEdit(name) {
+    const panel = document.getElementById(name + '-panel')
+    const isOpen = panel.classList.contains('open')
+    if (openPanel && openPanel !== name) cancelEdit(openPanel)
+    if (isOpen) { cancelEdit(name); return }
+    panel.classList.add('open')
+    openPanel = name
+    const first = panel.querySelector('input, textarea')
+    if (first) setTimeout(() => first.focus(), 50)
+  }
+
+  function cancelEdit(name) {
+    const panel = document.getElementById(name + '-panel')
+    panel.classList.remove('open')
+    if (openPanel === name) openPanel = null
+    // Clear inputs and messages
+    panel.querySelectorAll('input, textarea').forEach(el => el.value = '')
+    ;[name + '-err', name + '-ok'].forEach(id => {
+      const el = document.getElementById(id)
+      if (el) el.classList.add('hidden')
+    })
+  }
+
+  function setEditLoading(prefix, loading, label) {
+    const btn = document.getElementById(prefix + '-save')
+    if (!btn) return
+    btn.disabled = loading
+    btn.innerHTML = loading ? '<span class="spinner" style="width:14px;height:14px;border-width:2px"></span>' : label
+  }
+
+  // ── Bio ────────────────────────────────────────────────────────────────────
+  async function saveBio() {
+    const bio = document.getElementById('bio-input').value.trim()
+    const err = document.getElementById('bio-err')
+    err.classList.add('hidden')
+    setEditLoading('bio', true, 'Save')
+
+    const { error } = await sb.from('profiles').update({ bio }).eq('id', currentUser.id)
+    setEditLoading('bio', false, 'Save')
+
+    if (error) {
+      err.textContent = 'Failed to save. Please try again.'
+      err.classList.remove('hidden')
+      return
+    }
+
+    currentProfile.bio = bio
+    document.getElementById('bio-display').textContent = bio || 'No bio yet'
+    cancelEdit('bio')
+    showToast('Bio updated')
+  }
+
+  // ── Email ──────────────────────────────────────────────────────────────────
+  async function saveEmail() {
+    const email = document.getElementById('email-input').value.trim().toLowerCase()
+    const err   = document.getElementById('email-err')
+    const ok    = document.getElementById('email-ok')
+    err.classList.add('hidden')
+    ok.classList.add('hidden')
+
+    if (!email) { err.textContent = 'Please enter a new email.'; err.classList.remove('hidden'); return }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      err.textContent = 'Please enter a valid email address.'
+      err.classList.remove('hidden'); return
+    }
+
+    setEditLoading('email', true, 'Send Confirmation')
+    const { error } = await sb.auth.updateUser({ email })
+    setEditLoading('email', false, 'Send Confirmation')
+
+    if (error) {
+      err.textContent = error.message || 'Failed to update email.'
+      err.classList.remove('hidden')
+      return
+    }
+
+    ok.classList.remove('hidden')
+  }
+
+  // ── Password ───────────────────────────────────────────────────────────────
+  function validatePassword(pw) {
+    if (!pw || pw.length < 10)      return 'Password must be at least 10 characters.'
+    if (!/[A-Z]/.test(pw))          return 'Password must contain an uppercase letter.'
+    if (!/[0-9]/.test(pw))          return 'Password must contain a number.'
+    if (!/[^a-zA-Z0-9]/.test(pw))   return 'Password must contain a special character.'
+    return null
+  }
+
+  async function savePassword() {
+    const pw1 = document.getElementById('pw-new').value
+    const pw2 = document.getElementById('pw-confirm').value
+    const err = document.getElementById('password-err')
+    const ok  = document.getElementById('password-ok')
+    err.classList.add('hidden')
+    ok.classList.add('hidden')
+
+    const valErr = validatePassword(pw1)
+    if (valErr) { err.textContent = valErr; err.classList.remove('hidden'); return }
+    if (pw1 !== pw2) { err.textContent = 'Passwords do not match.'; err.classList.remove('hidden'); return }
+
+    setEditLoading('password', true, 'Update Password')
+    const { error } = await sb.auth.updateUser({ password: pw1 })
+    setEditLoading('password', false, 'Update Password')
+
+    if (error) {
+      err.textContent = error.message || 'Failed to update password.'
+      err.classList.remove('hidden')
+      return
+    }
+
+    ok.classList.remove('hidden')
+    document.getElementById('pw-new').value = ''
+    document.getElementById('pw-confirm').value = ''
+    showToast('Password updated')
+  }
+
+  // ── Avatar upload ──────────────────────────────────────────────────────────
+  async function handleAvatarUpload(input) {
+    const file = input.files[0]
+    if (!file) return
+    input.value = ''
+
+    if (!file.type.startsWith('image/')) { showToast('Please select an image file.', 'error'); return }
+    if (file.size > 5 * 1024 * 1024) { showToast('Image must be under 5 MB.', 'error'); return }
+
+    showUpload('Uploading photo…')
+    const ext  = file.name.split('.').pop().toLowerCase() || 'jpg'
+    const path = `${currentUser.id}/avatar_${Date.now()}.${ext}`
+
+    const { error: upErr } = await sb.storage.from('avatars').upload(path, file, { upsert: true })
+    if (upErr) { hideUpload(); showToast('Upload failed. Try again.', 'error'); return }
+
+    const { data } = sb.storage.from('avatars').getPublicUrl(path)
+    const url = data.publicUrl + '?t=' + Date.now()
+
+    const { error: dbErr } = await sb.from('profiles').update({ avatar_url: url }).eq('id', currentUser.id)
+    hideUpload()
+
+    if (dbErr) { showToast('Saved image but failed to update profile.', 'error'); return }
+
+    currentProfile.avatar_url = url
+    const img = document.getElementById('avatar-img')
+    img.src = url
+    img.style.display = 'block'
+    showToast('Profile photo updated')
+  }
+
+  // ── Banner upload ──────────────────────────────────────────────────────────
+  async function handleBannerUpload(input) {
+    const file = input.files[0]
+    if (!file) return
+    input.value = ''
+
+    if (!file.type.startsWith('image/')) { showToast('Please select an image file.', 'error'); return }
+    if (file.size > 10 * 1024 * 1024) { showToast('Image must be under 10 MB.', 'error'); return }
+
+    showUpload('Uploading banner…')
+    const ext  = file.name.split('.').pop().toLowerCase() || 'jpg'
+    const path = `${currentUser.id}/banner_${Date.now()}.${ext}`
+
+    const { error: upErr } = await sb.storage.from('banners').upload(path, file, { upsert: true })
+    if (upErr) { hideUpload(); showToast('Upload failed. Try again.', 'error'); return }
+
+    const { data } = sb.storage.from('banners').getPublicUrl(path)
+    const url = data.publicUrl + '?t=' + Date.now()
+
+    const { error: dbErr } = await sb.from('profiles').update({ banner_image_url: url }).eq('id', currentUser.id)
+    hideUpload()
+
+    if (dbErr) { showToast('Saved image but failed to update profile.', 'error'); return }
+
+    currentProfile.banner_image_url = url
+    const img = document.getElementById('banner-img')
+    img.src = url
+    img.style.display = 'block'
+    document.getElementById('banner-placeholder').style.display = 'none'
+    showToast('Banner updated')
+  }
+
+  // ── Sign out ───────────────────────────────────────────────────────────────
+  async function handleSignOut() {
+    await sb.auth.signOut()
+    window.location.href = '/login'
+  }
+
+  async function handleSignOutAll() {
+    await sb.auth.signOut({ scope: 'global' })
+    window.location.href = '/login'
+  }
+
+  // ── Render subscription section ────────────────────────────────────────────
+  function renderSubscription(profile) {
+    const isPremium = profile.is_subscribed === true
+    const icon  = document.getElementById('sub-icon')
+    const name  = document.getElementById('sub-name')
+    const desc  = document.getElementById('sub-desc')
+    const acts  = document.getElementById('sub-actions')
+
+    if (isPremium) {
+      icon.textContent = '👑'
+      name.innerHTML   = '<span class="badge-premium">✦ PREMIUM</span>'
+      desc.textContent = 'You have access to all premium features including live location tracking on meetups.'
+      acts.innerHTML   = `
+        <a class="btn-manage-sub" href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer">
+          ⚙️ Manage Subscription on Apple
+        </a>`
+    } else {
+      icon.textContent = '⭐'
+      name.innerHTML   = '<span class="badge-free">FREE</span>'
+      desc.textContent = 'Upgrade to Premium to unlock live meetup tracking, priority placement, and more.'
+      acts.innerHTML   = `
+        <a class="btn-get-premium" href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">
+          Get Premium in the App
+        </a>`
+    }
+  }
+
+  // ── Render profile ─────────────────────────────────────────────────────────
+  function renderProfile(user, profile) {
+    // Nav
+    document.getElementById('nav-username').textContent = profile.username ? '@' + profile.username : ''
+
+    // Names
+    const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || '—'
+    document.getElementById('profile-name').textContent = fullName
+    document.getElementById('profile-username').textContent = profile.username ? '@' + profile.username : ''
+
+    // Bio
+    document.getElementById('bio-display').textContent = profile.bio || 'No bio yet'
+    if (profile.bio) document.getElementById('bio-input').value = profile.bio
+
+    // Email
+    document.getElementById('email-display').textContent = user.email || '—'
+
+    // Avatar
+    if (profile.avatar_url) {
+      const img = document.getElementById('avatar-img')
+      img.src   = profile.avatar_url
+      img.style.display = 'block'
+    }
+
+    // Banner
+    if (profile.banner_image_url) {
+      const img = document.getElementById('banner-img')
+      img.src   = profile.banner_image_url
+      img.style.display = 'block'
+      document.getElementById('banner-placeholder').style.display = 'none'
+    }
+
+    // Subscription
+    renderSubscription(profile)
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession()
+    if (!session) { window.location.href = '/login'; return }
+
+    currentUser = session.user
+
+    const { data: profile, error } = await sb
+      .from('profiles')
+      .select('first_name, last_name, username, bio, is_subscribed, avatar_url, banner_image_url, is_verified')
+      .eq('id', currentUser.id)
+      .single()
+
+    if (error || !profile) {
+      document.getElementById('view-loading').innerHTML =
+        '<span style="color:var(--danger)">Failed to load profile. Please refresh.</span>'
+      return
+    }
+
+    currentProfile = profile
+
+    document.getElementById('view-loading').classList.add('hidden')
+    document.getElementById('view-main').classList.remove('hidden')
+
+    renderProfile(currentUser, profile)
+
+    // Listen for auth changes (e.g. email update confirmation)
+    sb.auth.onAuthStateChange((event, s) => {
+      if (event === 'USER_UPDATED' && s?.user?.email) {
+        document.getElementById('email-display').textContent = s.user.email
+        currentUser = s.user
+      }
+      if (event === 'SIGNED_OUT') {
+        window.location.href = '/login'
+      }
+    })
+  }
+
+  init()
+</script>
+</body>
+</html>

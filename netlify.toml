@@ -13,6 +13,43 @@
     Strict-Transport-Security  = "max-age=63072000; includeSubDomains; preload"
     Content-Security-Policy    = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
+# ── Auth & account pages: relaxed CSP to allow Supabase ───────────────────────
+[[headers]]
+  for = "/login.html"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/login"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/account.html"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/account"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/reset-password.html"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/reset-password"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
 # ── Auth pages: never cache (tokens in URLs) ──────────────────────────────────
 [[headers]]
   for = "/reset-password"
@@ -53,6 +90,17 @@
 [[redirects]]
   from = "/email-confirmed"
   to   = "/email-confirmed.html"
+  status = 200
+
+# ── Account portal routes ─────────────────────────────────────────────────────
+[[redirects]]
+  from = "/login"
+  to   = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/account"
+  to   = "/account.html"
   status = 200
 
 # ── Legacy redirects ──────────────────────────────────────────────────────────
