@@ -57,9 +57,16 @@
       font-size: 13px; font-weight: 600; color: var(--mg);
       padding: 8px 18px; border-radius: 9px;
       background: var(--mg-light); border: 1px solid #dbb6f8;
-      transition: background .15s;
+      transition: background .15s; text-decoration: none;
     }
     .nav-pill:hover { background: #ead5fd; }
+    .nav-pill-ghost {
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      padding: 8px 18px; border-radius: 9px;
+      background: transparent; border: 1px solid rgba(0,0,0,.12);
+      transition: background .15s, color .15s; text-decoration: none;
+    }
+    .nav-pill-ghost:hover { background: rgba(0,0,0,.06); color: var(--text); }
 
     /* ── HERO ── */
     .hero {
@@ -285,8 +292,23 @@
     <a href="#how-it-works">How it Works</a>
     <a href="#pricing">Pricing</a>
   </div>
-  <a href="mailto:support@1st-bond.com" class="nav-pill">Get in Touch</a>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a id="nav-account-btn" href="/login" class="nav-pill-ghost">Sign In</a>
+    <a href="mailto:support@1st-bond.com" class="nav-pill">Get in Touch</a>
+  </div>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  (async () => {
+    const sb = supabase.createClient(
+      'https://apwxlfbbngfvvafrnafy.supabase.co',
+      'sb_publishable_86hMdszoLnTgAuSYNiqqmQ_0_R6YWR_'
+    )
+    const { data: { session } } = await sb.auth.getSession()
+    const btn = document.getElementById('nav-account-btn')
+    if (session) { btn.textContent = 'My Account'; btn.href = '/account' }
+  })()
+</script>
 
 <!-- HERO -->
 <div class="hero">
