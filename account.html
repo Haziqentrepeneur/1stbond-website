@@ -9,224 +9,262 @@
   <title>My Account — 1STBOND</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --p: #a020f0; --p-dim: rgba(160,32,240,.12); --p-border: rgba(160,32,240,.25);
-      --bg: #080808; --surface: #111; --surface2: #181818; --border: rgba(255,255,255,.08);
-      --text: #fff; --text2: rgba(255,255,255,.6); --text3: rgba(255,255,255,.35);
-      --danger: #ff4d4d; --danger-dim: rgba(255,77,77,.12); --danger-border: rgba(255,77,77,.25);
-      --success: #22c55e; --success-dim: rgba(34,197,94,.10); --success-border: rgba(34,197,94,.25);
-      --gold: #f59e0b; --gold-dim: rgba(245,158,11,.12); --gold-border: rgba(245,158,11,.25);
+      --mg: #a020f0; --mg-dark: #7a00cc; --mg-light: #f3e8ff; --mg-faint: #fdf6ff;
+      --mg-border: #dbb6f8;
+      --text: #0f0a1e; --muted: #64748b; --subtle: #94a3b8;
+      --border: #e2e8f0; --white: #ffffff; --bg: #f8f6ff; --surface: #f8fafc;
+      --danger: #dc2626; --danger-bg: #fef2f2; --danger-border: #fecaca;
+      --success: #16a34a; --success-bg: #f0fdf4; --success-border: #bbf7d0;
+      --gold: #b45309; --gold-bg: #fffbeb; --gold-border: #fde68a;
     }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
-      min-height: 100vh; -webkit-font-smoothing: antialiased;
+      font-family: 'Inter', sans-serif; background: var(--bg);
+      color: var(--text); min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-    body::before {
-      content: ''; position: fixed; top: -20%; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 500px;
-      background: radial-gradient(circle, rgba(160,32,240,.12) 0%, transparent 70%);
-      pointer-events: none; z-index: 0;
-    }
+    a { text-decoration: none; color: inherit; }
 
     /* ── Nav ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(8,8,8,.85); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 24px;
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
     }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
-    .nav-logo span { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; color: var(--text); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 9px; }
+    .nav-logo-text { font-size: 15px; font-weight: 800; letter-spacing: 0.4px; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-username { font-size: 13px; color: var(--text2); }
-    .btn-signout {
-      background: rgba(255,255,255,.06); border: 1px solid var(--border);
-      border-radius: 8px; padding: 7px 14px; color: var(--text2);
-      font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
-      transition: background .15s, color .15s;
+    .nav-username { font-size: 13px; color: var(--muted); }
+    .nav-pill {
+      font-size: 13px; font-weight: 600; color: var(--mg);
+      padding: 8px 18px; border-radius: 9px;
+      background: var(--mg-light); border: 1px solid var(--mg-border);
+      transition: background .15s; cursor: pointer; font-family: inherit; border: 1px solid var(--mg-border);
     }
-    .btn-signout:hover { background: rgba(255,77,77,.12); color: var(--danger); border-color: var(--danger-border); }
+    .nav-pill:hover { background: #ead5fd; }
+    .btn-signout {
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      padding: 8px 16px; border-radius: 9px;
+      background: transparent; border: 1.5px solid var(--border);
+      cursor: pointer; font-family: inherit;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-signout:hover { border-color: var(--danger-border); color: var(--danger); }
 
-    /* ── Loading / auth guard ── */
+    /* ── Loading ── */
     #view-loading {
       display: flex; align-items: center; justify-content: center;
-      min-height: 80vh; font-size: 14px; color: var(--text3);
+      min-height: 60vh; color: var(--muted); font-size: 14px; gap: 10px;
     }
-    .spinner {
-      display: inline-block; width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,.15); border-top-color: var(--p);
-      border-radius: 50%; animation: spin .7s linear infinite; margin-right: 10px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Main layout ── */
-    main { max-width: 700px; margin: 0 auto; padding: 32px 24px 64px; position: relative; z-index: 1; }
+    /* ── Main ── */
+    main { max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
 
-    /* ── Section headings ── */
-    .section-title {
+    /* ── Section labels ── */
+    .section-label {
       font-size: 11px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; color: var(--text3); margin-bottom: 12px; margin-top: 32px;
+      text-transform: uppercase; color: var(--subtle);
+      margin-bottom: 10px; margin-top: 36px;
     }
-    .section-title:first-child { margin-top: 0; }
+    .section-label:first-child { margin-top: 0; }
 
     /* ── Cards ── */
     .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; overflow: hidden; margin-bottom: 12px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
     }
 
-    /* ── Profile header ── */
-    .profile-header { position: relative; }
+    /* ── Profile banner + avatar ── */
     .banner-wrap {
-      width: 100%; height: 120px; background: var(--surface2);
+      width: 100%; height: 110px; background: linear-gradient(135deg, #f3e8ff, #fdf6ff);
       cursor: pointer; overflow: hidden; position: relative;
     }
-    .banner-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .banner-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
     .banner-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,.4);
+      position: absolute; inset: 0; background: rgba(160,32,240,.12);
       display: flex; align-items: center; justify-content: center;
       opacity: 0; transition: opacity .2s;
     }
     .banner-wrap:hover .banner-overlay { opacity: 1; }
-    .upload-hint { font-size: 12px; color: #fff; font-weight: 600; }
-    .avatar-area {
-      display: flex; align-items: flex-end; gap: 16px;
-      padding: 0 20px 16px; margin-top: -36px;
+    .banner-hint {
+      font-size: 12px; font-weight: 600; color: var(--mg);
+      background: rgba(255,255,255,.9); padding: 6px 14px; border-radius: 20px;
+    }
+
+    .avatar-row {
+      display: flex; align-items: flex-end; gap: 14px;
+      padding: 0 20px 16px; margin-top: -30px;
     }
     .avatar-wrap {
-      width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
-      border: 3px solid var(--surface); overflow: hidden;
-      background: var(--surface2); cursor: pointer; position: relative;
+      width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+      border: 3px solid var(--white); overflow: hidden;
+      background: var(--mg-light); cursor: pointer; position: relative;
     }
     .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
     .avatar-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,.5);
+      position: absolute; inset: 0; background: rgba(160,32,240,.2);
       display: flex; align-items: center; justify-content: center;
       opacity: 0; transition: opacity .2s; border-radius: 50%;
     }
     .avatar-wrap:hover .avatar-overlay { opacity: 1; }
-    .avatar-overlay-icon { font-size: 18px; }
-    .profile-name-area { flex: 1; padding-bottom: 4px; }
-    .profile-name { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
-    .profile-username { font-size: 13px; color: var(--text3); }
+    .profile-name-area { flex: 1; padding-bottom: 2px; }
+    .profile-fullname { font-size: 17px; font-weight: 800; margin-bottom: 1px; }
+    .profile-handle { font-size: 13px; color: var(--muted); }
 
-    /* ── Form rows ── */
-    .form-row { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
-    .form-row:last-child { border-bottom: none; }
-    .form-row-info { flex: 1; }
-    .form-row-label { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
-    .form-row-value { font-size: 15px; color: var(--text); }
-    .form-row-value.muted { color: var(--text2); }
-    .form-row-input {
-      flex: 1; background: transparent; border: none; outline: none;
-      color: var(--text); font-family: inherit; font-size: 15px; padding: 0;
-      min-width: 0;
+    /* ── Row items ── */
+    .row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 15px 20px; border-bottom: 1px solid var(--border);
     }
-    .form-row-input::placeholder { color: var(--text3); }
-    .form-row-input:focus { color: var(--text); }
+    .row:last-child { border-bottom: none; }
+    .row-info { flex: 1; min-width: 0; }
+    .row-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--subtle); margin-bottom: 3px;
+    }
+    .row-value { font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row-value.dim { color: var(--muted); }
+
     .btn-edit {
-      background: rgba(255,255,255,.06); border: 1px solid var(--border);
-      border-radius: 8px; padding: 7px 14px; color: var(--text2);
-      font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
-      white-space: nowrap; transition: background .15s, border-color .15s;
+      flex-shrink: 0; font-size: 12px; font-weight: 600; color: var(--muted);
+      padding: 6px 13px; border-radius: 8px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      cursor: pointer; font-family: inherit;
+      transition: border-color .15s, color .15s;
     }
-    .btn-edit:hover { background: var(--p-dim); border-color: var(--p-border); color: var(--text); }
+    .btn-edit:hover { border-color: var(--mg-border); color: var(--mg); }
 
-    /* ── Editable row (expanded) ── */
-    .edit-panel {
-      padding: 0 20px 16px; display: none; flex-direction: column; gap: 10px;
-    }
+    /* ── Edit panels ── */
+    .edit-panel { padding: 0 20px 16px; display: none; flex-direction: column; gap: 10px; }
     .edit-panel.open { display: flex; }
+
     .edit-input {
-      width: 100%; background: rgba(255,255,255,.05); border: 1.5px solid var(--border);
-      border-radius: 11px; padding: 11px 14px; color: var(--text);
-      font-family: inherit; font-size: 14px; outline: none; transition: border-color .15s;
+      width: 100%; background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 11px 13px; color: var(--text);
+      font-family: inherit; font-size: 14px; outline: none;
+      transition: border-color .15s, box-shadow .15s;
     }
-    .edit-input:focus { border-color: var(--p-border); }
-    .edit-input[type="password"] { letter-spacing: 2px; }
+    .edit-input:focus { border-color: #c084fc; box-shadow: 0 0 0 3px rgba(160,32,240,.08); }
+    textarea.edit-input { resize: vertical; line-height: 1.5; min-height: 80px; }
+
     .edit-actions { display: flex; gap: 8px; }
     .btn-save {
-      flex: 1; background: var(--p); color: #fff; border: none;
-      border-radius: 10px; padding: 11px; font-family: inherit;
-      font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity .15s;
+      flex: 1; background: var(--mg); color: #fff; border: none;
+      border-radius: 9px; padding: 11px; font-family: inherit;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      transition: background .15s; display: flex; align-items: center; justify-content: center; gap: 6px;
     }
-    .btn-save:hover { opacity: .88; }
-    .btn-save:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-save:hover { background: var(--mg-dark); }
+    .btn-save:disabled { opacity: .5; cursor: not-allowed; }
     .btn-cancel {
-      background: rgba(255,255,255,.06); border: 1px solid var(--border);
-      border-radius: 10px; padding: 11px 18px; color: var(--text2);
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 9px; padding: 11px 16px; color: var(--muted);
       font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
     }
-    .btn-cancel:hover { background: rgba(255,255,255,.10); }
-    .edit-err { color: var(--danger); font-size: 12px; }
-    .edit-ok  { color: var(--success); font-size: 12px; }
+    .btn-cancel:hover { background: var(--border); }
+    .edit-err { font-size: 12px; color: var(--danger); }
+    .edit-ok  { font-size: 12px; color: var(--success); font-weight: 600; }
 
-    /* ── Subscription card ── */
-    .sub-row { padding: 20px; display: flex; align-items: center; gap: 16px; }
-    .sub-icon { font-size: 28px; flex-shrink: 0; }
-    .sub-info { flex: 1; }
-    .sub-name { font-size: 16px; font-weight: 700; }
-    .sub-desc { font-size: 13px; color: var(--text2); margin-top: 3px; line-height: 1.5; }
+    /* ── Subscription ── */
+    .sub-body { padding: 20px; }
+    .sub-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .sub-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sub-icon.premium { background: var(--gold-bg); border: 1px solid var(--gold-border); }
+    .sub-icon.free    { background: var(--mg-light); border: 1px solid var(--mg-border); }
+    .sub-name { font-size: 16px; font-weight: 800; }
+    .sub-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
     .badge-premium {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--gold-dim); border: 1px solid var(--gold-border);
-      color: var(--gold); border-radius: 6px; padding: 3px 9px;
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--gold-bg); border: 1px solid var(--gold-border);
+      color: var(--gold); border-radius: 6px; padding: 2px 9px;
       font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
     }
     .badge-free {
       display: inline-flex; align-items: center;
-      background: rgba(255,255,255,.06); border: 1px solid var(--border);
-      color: var(--text3); border-radius: 6px; padding: 3px 9px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted); border-radius: 6px; padding: 2px 9px;
       font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
     }
-    .btn-manage-sub {
+    .btn-sub-action {
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      text-decoration: none; background: rgba(255,255,255,.06);
-      border: 1px solid var(--border); border-radius: 10px;
-      padding: 11px 18px; color: var(--text2); font-family: inherit;
-      font-size: 13px; font-weight: 600; transition: background .15s, border-color .15s;
-      margin: 0 20px 20px;
+      width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 12px; font-family: inherit;
+      font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer;
+      transition: border-color .15s, color .15s;
     }
-    .btn-manage-sub:hover { background: var(--gold-dim); border-color: var(--gold-border); color: var(--gold); }
+    .btn-sub-action:hover { border-color: var(--mg-border); color: var(--mg); }
     .btn-get-premium {
       display: flex; align-items: center; justify-content: center;
-      text-decoration: none; background: var(--p); border-radius: 10px;
-      padding: 12px 18px; color: #fff; font-family: inherit;
-      font-size: 14px; font-weight: 700; margin: 0 20px 20px;
-      transition: opacity .15s;
+      width: 100%; background: var(--mg); border: none;
+      border-radius: 10px; padding: 13px; font-family: inherit;
+      font-size: 14px; font-weight: 700; color: #fff; cursor: pointer;
+      transition: background .15s;
     }
-    .btn-get-premium:hover { opacity: .88; }
+    .btn-get-premium:hover { background: var(--mg-dark); }
 
-    /* ── Upload progress ── */
-    .upload-progress {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 12px 20px; font-size: 13px; color: var(--text2);
-      display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.5); z-index: 200;
-      opacity: 0; transition: opacity .25s; pointer-events: none;
+    /* ── Danger row ── */
+    .danger-row {
+      padding: 16px 20px; display: flex; flex-direction: column; gap: 6px;
     }
-    .upload-progress.show { opacity: 1; }
+    .btn-danger {
+      align-self: flex-start; font-size: 12px; font-weight: 600; color: var(--danger);
+      padding: 7px 14px; border-radius: 8px;
+      background: var(--danger-bg); border: 1.5px solid var(--danger-border);
+      cursor: pointer; font-family: inherit; margin-top: 4px;
+      transition: background .15s;
+    }
+    .btn-danger:hover { background: #fecaca; }
 
     /* ── Toast ── */
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 12px 20px; font-size: 13px; font-weight: 600;
-      box-shadow: 0 8px 32px rgba(0,0,0,.5); z-index: 201;
+      background: var(--text); color: #fff;
+      border-radius: 10px; padding: 11px 20px; font-size: 13px; font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,.15); z-index: 200;
       opacity: 0; transition: opacity .25s; pointer-events: none; white-space: nowrap;
     }
     .toast.show { opacity: 1; }
-    .toast.success { border-color: var(--success-border); color: var(--success); background: var(--success-dim); }
-    .toast.error   { border-color: var(--danger-border);  color: var(--danger);  background: var(--danger-dim); }
+    .toast.success { background: var(--success); }
+    .toast.error   { background: var(--danger); }
 
+    /* ── Upload indicator ── */
+    .upload-bar {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 20px; font-size: 13px; color: var(--muted);
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.08); z-index: 199;
+      opacity: 0; transition: opacity .25s; pointer-events: none;
+    }
+    .upload-bar.show { opacity: 1; }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 15px; height: 15px; border: 2px solid rgba(255,255,255,.3);
+      border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0;
+    }
+    .spinner-dark {
+      width: 15px; height: 15px; border: 2px solid var(--border);
+      border-top-color: var(--mg); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .hidden { display: none !important; }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 20px; }
+      main { padding: 24px 16px 60px; }
+    }
   </style>
 </head>
 <body>
@@ -234,7 +272,7 @@
 <nav>
   <a class="nav-logo" href="/">
     <img src="logo.png" alt="1stBond" />
-    <span>1STBOND</span>
+    <span class="nav-logo-text">1STBOND</span>
   </a>
   <div class="nav-right">
     <span class="nav-username" id="nav-username"></span>
@@ -243,46 +281,41 @@
 </nav>
 
 <div id="view-loading">
-  <span class="spinner"></span> Loading your account…
+  <span class="spinner-dark"></span> Loading your account…
 </div>
 
 <main id="view-main" class="hidden">
 
-  <!-- ── Profile ── -->
-  <div class="section-title">Profile</div>
+  <!-- Profile -->
+  <div class="section-label">Profile</div>
   <div class="card">
-    <div class="profile-header">
-      <!-- Banner -->
-      <div class="banner-wrap" onclick="document.getElementById('banner-input').click()" title="Change banner">
-        <img id="banner-img" src="" alt="" style="display:none" />
-        <div id="banner-placeholder" style="width:100%;height:100%;background:linear-gradient(135deg,rgba(160,32,240,.25),rgba(160,32,240,.05));display:flex;align-items:center;justify-content:center;">
-          <span style="font-size:12px;color:rgba(255,255,255,.3);">Click to add a banner</span>
+    <div class="banner-wrap" onclick="document.getElementById('banner-input').click()" title="Change banner">
+      <img id="banner-img" alt="Banner" />
+      <div class="banner-overlay"><span class="banner-hint">Change Banner</span></div>
+    </div>
+    <div class="avatar-row">
+      <div class="avatar-wrap" onclick="document.getElementById('avatar-input').click()" title="Change photo">
+        <img id="avatar-img" alt="Avatar" />
+        <div class="avatar-overlay">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
         </div>
-        <div class="banner-overlay"><span class="upload-hint">📷 Change Banner</span></div>
       </div>
-      <!-- Avatar -->
-      <div class="avatar-area">
-        <div class="avatar-wrap" onclick="document.getElementById('avatar-input').click()" title="Change photo">
-          <img id="avatar-img" src="" alt="" />
-          <div class="avatar-overlay"><span class="avatar-overlay-icon">📷</span></div>
-        </div>
-        <div class="profile-name-area">
-          <div class="profile-name" id="profile-name">—</div>
-          <div class="profile-username" id="profile-username"></div>
-        </div>
+      <div class="profile-name-area">
+        <div class="profile-fullname" id="profile-fullname">—</div>
+        <div class="profile-handle" id="profile-handle"></div>
       </div>
     </div>
 
     <!-- Bio -->
-    <div class="form-row" id="bio-row">
-      <div class="form-row-info">
-        <div class="form-row-label">Bio</div>
-        <div class="form-row-value muted" id="bio-display">No bio yet</div>
+    <div class="row" id="bio-row">
+      <div class="row-info">
+        <div class="row-label">Bio</div>
+        <div class="row-value dim" id="bio-display">No bio yet</div>
       </div>
       <button class="btn-edit" onclick="toggleEdit('bio')">Edit</button>
     </div>
     <div class="edit-panel" id="bio-panel">
-      <textarea class="edit-input" id="bio-input" rows="3" placeholder="Tell people about yourself…" maxlength="300" style="resize:vertical;line-height:1.5"></textarea>
+      <textarea class="edit-input" id="bio-input" placeholder="Tell people about yourself…" maxlength="300"></textarea>
       <div class="edit-actions">
         <button class="btn-cancel" onclick="cancelEdit('bio')">Cancel</button>
         <button class="btn-save" id="bio-save" onclick="saveBio()">Save</button>
@@ -291,18 +324,16 @@
     </div>
   </div>
 
-  <!-- Hidden file inputs -->
   <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(this)" />
   <input type="file" id="banner-input" accept="image/*" class="hidden" onchange="handleBannerUpload(this)" />
 
-  <!-- ── Account ── -->
-  <div class="section-title">Account</div>
+  <!-- Account -->
+  <div class="section-label">Account</div>
   <div class="card">
-    <!-- Email -->
-    <div class="form-row">
-      <div class="form-row-info">
-        <div class="form-row-label">Email</div>
-        <div class="form-row-value" id="email-display">—</div>
+    <div class="row">
+      <div class="row-info">
+        <div class="row-label">Email</div>
+        <div class="row-value" id="email-display">—</div>
       </div>
       <button class="btn-edit" onclick="toggleEdit('email')">Edit</button>
     </div>
@@ -316,11 +347,10 @@
       <div class="edit-ok hidden" id="email-ok">Confirmation email sent — check your inbox.</div>
     </div>
 
-    <!-- Password -->
-    <div class="form-row">
-      <div class="form-row-info">
-        <div class="form-row-label">Password</div>
-        <div class="form-row-value muted">••••••••••</div>
+    <div class="row">
+      <div class="row-info">
+        <div class="row-label">Password</div>
+        <div class="row-value dim">••••••••••</div>
       </div>
       <button class="btn-edit" onclick="toggleEdit('password')">Change</button>
     </div>
@@ -336,38 +366,39 @@
     </div>
   </div>
 
-  <!-- ── Subscription ── -->
-  <div class="section-title">Subscription</div>
-  <div class="card" id="sub-card">
-    <div class="sub-row">
-      <div class="sub-icon" id="sub-icon">⭐</div>
-      <div class="sub-info">
-        <div class="sub-name" id="sub-name">Loading…</div>
-        <div class="sub-desc" id="sub-desc"></div>
+  <!-- Subscription -->
+  <div class="section-label">Subscription</div>
+  <div class="card">
+    <div class="sub-body" id="sub-body">
+      <div class="sub-header">
+        <div class="sub-icon" id="sub-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="sub-name" id="sub-name">Loading…</div>
+        </div>
       </div>
+      <div class="sub-desc" id="sub-desc"></div>
+      <div id="sub-actions"></div>
     </div>
-    <div id="sub-actions"></div>
   </div>
 
-  <!-- ── Danger zone ── -->
-  <div class="section-title">Account Actions</div>
+  <!-- Account actions -->
+  <div class="section-label">Account Actions</div>
   <div class="card">
-    <div class="form-row" style="flex-direction:column;align-items:flex-start;gap:6px">
-      <div class="form-row-label">Sign out everywhere</div>
-      <div class="form-row-value muted" style="font-size:13px">Signs you out of all active sessions including the mobile app.</div>
-      <button class="btn-edit" style="margin-top:4px;color:var(--danger);border-color:var(--danger-border)" onclick="handleSignOutAll()">Sign Out All Devices</button>
+    <div class="danger-row">
+      <div class="row-label">Sign out everywhere</div>
+      <div class="row-value dim" style="font-size:13px">Signs you out of all active sessions including the mobile app.</div>
+      <button class="btn-danger" onclick="handleSignOutAll()">Sign Out All Devices</button>
     </div>
   </div>
 
 </main>
 
-<!-- Upload progress indicator -->
-<div class="upload-progress" id="upload-progress">
-  <span class="spinner"></span>
-  <span id="upload-progress-text">Uploading…</span>
+<div class="upload-bar" id="upload-bar">
+  <span class="spinner-dark"></span>
+  <span id="upload-bar-text">Uploading…</span>
 </div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
@@ -389,16 +420,13 @@
     toastTimer = setTimeout(() => { t.className = 'toast' }, 3000)
   }
 
-  // ── Upload progress ────────────────────────────────────────────────────────
   function showUpload(text) {
-    document.getElementById('upload-progress-text').textContent = text
-    document.getElementById('upload-progress').classList.add('show')
+    document.getElementById('upload-bar-text').textContent = text
+    document.getElementById('upload-bar').classList.add('show')
   }
-  function hideUpload() {
-    document.getElementById('upload-progress').classList.remove('show')
-  }
+  function hideUpload() { document.getElementById('upload-bar').classList.remove('show') }
 
-  // ── Panel toggle ───────────────────────────────────────────────────────────
+  // ── Panels ─────────────────────────────────────────────────────────────────
   function toggleEdit(name) {
     const panel = document.getElementById(name + '-panel')
     const isOpen = panel.classList.contains('open')
@@ -407,14 +435,14 @@
     panel.classList.add('open')
     openPanel = name
     const first = panel.querySelector('input, textarea')
-    if (first) setTimeout(() => first.focus(), 50)
+    if (first) setTimeout(() => first.focus(), 40)
   }
 
   function cancelEdit(name) {
     const panel = document.getElementById(name + '-panel')
+    if (!panel) return
     panel.classList.remove('open')
     if (openPanel === name) openPanel = null
-    // Clear inputs and messages
     panel.querySelectorAll('input, textarea').forEach(el => el.value = '')
     ;[name + '-err', name + '-ok'].forEach(id => {
       const el = document.getElementById(id)
@@ -422,11 +450,13 @@
     })
   }
 
-  function setEditLoading(prefix, loading, label) {
+  function setSaveLoading(prefix, loading, label) {
     const btn = document.getElementById(prefix + '-save')
     if (!btn) return
     btn.disabled = loading
-    btn.innerHTML = loading ? '<span class="spinner" style="width:14px;height:14px;border-width:2px"></span>' : label
+    btn.innerHTML = loading
+      ? '<span class="spinner"></span>'
+      : label
   }
 
   // ── Bio ────────────────────────────────────────────────────────────────────
@@ -434,19 +464,15 @@
     const bio = document.getElementById('bio-input').value.trim()
     const err = document.getElementById('bio-err')
     err.classList.add('hidden')
-    setEditLoading('bio', true, 'Save')
+    setSaveLoading('bio', true, 'Save')
 
     const { error } = await sb.from('profiles').update({ bio }).eq('id', currentUser.id)
-    setEditLoading('bio', false, 'Save')
+    setSaveLoading('bio', false, 'Save')
 
-    if (error) {
-      err.textContent = 'Failed to save. Please try again.'
-      err.classList.remove('hidden')
-      return
-    }
-
+    if (error) { err.textContent = 'Failed to save. Please try again.'; err.classList.remove('hidden'); return }
     currentProfile.bio = bio
     document.getElementById('bio-display').textContent = bio || 'No bio yet'
+    document.getElementById('bio-display').className = 'row-value' + (bio ? '' : ' dim')
     cancelEdit('bio')
     showToast('Bio updated')
   }
@@ -454,36 +480,27 @@
   // ── Email ──────────────────────────────────────────────────────────────────
   async function saveEmail() {
     const email = document.getElementById('email-input').value.trim().toLowerCase()
-    const err   = document.getElementById('email-err')
-    const ok    = document.getElementById('email-ok')
-    err.classList.add('hidden')
-    ok.classList.add('hidden')
+    const err = document.getElementById('email-err')
+    const ok  = document.getElementById('email-ok')
+    err.classList.add('hidden'); ok.classList.add('hidden')
 
     if (!email) { err.textContent = 'Please enter a new email.'; err.classList.remove('hidden'); return }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      err.textContent = 'Please enter a valid email address.'
-      err.classList.remove('hidden'); return
-    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email.'; err.classList.remove('hidden'); return }
 
-    setEditLoading('email', true, 'Send Confirmation')
+    setSaveLoading('email', true, 'Send Confirmation')
     const { error } = await sb.auth.updateUser({ email })
-    setEditLoading('email', false, 'Send Confirmation')
+    setSaveLoading('email', false, 'Send Confirmation')
 
-    if (error) {
-      err.textContent = error.message || 'Failed to update email.'
-      err.classList.remove('hidden')
-      return
-    }
-
+    if (error) { err.textContent = error.message || 'Failed to update email.'; err.classList.remove('hidden'); return }
     ok.classList.remove('hidden')
   }
 
   // ── Password ───────────────────────────────────────────────────────────────
   function validatePassword(pw) {
-    if (!pw || pw.length < 10)      return 'Password must be at least 10 characters.'
-    if (!/[A-Z]/.test(pw))          return 'Password must contain an uppercase letter.'
-    if (!/[0-9]/.test(pw))          return 'Password must contain a number.'
-    if (!/[^a-zA-Z0-9]/.test(pw))   return 'Password must contain a special character.'
+    if (!pw || pw.length < 10)    return 'Password must be at least 10 characters.'
+    if (!/[A-Z]/.test(pw))        return 'Password must contain an uppercase letter.'
+    if (!/[0-9]/.test(pw))        return 'Password must contain a number.'
+    if (!/[^a-zA-Z0-9]/.test(pw)) return 'Password must contain a special character.'
     return null
   }
 
@@ -492,23 +509,17 @@
     const pw2 = document.getElementById('pw-confirm').value
     const err = document.getElementById('password-err')
     const ok  = document.getElementById('password-ok')
-    err.classList.add('hidden')
-    ok.classList.add('hidden')
+    err.classList.add('hidden'); ok.classList.add('hidden')
 
     const valErr = validatePassword(pw1)
     if (valErr) { err.textContent = valErr; err.classList.remove('hidden'); return }
     if (pw1 !== pw2) { err.textContent = 'Passwords do not match.'; err.classList.remove('hidden'); return }
 
-    setEditLoading('password', true, 'Update Password')
+    setSaveLoading('password', true, 'Update Password')
     const { error } = await sb.auth.updateUser({ password: pw1 })
-    setEditLoading('password', false, 'Update Password')
+    setSaveLoading('password', false, 'Update Password')
 
-    if (error) {
-      err.textContent = error.message || 'Failed to update password.'
-      err.classList.remove('hidden')
-      return
-    }
-
+    if (error) { err.textContent = error.message || 'Failed to update password.'; err.classList.remove('hidden'); return }
     ok.classList.remove('hidden')
     document.getElementById('pw-new').value = ''
     document.getElementById('pw-confirm').value = ''
@@ -517,64 +528,51 @@
 
   // ── Avatar upload ──────────────────────────────────────────────────────────
   async function handleAvatarUpload(input) {
-    const file = input.files[0]
+    const file = input.files[0]; input.value = ''
     if (!file) return
-    input.value = ''
-
-    if (!file.type.startsWith('image/')) { showToast('Please select an image file.', 'error'); return }
+    if (!file.type.startsWith('image/')) { showToast('Select an image file.', 'error'); return }
     if (file.size > 5 * 1024 * 1024) { showToast('Image must be under 5 MB.', 'error'); return }
 
     showUpload('Uploading photo…')
     const ext  = file.name.split('.').pop().toLowerCase() || 'jpg'
     const path = `${currentUser.id}/avatar_${Date.now()}.${ext}`
-
     const { error: upErr } = await sb.storage.from('avatars').upload(path, file, { upsert: true })
     if (upErr) { hideUpload(); showToast('Upload failed. Try again.', 'error'); return }
 
     const { data } = sb.storage.from('avatars').getPublicUrl(path)
     const url = data.publicUrl + '?t=' + Date.now()
-
     const { error: dbErr } = await sb.from('profiles').update({ avatar_url: url }).eq('id', currentUser.id)
     hideUpload()
-
-    if (dbErr) { showToast('Saved image but failed to update profile.', 'error'); return }
+    if (dbErr) { showToast('Uploaded but could not save URL.', 'error'); return }
 
     currentProfile.avatar_url = url
     const img = document.getElementById('avatar-img')
-    img.src = url
-    img.style.display = 'block'
+    img.src = url; img.style.display = 'block'
     showToast('Profile photo updated')
   }
 
   // ── Banner upload ──────────────────────────────────────────────────────────
   async function handleBannerUpload(input) {
-    const file = input.files[0]
+    const file = input.files[0]; input.value = ''
     if (!file) return
-    input.value = ''
-
-    if (!file.type.startsWith('image/')) { showToast('Please select an image file.', 'error'); return }
+    if (!file.type.startsWith('image/')) { showToast('Select an image file.', 'error'); return }
     if (file.size > 10 * 1024 * 1024) { showToast('Image must be under 10 MB.', 'error'); return }
 
     showUpload('Uploading banner…')
     const ext  = file.name.split('.').pop().toLowerCase() || 'jpg'
     const path = `${currentUser.id}/banner_${Date.now()}.${ext}`
-
     const { error: upErr } = await sb.storage.from('banners').upload(path, file, { upsert: true })
     if (upErr) { hideUpload(); showToast('Upload failed. Try again.', 'error'); return }
 
     const { data } = sb.storage.from('banners').getPublicUrl(path)
     const url = data.publicUrl + '?t=' + Date.now()
-
     const { error: dbErr } = await sb.from('profiles').update({ banner_image_url: url }).eq('id', currentUser.id)
     hideUpload()
-
-    if (dbErr) { showToast('Saved image but failed to update profile.', 'error'); return }
+    if (dbErr) { showToast('Uploaded but could not save URL.', 'error'); return }
 
     currentProfile.banner_image_url = url
     const img = document.getElementById('banner-img')
-    img.src = url
-    img.style.display = 'block'
-    document.getElementById('banner-placeholder').style.display = 'none'
+    img.src = url; img.style.display = 'block'
     showToast('Banner updated')
   }
 
@@ -583,72 +581,53 @@
     await sb.auth.signOut()
     window.location.href = '/login'
   }
-
   async function handleSignOutAll() {
     await sb.auth.signOut({ scope: 'global' })
     window.location.href = '/login'
   }
 
-  // ── Render subscription section ────────────────────────────────────────────
+  // ── Subscription ───────────────────────────────────────────────────────────
   function renderSubscription(profile) {
     const isPremium = profile.is_subscribed === true
-    const icon  = document.getElementById('sub-icon')
-    const name  = document.getElementById('sub-name')
-    const desc  = document.getElementById('sub-desc')
-    const acts  = document.getElementById('sub-actions')
+    const iconWrap = document.getElementById('sub-icon-wrap')
+    const name     = document.getElementById('sub-name')
+    const desc     = document.getElementById('sub-desc')
+    const acts     = document.getElementById('sub-actions')
 
     if (isPremium) {
-      icon.textContent = '👑'
-      name.innerHTML   = '<span class="badge-premium">✦ PREMIUM</span>'
+      iconWrap.className = 'sub-icon premium'
+      iconWrap.style.color = '#b45309'
+      name.innerHTML = '<span class="badge-premium">PREMIUM</span>'
       desc.textContent = 'You have access to all premium features including live location tracking on meetups.'
-      acts.innerHTML   = `
-        <a class="btn-manage-sub" href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer">
-          ⚙️ Manage Subscription on Apple
-        </a>`
+      acts.innerHTML = `<a class="btn-sub-action" href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer">Manage subscription on Apple</a>`
     } else {
-      icon.textContent = '⭐'
-      name.innerHTML   = '<span class="badge-free">FREE</span>'
+      iconWrap.className = 'sub-icon free'
+      iconWrap.style.color = '#a020f0'
+      name.innerHTML = '<span class="badge-free">FREE</span>'
       desc.textContent = 'Upgrade to Premium to unlock live meetup tracking, priority placement, and more.'
-      acts.innerHTML   = `
-        <a class="btn-get-premium" href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">
-          Get Premium in the App
-        </a>`
+      acts.innerHTML = `<a class="btn-get-premium" href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">Get Premium in the App</a>`
     }
   }
 
-  // ── Render profile ─────────────────────────────────────────────────────────
+  // ── Render ─────────────────────────────────────────────────────────────────
   function renderProfile(user, profile) {
-    // Nav
     document.getElementById('nav-username').textContent = profile.username ? '@' + profile.username : ''
-
-    // Names
     const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || '—'
-    document.getElementById('profile-name').textContent = fullName
-    document.getElementById('profile-username').textContent = profile.username ? '@' + profile.username : ''
-
-    // Bio
+    document.getElementById('profile-fullname').textContent = fullName
+    document.getElementById('profile-handle').textContent = profile.username ? '@' + profile.username : ''
     document.getElementById('bio-display').textContent = profile.bio || 'No bio yet'
+    if (!profile.bio) document.getElementById('bio-display').classList.add('dim')
     if (profile.bio) document.getElementById('bio-input').value = profile.bio
-
-    // Email
     document.getElementById('email-display').textContent = user.email || '—'
 
-    // Avatar
     if (profile.avatar_url) {
       const img = document.getElementById('avatar-img')
-      img.src   = profile.avatar_url
-      img.style.display = 'block'
+      img.src = profile.avatar_url; img.style.display = 'block'
     }
-
-    // Banner
     if (profile.banner_image_url) {
       const img = document.getElementById('banner-img')
-      img.src   = profile.banner_image_url
-      img.style.display = 'block'
-      document.getElementById('banner-placeholder').style.display = 'none'
+      img.src = profile.banner_image_url; img.style.display = 'block'
     }
-
-    // Subscription
     renderSubscription(profile)
   }
 
@@ -656,12 +635,11 @@
   async function init() {
     const { data: { session } } = await sb.auth.getSession()
     if (!session) { window.location.href = '/login'; return }
-
     currentUser = session.user
 
     const { data: profile, error } = await sb
       .from('profiles')
-      .select('first_name, last_name, username, bio, is_subscribed, avatar_url, banner_image_url, is_verified')
+      .select('first_name, last_name, username, bio, is_subscribed, avatar_url, banner_image_url')
       .eq('id', currentUser.id)
       .single()
 
@@ -672,21 +650,16 @@
     }
 
     currentProfile = profile
-
     document.getElementById('view-loading').classList.add('hidden')
     document.getElementById('view-main').classList.remove('hidden')
-
     renderProfile(currentUser, profile)
 
-    // Listen for auth changes (e.g. email update confirmation)
     sb.auth.onAuthStateChange((event, s) => {
       if (event === 'USER_UPDATED' && s?.user?.email) {
         document.getElementById('email-display').textContent = s.user.email
         currentUser = s.user
       }
-      if (event === 'SIGNED_OUT') {
-        window.location.href = '/login'
-      }
+      if (event === 'SIGNED_OUT') window.location.href = '/login'
     })
   }
 

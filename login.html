@@ -9,183 +9,216 @@
   <title>Sign In — 1STBOND</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --p: #a020f0; --p-dim: rgba(160,32,240,.12); --p-border: rgba(160,32,240,.25);
-      --bg: #080808; --surface: #111; --border: rgba(255,255,255,.08);
-      --text: #fff; --text2: rgba(255,255,255,.6); --text3: rgba(255,255,255,.35);
-      --danger: #ff4d4d; --success: #22c55e;
+      --mg: #a020f0; --mg-dark: #7a00cc; --mg-light: #f3e8ff; --mg-faint: #fdf6ff;
+      --text: #0f0a1e; --muted: #64748b; --subtle: #94a3b8;
+      --border: #e2e8f0; --white: #ffffff; --bg: #f8f6ff;
+      --danger: #dc2626; --danger-bg: #fef2f2; --danger-border: #fecaca;
+      --success: #16a34a; --success-bg: #f0fdf4; --success-border: #bbf7d0;
     }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
-      min-height: 100vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; padding: 24px;
+      font-family: 'Inter', sans-serif; background: var(--bg);
+      color: var(--text); min-height: 100vh;
+      display: flex; flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
-    body::before {
-      content: ''; position: fixed; top: -30%; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(160,32,240,.15) 0%, transparent 70%);
-      pointer-events: none; z-index: 0;
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav ── */
+    nav {
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 9px; }
+    .nav-logo-text { font-size: 15px; font-weight: 800; letter-spacing: 0.4px; }
+    .nav-pill {
+      font-size: 13px; font-weight: 600; color: var(--mg);
+      padding: 8px 18px; border-radius: 9px;
+      background: var(--mg-light); border: 1px solid #dbb6f8;
+      transition: background .15s;
+    }
+    .nav-pill:hover { background: #ead5fd; }
+
+    /* ── Page ── */
+    .page {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 40px 24px;
     }
     .card {
-      position: relative; z-index: 1; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 24px;
-      padding: 40px; width: 100%; max-width: 420px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px; width: 100%; max-width: 420px;
+      box-shadow: 0 4px 24px rgba(160,32,240,.06), 0 1px 4px rgba(0,0,0,.04);
     }
-    .logo-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
-    .logo-wrap img { width: 36px; height: 36px; border-radius: 9px; }
-    .logo-wrap span { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
-    .icon-wrap {
-      width: 60px; height: 60px; border-radius: 16px;
-      background: var(--p-dim); border: 1px solid var(--p-border);
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px; font-size: 26px;
-    }
-    h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 8px; }
-    .subtitle { color: var(--text2); font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
+    .card-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+    .card-logo img { width: 32px; height: 32px; border-radius: 9px; }
+    .card-logo span { font-size: 14px; font-weight: 800; letter-spacing: 0.4px; }
+
+    h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .subtitle { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
+
     .form-group { margin-bottom: 16px; }
     label {
       display: block; font-size: 11px; font-weight: 700;
       letter-spacing: 0.8px; text-transform: uppercase;
-      color: var(--text3); margin-bottom: 6px;
+      color: var(--subtle); margin-bottom: 6px;
     }
     .input-wrap { position: relative; }
     input[type="email"], input[type="password"], input[type="text"] {
-      width: 100%; background: rgba(255,255,255,.05); border: 1.5px solid var(--border);
-      border-radius: 12px; padding: 13px 44px 13px 14px;
+      width: 100%; background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 11px; padding: 12px 42px 12px 13px;
       color: var(--text); font-family: inherit; font-size: 15px;
-      outline: none; transition: border-color .15s;
+      outline: none; transition: border-color .15s, box-shadow .15s;
     }
-    input[type="email"] { padding-right: 14px; }
-    input:focus { border-color: var(--p-border); }
+    input[type="email"] { padding-right: 13px; }
+    input:focus { border-color: #c084fc; box-shadow: 0 0 0 3px rgba(160,32,240,.08); }
     .eye-btn {
-      position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; color: var(--text3);
-      font-size: 18px; padding: 4px; line-height: 1;
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--subtle);
+      padding: 4px; display: flex; align-items: center; line-height: 1;
     }
-    .btn-primary {
-      width: 100%; background: var(--p); color: #fff; border: none;
-      border-radius: 13px; padding: 15px; font-family: inherit; font-size: 16px;
-      font-weight: 700; cursor: pointer; margin-top: 8px; transition: opacity .15s;
-    }
-    .btn-primary:hover { opacity: .88; }
-    .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
-    .btn-ghost {
-      width: 100%; background: transparent; color: var(--text2); border: 1.5px solid var(--border);
-      border-radius: 13px; padding: 14px; font-family: inherit; font-size: 15px;
-      font-weight: 600; cursor: pointer; margin-top: 8px; transition: opacity .15s, border-color .15s;
-    }
-    .btn-ghost:hover { border-color: var(--p-border); color: var(--text); }
+    .eye-btn:hover { color: var(--text); }
+
     .forgot-link {
-      display: block; text-align: right; font-size: 12px;
-      color: var(--p); font-weight: 600; cursor: pointer;
-      margin-top: -8px; margin-bottom: 8px; background: none;
-      border: none; font-family: inherit; padding: 0;
+      display: block; text-align: right; font-size: 12px; font-weight: 600;
+      color: var(--mg); cursor: pointer; background: none; border: none;
+      font-family: inherit; padding: 0; margin-top: -8px; margin-bottom: 8px;
     }
-    .forgot-link:hover { opacity: .8; }
-    .error-text { color: var(--danger); font-size: 12px; margin-top: 6px; text-align: center; }
-    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+    .forgot-link:hover { color: var(--mg-dark); }
+
+    .btn-primary {
+      width: 100%; background: var(--mg); color: #fff; border: none;
+      border-radius: 11px; padding: 14px; font-family: inherit; font-size: 15px;
+      font-weight: 700; cursor: pointer; margin-top: 8px;
+      transition: background .15s, opacity .15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary:hover { background: var(--mg-dark); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-ghost {
+      width: 100%; background: transparent; color: var(--muted);
+      border: 1.5px solid var(--border); border-radius: 11px;
+      padding: 13px; font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer; margin-top: 10px; transition: border-color .15s, color .15s;
+    }
+    .btn-ghost:hover { border-color: #c084fc; color: var(--text); }
+
+    .error-msg {
+      background: var(--danger-bg); border: 1px solid var(--danger-border);
+      border-radius: 9px; padding: 10px 13px; color: var(--danger);
+      font-size: 13px; margin-top: 12px; display: none;
+    }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0 12px; }
     .divider-line { flex: 1; height: 1px; background: var(--border); }
-    .divider-txt { color: var(--text3); font-size: 12px; }
-    .app-store-row { display: flex; gap: 10px; margin-top: 8px; }
-    .app-store-btn {
-      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: rgba(255,255,255,.05); border: 1.5px solid var(--border);
-      border-radius: 12px; padding: 12px 16px; text-decoration: none;
-      color: var(--text); font-family: inherit; font-size: 13px; font-weight: 600;
-      transition: border-color .15s, background .15s;
+    .divider-txt { color: var(--subtle); font-size: 12px; white-space: nowrap; }
+
+    .app-store-link {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      border: 1.5px solid var(--border); border-radius: 11px; padding: 12px 16px;
+      color: var(--muted); font-size: 13px; font-weight: 600;
+      transition: border-color .15s, color .15s;
     }
-    .app-store-btn:hover { border-color: var(--p-border); background: var(--p-dim); }
-    .app-store-btn .icon { font-size: 20px; }
-    .result-card { border-radius: 14px; padding: 24px; text-align: center; }
-    .result-card.success {
-      background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.25);
-    }
-    .result-icon { font-size: 32px; margin-bottom: 10px; }
-    .result-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
-    .result-body { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 16px; }
-    .hidden { display: none !important; }
+    .app-store-link:hover { border-color: #c084fc; color: var(--text); }
+
+    .result-card { border-radius: 13px; padding: 22px; text-align: center; }
+    .result-card.success { background: var(--success-bg); border: 1px solid var(--success-border); }
+    .result-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; color: var(--success); }
+    .result-body { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
     .spinner {
-      display: inline-block; width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
-      border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle;
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.35);
+      border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite;
+      flex-shrink: 0;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-<div class="card">
-  <div class="logo-wrap">
+
+<nav>
+  <a class="nav-logo" href="/">
     <img src="logo.png" alt="1stBond" />
-    <span>1STBOND</span>
-  </div>
+    <span class="nav-logo-text">1STBOND</span>
+  </a>
+  <a href="/" class="nav-pill">Back to Home</a>
+</nav>
 
-  <!-- ── Sign-in form ── -->
-  <div id="view-login">
-    <div class="icon-wrap">🔐</div>
-    <h1>Welcome back</h1>
-    <div class="subtitle">Sign in to manage your 1stBond account.</div>
-
-    <div class="form-group">
-      <label>Email address</label>
-      <input type="email" id="email" placeholder="alex@example.com"
-             autocomplete="email" maxlength="254" />
+<div class="page">
+  <div class="card">
+    <div class="card-logo">
+      <img src="logo.png" alt="1stBond" />
+      <span>1STBOND</span>
     </div>
 
-    <div class="form-group">
-      <label>Password</label>
-      <div class="input-wrap">
-        <input type="password" id="password" placeholder="Your password"
-               autocomplete="current-password" />
-        <button class="eye-btn" type="button" onclick="toggleEye('password',this)">👁</button>
+    <!-- Sign in -->
+    <div id="view-login">
+      <h1>Welcome back</h1>
+      <div class="subtitle">Sign in to manage your 1stBond account.</div>
+
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="email" placeholder="alex@example.com"
+               autocomplete="email" maxlength="254" />
       </div>
-    </div>
 
-    <button class="forgot-link" type="button" onclick="show('view-forgot')">Forgot password?</button>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="Your password"
+                 autocomplete="current-password" />
+          <button class="eye-btn" type="button" onclick="toggleEye('password', this)" aria-label="Show password">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
 
-    <div class="error-text hidden" id="login-err"></div>
-    <button class="btn-primary" id="login-btn" onclick="handleLogin()">Sign In</button>
+      <button class="forgot-link" type="button" onclick="show('view-forgot')">Forgot password?</button>
 
-    <div class="divider"><div class="divider-line"></div><span class="divider-txt">Don't have the app?</span><div class="divider-line"></div></div>
-    <div class="app-store-row">
-      <a class="app-store-btn" href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">
-        <span class="icon">🍎</span> App Store
+      <div class="error-msg" id="login-err"></div>
+      <button class="btn-primary" id="login-btn" onclick="handleLogin()">Sign In</button>
+
+      <div class="divider"><div class="divider-line"></div><span class="divider-txt">Don't have the app?</span><div class="divider-line"></div></div>
+      <a class="app-store-link" href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on the App Store
       </a>
     </div>
-  </div>
 
-  <!-- ── Forgot password form ── -->
-  <div id="view-forgot" class="hidden">
-    <div class="icon-wrap">🔑</div>
-    <h1>Forgot Password</h1>
-    <div class="subtitle">Enter your email and we'll send you a reset link.</div>
+    <!-- Forgot password -->
+    <div id="view-forgot" class="hidden">
+      <h1>Reset Password</h1>
+      <div class="subtitle">Enter your email and we'll send you a reset link.</div>
 
-    <div class="form-group">
-      <label>Email address</label>
-      <input type="email" id="forgot-email" placeholder="alex@example.com"
-             autocomplete="email" maxlength="254" />
-    </div>
-
-    <div class="error-text hidden" id="forgot-err"></div>
-    <button class="btn-primary" id="forgot-btn" onclick="handleForgot()">Send Reset Link</button>
-    <button class="btn-ghost" type="button" onclick="show('view-login')">Back to Sign In</button>
-  </div>
-
-  <!-- ── Forgot password sent ── -->
-  <div id="view-forgot-sent" class="hidden">
-    <div class="result-card success">
-      <div class="result-icon">📬</div>
-      <div class="result-title">Check your inbox</div>
-      <div class="result-body">
-        If an account exists with that email, you'll receive a reset link shortly.
-        Check your spam folder if you don't see it within a few minutes.
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="forgot-email" placeholder="alex@example.com"
+               autocomplete="email" maxlength="254" />
       </div>
+
+      <div class="error-msg" id="forgot-err"></div>
+      <button class="btn-primary" id="forgot-btn" onclick="handleForgot()">Send Reset Link</button>
+      <button class="btn-ghost" type="button" onclick="show('view-login')">Back to Sign In</button>
     </div>
-    <button class="btn-ghost" type="button" onclick="show('view-login')" style="margin-top:16px">Back to Sign In</button>
+
+    <!-- Forgot sent -->
+    <div id="view-forgot-sent" class="hidden">
+      <div class="result-card success">
+        <div class="result-title">Check your inbox</div>
+        <div class="result-body">
+          If an account exists with that email, you'll receive a reset link shortly.
+          Check your spam folder if you don't see it within a few minutes.
+        </div>
+      </div>
+      <button class="btn-ghost" type="button" onclick="show('view-login')" style="margin-top:16px">Back to Sign In</button>
+    </div>
   </div>
 </div>
 
@@ -203,7 +236,9 @@
     const el = document.getElementById(id)
     const hidden = el.type === 'password'
     el.type = hidden ? 'text' : 'password'
-    btn.textContent = hidden ? '🙈' : '👁'
+    btn.innerHTML = hidden
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
   }
 
   function setLoading(btnId, loading, label) {
@@ -216,56 +251,50 @@
     const email = document.getElementById('email').value.trim().toLowerCase()
     const pw    = document.getElementById('password').value
     const err   = document.getElementById('login-err')
-    err.classList.add('hidden')
+    err.style.display = 'none'
 
-    if (!email) { err.textContent = 'Please enter your email.'; err.classList.remove('hidden'); return }
-    if (!pw)    { err.textContent = 'Please enter your password.'; err.classList.remove('hidden'); return }
+    if (!email) { err.textContent = 'Please enter your email.'; err.style.display = 'block'; return }
+    if (!pw)    { err.textContent = 'Please enter your password.'; err.style.display = 'block'; return }
 
     setLoading('login-btn', true, 'Sign In')
     const { error } = await sb.auth.signInWithPassword({ email, password: pw })
     setLoading('login-btn', false, 'Sign In')
 
     if (error) {
-      err.textContent = error.message.includes('Invalid login') || error.message.includes('invalid_credentials')
+      err.textContent = (error.message.includes('Invalid login') || error.message.includes('invalid_credentials'))
         ? 'Incorrect email or password.'
         : error.message
-      err.classList.remove('hidden')
+      err.style.display = 'block'
       return
     }
-
     window.location.href = '/account'
   }
 
   async function handleForgot() {
     const email = document.getElementById('forgot-email').value.trim().toLowerCase()
     const err   = document.getElementById('forgot-err')
-    err.classList.add('hidden')
+    err.style.display = 'none'
 
-    if (!email) { err.textContent = 'Please enter your email.'; err.classList.remove('hidden'); return }
+    if (!email) { err.textContent = 'Please enter your email.'; err.style.display = 'block'; return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       err.textContent = 'Please enter a valid email address.'
-      err.classList.remove('hidden')
-      return
+      err.style.display = 'block'; return
     }
 
     setLoading('forgot-btn', true, 'Send Reset Link')
-    await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://1st-bond.com/reset-password',
-    })
+    await sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://1st-bond.com/reset-password' })
     setLoading('forgot-btn', false, 'Send Reset Link')
     show('view-forgot-sent')
-  }
-
-  // If already logged in, go straight to account
-  async function init() {
-    const { data: { session } } = await sb.auth.getSession()
-    if (session) window.location.href = '/account'
   }
 
   document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password').focus() })
   document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin() })
   document.getElementById('forgot-email').addEventListener('keydown', e => { if (e.key === 'Enter') handleForgot() })
 
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession()
+    if (session) window.location.href = '/account'
+  }
   init()
 </script>
 </body>
