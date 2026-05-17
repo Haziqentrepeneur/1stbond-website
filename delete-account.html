@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="robots" content="noindex" />
+  <title>Delete Account — 1STBOND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --mg: #a020f0; --mg-dark: #7a00cc; --mg-light: #f3e8ff;
+      --mg-border: #dbb6f8;
+      --text: #0f0a1e; --muted: #64748b; --subtle: #94a3b8;
+      --border: #e2e8f0; --white: #ffffff; --bg: #f8f6ff; --surface: #f8fafc;
+      --danger: #dc2626; --danger-bg: #fef2f2; --danger-border: #fecaca;
+      --success: #16a34a; --success-bg: #f0fdf4; --success-border: #bbf7d0;
+      --warn: #b45309; --warn-bg: #fffbeb; --warn-border: #fde68a;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif; background: var(--bg);
+      color: var(--text); min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Nav ── */
+    nav {
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { width: 32px; height: 32px; border-radius: 9px; }
+    .nav-logo-text { font-size: 15px; font-weight: 800; letter-spacing: 0.4px; }
+    .nav-pill {
+      font-size: 13px; font-weight: 600; color: var(--mg);
+      padding: 8px 18px; border-radius: 9px;
+      background: var(--mg-light); border: 1px solid var(--mg-border);
+      transition: background .15s;
+    }
+    .nav-pill:hover { background: #ead5fd; }
+
+    /* ── Page ── */
+    .page { flex: 1; padding: 56px 24px 80px; }
+    .container { max-width: 600px; margin: 0 auto; }
+
+    h1 {
+      font-size: 30px; font-weight: 900; letter-spacing: -0.5px;
+      margin-bottom: 12px; color: var(--text);
+    }
+    .lead {
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    /* ── Warning banner ── */
+    .warn-banner {
+      background: var(--warn-bg); border: 1px solid var(--warn-border);
+      border-radius: 14px; padding: 18px 20px;
+      display: flex; gap: 14px; align-items: flex-start; margin-bottom: 32px;
+    }
+    .warn-icon {
+      width: 22px; height: 22px; flex-shrink: 0; margin-top: 1px; color: var(--warn);
+    }
+    .warn-text { font-size: 14px; color: var(--warn); line-height: 1.6; font-weight: 500; }
+    .warn-text strong { font-weight: 700; }
+
+    /* ── What gets deleted ── */
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--subtle); margin-bottom: 12px;
+    }
+
+    .data-list {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; margin-bottom: 32px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .data-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+    }
+    .data-row:last-child { border-bottom: none; }
+    .data-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .data-dot.red    { background: var(--danger); }
+    .data-dot.orange { background: #f97316; }
+    .data-dot.gray   { background: var(--subtle); }
+    .data-text { font-size: 14px; color: var(--text); }
+    .data-sub  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+    /* ── How to request ── */
+    .methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .method-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .method-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+    }
+    .method-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+      padding: 3px 9px; border-radius: 6px;
+    }
+    .badge-recommended {
+      background: var(--mg-light); border: 1px solid var(--mg-border); color: var(--mg);
+    }
+    .badge-alt {
+      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    }
+    .method-title { font-size: 15px; font-weight: 700; }
+    .method-desc  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .method-steps { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+    .method-step  { display: flex; gap: 10px; align-items: baseline; }
+    .step-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--mg-light); color: var(--mg);
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+    .email-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 12px; padding: 10px 16px; border-radius: 10px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      font-size: 14px; font-weight: 600; color: var(--text);
+      transition: border-color .15s, color .15s;
+    }
+    .email-link:hover { border-color: var(--mg-border); color: var(--mg); }
+
+    /* ── Timeline ── */
+    .timeline-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .timeline-row { display: flex; gap: 14px; align-items: flex-start; padding: 6px 0; }
+    .timeline-line { display: flex; flex-direction: column; align-items: center; }
+    .timeline-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+    }
+    .timeline-connector { width: 1px; flex: 1; background: var(--border); margin: 4px 0; }
+    .timeline-label { font-size: 14px; font-weight: 600; color: var(--text); }
+    .timeline-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
+    /* ── Contact footer note ── */
+    .footer-note {
+      text-align: center; font-size: 13px; color: var(--muted);
+      margin-top: 40px; line-height: 1.7; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-note a { color: var(--mg); font-weight: 600; }
+    .footer-note a:hover { color: var(--mg-dark); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="logo.png" alt="1stBond" />
+    <span class="nav-logo-text">1STBOND</span>
+  </a>
+  <a href="/" class="nav-pill">Back to Home</a>
+</nav>
+
+<div class="page">
+  <div class="container">
+
+    <h1>Delete Your 1STBOND Account</h1>
+    <p class="lead">
+      You can permanently delete your 1STBOND account and all associated data at any time.
+      This page explains what gets deleted, how to request deletion, and how long the process takes.
+    </p>
+
+    <!-- Warning -->
+    <div class="warn-banner">
+      <svg class="warn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <div class="warn-text">
+        <strong>Account deletion is permanent and cannot be undone.</strong>
+        Once your account is deleted, your profile, messages, and meetup history cannot be recovered.
+        If you have an active Premium subscription, cancel it first through the App Store to avoid future charges.
+      </div>
+    </div>
+
+    <!-- What gets deleted -->
+    <div class="section-title">What gets deleted</div>
+    <div class="data-list">
+      <div class="data-row">
+        <div class="data-dot red"></div>
+        <div>
+          <div class="data-text">Account &amp; profile</div>
+          <div class="data-sub">Name, username, bio, profile photo, banner, and all account credentials</div>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-dot red"></div>
+        <div>
+          <div class="data-text">Messages &amp; chat history</div>
+          <div class="data-sub">All conversations and message content sent or received</div>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-dot red"></div>
+        <div>
+          <div class="data-text">Meetup history</div>
+          <div class="data-sub">All scheduled, completed, and pending meetups</div>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-dot red"></div>
+        <div>
+          <div class="data-text">Verification data</div>
+          <div class="data-sub">Government ID verification status and face scan records</div>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-dot orange"></div>
+        <div>
+          <div class="data-text">Ratings &amp; reviews</div>
+          <div class="data-sub">Reviews you left for others are anonymised, not deleted</div>
+        </div>
+      </div>
+      <div class="data-row">
+        <div class="data-dot gray"></div>
+        <div>
+          <div class="data-text">Transaction records</div>
+          <div class="data-sub">Billing records are retained for legal and financial compliance (not shared or used)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to request -->
+    <div class="section-title">How to delete your account</div>
+    <div class="methods">
+
+      <div class="method-card">
+        <div class="method-header">
+          <span class="method-badge badge-recommended">Recommended</span>
+          <span class="method-title">Delete from the 1STBOND app</span>
+        </div>
+        <p class="method-desc">The fastest way — your account is deleted immediately through the app.</p>
+        <div class="method-steps">
+          <div class="method-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Open the <strong>1STBOND</strong> app and go to <strong>Profile</strong></div>
+          </div>
+          <div class="method-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Tap the <strong>Settings</strong> icon (top right)</div>
+          </div>
+          <div class="method-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Scroll to the bottom and tap <strong>Delete Account</strong></div>
+          </div>
+          <div class="method-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Confirm the deletion — your account will be permanently removed</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="method-card">
+        <div class="method-header">
+          <span class="method-badge badge-alt">Alternative</span>
+          <span class="method-title">Email our support team</span>
+        </div>
+        <p class="method-desc">
+          If you no longer have access to the app, email us from the address associated with your account.
+          We will process your request within 30 days.
+        </p>
+        <a class="email-link" href="mailto:support@1st-bond.com?subject=Account%20Deletion%20Request&body=Please%20delete%20my%201STBOND%20account%20and%20all%20associated%20data.%0A%0AEmail%20address%20on%20account%3A%20">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          support@1st-bond.com
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Timeline -->
+    <div class="section-title">Deletion timeline</div>
+    <div class="timeline-card">
+      <div class="timeline-row">
+        <div class="timeline-line">
+          <div class="timeline-dot" style="background:var(--mg)"></div>
+          <div class="timeline-connector"></div>
+        </div>
+        <div>
+          <div class="timeline-label">Request received</div>
+          <div class="timeline-sub">Your account is immediately deactivated and no longer visible to other users</div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-line">
+          <div class="timeline-dot" style="background:var(--warn)"></div>
+          <div class="timeline-connector"></div>
+        </div>
+        <div>
+          <div class="timeline-label">Within 30 days</div>
+          <div class="timeline-sub">All personal data is permanently removed from our systems and backups</div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-line">
+          <div class="timeline-dot" style="background:var(--success)"></div>
+        </div>
+        <div>
+          <div class="timeline-label">Deletion complete</div>
+          <div class="timeline-sub">Your data has been fully erased. Only anonymised aggregate data and legally required transaction records may be retained</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Questions about your data or privacy?<br />
+      Contact us at <a href="mailto:support@1st-bond.com">support@1st-bond.com</a> or read our
+      <a href="/privacy">Privacy Policy</a>.
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

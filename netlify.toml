@@ -103,6 +103,24 @@
   to   = "/account.html"
   status = 200
 
+# ── Delete account page ───────────────────────────────────────────────────────
+[[redirects]]
+  from = "/delete-account"
+  to   = "/delete-account.html"
+  status = 200
+
+[[headers]]
+  for = "/delete-account.html"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/delete-account"
+  [headers.values]
+    Cache-Control           = "no-store, no-cache, must-revalidate"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
 # ── Legacy redirects ──────────────────────────────────────────────────────────
 [[redirects]]
   from = "/privacy-policy"
