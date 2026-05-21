@@ -215,47 +215,44 @@
     toastTimer = setTimeout(() => { el.className = '' }, 3200)
   }
 
-  // ── Auth gate ───────────────────────────────────────────────────────────────
+  // ── Auth helpers ────────────────────────────────────────────────────────────
   function resetBtn() {
     const btn = document.getElementById('gate-btn')
     if (btn) { btn.disabled = false; btn.textContent = 'Sign In' }
   }
 
+  async function enterApp(userId) {
+    const { data: prof, error: profErr } = await sb.from('profiles').select('is_admin, first_name, last_name').eq('id', userId).single()
+    if (profErr || !prof?.is_admin) {
+      await sb.auth.signOut()
+      resetBtn()
+      document.getElementById('gate-err').textContent = prof && !prof.is_admin
+        ? 'Access denied — not an admin account.'
+        : 'Could not load profile. Please try again.'
+      return
+    }
+    document.getElementById('auth-gate').style.display = 'none'
+    document.getElementById('app').style.display = 'block'
+    document.getElementById('header-user').textContent = `${prof.first_name} ${prof.last_name}`
+    loadReports()
+  }
+
+  // ── Auth gate ───────────────────────────────────────────────────────────────
   window.gateSignIn = async function () {
     const email    = document.getElementById('gate-email').value.trim()
     const password = document.getElementById('gate-password').value
-    const btn      = document.getElementById('gate-btn')
     const errEl    = document.getElementById('gate-err')
     errEl.textContent = ''
     if (!email || !password) { errEl.textContent = 'Please fill in both fields.'; return }
+
+    const btn = document.getElementById('gate-btn')
     btn.disabled = true; btn.textContent = 'Signing in…'
 
-    // Timeout wrapper so signInWithPassword never hangs indefinitely
-    const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Request timed out. Please try again.')), 8000)
-    )
+    const { data, error } = await sb.auth.signInWithPassword({ email, password })
+    if (error) { resetBtn(); errEl.textContent = error.message || 'Sign-in failed.'; return }
 
-    let signInResult
-    try {
-      signInResult = await Promise.race([
-        sb.auth.signInWithPassword({ email, password }),
-        timeout,
-      ])
-    } catch (e) {
-      resetBtn(); errEl.textContent = e.message; return
-    }
-
-    if (signInResult.error) {
-      resetBtn(); errEl.textContent = signInResult.error.message || 'Sign-in failed.'; return
-    }
-
-    // onAuthStateChange handles the transition — fall back if it takes too long
-    setTimeout(() => {
-      if (document.getElementById('auth-gate').style.display !== 'none') {
-        resetBtn()
-        errEl.textContent = 'Sign-in timed out. Please try again.'
-      }
-    }, 10000)
+    await enterApp(data.user.id)
+    resetBtn()
   }
 
   window.signOut = async function () {
@@ -265,32 +262,9 @@
     allReports = []
   }
 
-  // ── Auth state ──────────────────────────────────────────────────────────────
-  sb.auth.onAuthStateChange(async (event, session) => {
-    if (session?.user) {
-      const { data: prof, error: profErr } = await sb.from('profiles').select('is_admin, first_name, last_name').eq('id', session.user.id).single()
-      if (profErr || !prof?.is_admin) {
-        resetBtn()
-        document.getElementById('gate-err').textContent = prof && !prof.is_admin ? 'Access denied — not an admin account.' : 'Could not load profile. Please try again.'
-        await sb.auth.signOut()
-        return
-      }
-      document.getElementById('auth-gate').style.display = 'none'
-      document.getElementById('app').style.display = 'block'
-      document.getElementById('header-user').textContent = `${prof.first_name} ${prof.last_name}`
-      loadReports()
-    }
-  })
-
-  // On page load, check existing session
+  // On page load, auto-login if there's already a valid session
   sb.auth.getSession().then(async ({ data: { session } }) => {
-    if (!session?.user) return
-    const { data: prof } = await sb.from('profiles').select('is_admin, first_name, last_name').eq('id', session.user.id).single()
-    if (!prof?.is_admin) { await sb.auth.signOut(); return }
-    document.getElementById('auth-gate').style.display = 'none'
-    document.getElementById('app').style.display = 'block'
-    document.getElementById('header-user').textContent = `${prof.first_name} ${prof.last_name}`
-    loadReports()
+    if (session?.user) await enterApp(session.user.id)
   })
 
   // ── Load reports ─────────────────────────────────────────────────────────────
