@@ -216,6 +216,11 @@
   }
 
   // ── Auth gate ───────────────────────────────────────────────────────────────
+  function resetBtn() {
+    const btn = document.getElementById('gate-btn')
+    if (btn) { btn.disabled = false; btn.textContent = 'Sign In' }
+  }
+
   window.gateSignIn = async function () {
     const email    = document.getElementById('gate-email').value.trim()
     const password = document.getElementById('gate-password').value
@@ -224,10 +229,17 @@
     errEl.textContent = ''
     if (!email || !password) { errEl.textContent = 'Please fill in both fields.'; return }
     btn.disabled = true; btn.textContent = 'Signing in…'
+
     const { error } = await sb.auth.signInWithPassword({ email, password })
-    btn.disabled = false; btn.textContent = 'Sign In'
-    if (error) { errEl.textContent = error.message || 'Sign-in failed.'; return }
-    // onAuthStateChange will handle the rest
+    if (error) { resetBtn(); errEl.textContent = error.message || 'Sign-in failed.'; return }
+
+    // onAuthStateChange handles the transition — fall back if it takes too long
+    setTimeout(() => {
+      if (document.getElementById('auth-gate').style.display !== 'none') {
+        resetBtn()
+        errEl.textContent = 'Sign-in timed out. Please try again.'
+      }
+    }, 10000)
   }
 
   window.signOut = async function () {
@@ -240,10 +252,10 @@
   // ── Auth state ──────────────────────────────────────────────────────────────
   sb.auth.onAuthStateChange(async (event, session) => {
     if (session?.user) {
-      // Check is_admin
-      const { data: prof } = await sb.from('profiles').select('is_admin, first_name, last_name').eq('id', session.user.id).single()
-      if (!prof?.is_admin) {
-        document.getElementById('gate-err').textContent = 'Access denied — not an admin account.'
+      const { data: prof, error: profErr } = await sb.from('profiles').select('is_admin, first_name, last_name').eq('id', session.user.id).single()
+      if (profErr || !prof?.is_admin) {
+        resetBtn()
+        document.getElementById('gate-err').textContent = prof && !prof.is_admin ? 'Access denied — not an admin account.' : 'Could not load profile. Please try again.'
         await sb.auth.signOut()
         return
       }
