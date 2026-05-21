@@ -230,8 +230,24 @@
     if (!email || !password) { errEl.textContent = 'Please fill in both fields.'; return }
     btn.disabled = true; btn.textContent = 'Signing in…'
 
-    const { error } = await sb.auth.signInWithPassword({ email, password })
-    if (error) { resetBtn(); errEl.textContent = error.message || 'Sign-in failed.'; return }
+    // Timeout wrapper so signInWithPassword never hangs indefinitely
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Request timed out. Please try again.')), 8000)
+    )
+
+    let signInResult
+    try {
+      signInResult = await Promise.race([
+        sb.auth.signInWithPassword({ email, password }),
+        timeout,
+      ])
+    } catch (e) {
+      resetBtn(); errEl.textContent = e.message; return
+    }
+
+    if (signInResult.error) {
+      resetBtn(); errEl.textContent = signInResult.error.message || 'Sign-in failed.'; return
+    }
 
     // onAuthStateChange handles the transition — fall back if it takes too long
     setTimeout(() => {
