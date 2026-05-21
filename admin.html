@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Admin — 1STBOND</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/env.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --mg: #a020f0; --mg-dark: #7a00cc; --mg-light: #f3e8ff;
+      --text: #0f0a1e; --muted: #64748b; --subtle: #94a3b8;
+      --border: #e2e8f0; --white: #ffffff; --bg: #f8f6ff; --surface: #f8fafc;
+      --danger: #dc2626; --danger-bg: #fef2f2; --danger-border: #fecaca;
+      --success: #16a34a; --success-bg: #f0fdf4; --success-border: #bbf7d0;
+      --warn: #d97706; --warn-bg: #fffbeb; --warn-border: #fde68a;
+      --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    /* ── Auth gate ─────────────────────────────────────────────────────────── */
+    #auth-gate { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+    .gate-box { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 40px; max-width: 380px; width: 100%; text-align: center; }
+    .gate-box h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .gate-box p  { color: var(--muted); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
+    .gate-box input {
+      width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+      font-size: 14px; font-family: inherit; margin-bottom: 12px; outline: none; transition: border .15s;
+    }
+    .gate-box input:focus { border-color: var(--mg); }
+    .btn { display: inline-block; padding: 11px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; transition: opacity .15s; }
+    .btn:hover { opacity: .88; }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .btn-primary { background: var(--mg); color: #fff; width: 100%; }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-warn   { background: var(--warn);   color: #fff; }
+    .btn-muted  { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+    .btn-success { background: var(--success); color: #fff; }
+
+    /* ── Layout ────────────────────────────────────────────────────────────── */
+    #app { display: none; }
+    header {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .logo { font-size: 16px; font-weight: 800; color: var(--mg); letter-spacing: -.5px; }
+    .admin-badge { background: var(--danger-bg); color: var(--danger); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--danger-border); text-transform: uppercase; letter-spacing: .05em; margin-left: 10px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .header-user  { font-size: 13px; color: var(--muted); }
+    main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ── Filters ───────────────────────────────────────────────────────────── */
+    .filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .filter-btn { padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--muted); font-family: inherit; transition: all .15s; }
+    .filter-btn.active { border-color: var(--mg); background: var(--mg-light); color: var(--mg); }
+    .filter-input { padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 13px; font-family: inherit; outline: none; min-width: 200px; }
+    .filter-input:focus { border-color: var(--mg); }
+    .stats-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; flex: 1; min-width: 120px; }
+    .stat-card .val { font-size: 28px; font-weight: 800; line-height: 1; }
+    .stat-card .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+    .stat-pending  .val { color: var(--warn); }
+    .stat-actioned .val { color: var(--danger); }
+    .stat-dismissed .val { color: var(--muted); }
+    .stat-total    .val { color: var(--mg); }
+
+    /* ── Report cards ──────────────────────────────────────────────────────── */
+    #report-list { display: flex; flex-direction: column; gap: 14px; }
+    .report-card {
+      background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; transition: box-shadow .15s;
+    }
+    .report-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.07); }
+    .report-card.status-pending    { border-left: 3px solid var(--warn); }
+    .report-card.status-reviewed   { border-left: 3px solid var(--info); }
+    .report-card.status-actioned   { border-left: 3px solid var(--danger); }
+    .report-card.status-dismissed  { border-left: 3px solid var(--border); opacity: .65; }
+
+    .card-header { padding: 16px 20px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .card-meta   { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+    .badge-cat   { background: var(--mg-light); color: var(--mg); }
+    .badge-pending   { background: var(--warn-bg);    color: var(--warn);    border: 1px solid var(--warn-border); }
+    .badge-reviewed  { background: var(--info-bg);    color: var(--info);    border: 1px solid var(--info-border); }
+    .badge-actioned  { background: var(--danger-bg);  color: var(--danger);  border: 1px solid var(--danger-border); }
+    .badge-dismissed { background: var(--surface);    color: var(--subtle);  border: 1px solid var(--border); }
+
+    .card-time { font-size: 12px; color: var(--subtle); white-space: nowrap; }
+    .card-body { padding: 12px 20px; }
+    .user-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+    .user-block { display: flex; flex-direction: column; gap: 2px; }
+    .user-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--subtle); }
+    .user-name  { font-size: 14px; font-weight: 600; }
+    .user-handle { font-size: 12px; color: var(--muted); }
+    .banned-badge { display: inline-block; background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; margin-left: 6px; }
+    .arrow { color: var(--subtle); font-size: 18px; }
+    .description-block { background: var(--surface); border-radius: 8px; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: var(--text); white-space: pre-wrap; word-break: break-word; margin-bottom: 10px; }
+    .admin-notes-block { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 8px; padding: 10px 14px; font-size: 12px; line-height: 1.6; color: var(--warn); margin-bottom: 10px; }
+    .admin-notes-label { font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: .06em; margin-bottom: 4px; }
+
+    .card-actions { padding: 12px 20px 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--border); margin-top: 4px; }
+    .notes-input { flex: 1; min-width: 180px; padding: 7px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; }
+    .notes-input:focus { border-color: var(--mg); }
+
+    /* ── Empty / loading ───────────────────────────────────────────────────── */
+    .empty { text-align: center; padding: 64px 24px; color: var(--muted); }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty p { font-size: 15px; }
+    .spinner { display: inline-block; width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--mg); border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-wrap { display: flex; align-items: center; justify-content: center; padding: 64px; }
+
+    /* ── Toast ─────────────────────────────────────────────────────────────── */
+    #toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f0a1e; color: #fff; padding: 11px 22px; border-radius: 10px; font-size: 14px; font-weight: 500; opacity: 0; transition: all .25s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.error { background: var(--danger); }
+
+    /* ── Error box ─────────────────────────────────────────────────────────── */
+    .err-msg { color: var(--danger); font-size: 13px; margin-top: 8px; min-height: 18px; }
+
+    @media (max-width: 600px) {
+      header { padding: 0 16px; }
+      main   { padding: 20px 16px; }
+      .card-header, .card-body, .card-actions { padding-left: 14px; padding-right: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Auth gate (sign-in form) -->
+<div id="auth-gate">
+  <div class="gate-box">
+    <h2>Admin Panel</h2>
+    <p>Sign in with your admin account to manage reports.</p>
+    <input type="email"    id="gate-email"    placeholder="Email address" autocomplete="email" />
+    <input type="password" id="gate-password" placeholder="Password"      autocomplete="current-password" />
+    <p class="err-msg" id="gate-err"></p>
+    <button class="btn btn-primary" id="gate-btn" style="margin-top:4px" onclick="gateSignIn()">Sign In</button>
+  </div>
+</div>
+
+<!-- Main app -->
+<div id="app">
+  <header>
+    <div style="display:flex;align-items:center">
+      <span class="logo">1STBOND</span>
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="header-right">
+      <span class="header-user" id="header-user"></span>
+      <button class="btn btn-sm btn-muted" onclick="signOut()">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats-row">
+      <div class="stat-card stat-total">    <div class="val" id="stat-total">–</div>    <div class="lbl">Total</div></div>
+      <div class="stat-card stat-pending">  <div class="val" id="stat-pending">–</div>  <div class="lbl">Pending</div></div>
+      <div class="stat-card stat-actioned"> <div class="val" id="stat-actioned">–</div> <div class="lbl">Actioned</div></div>
+      <div class="stat-card stat-dismissed"><div class="val" id="stat-dismissed">–</div><div class="lbl">Dismissed</div></div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all"       onclick="setFilter('all',this)">All</button>
+      <button class="filter-btn"        data-filter="pending"   onclick="setFilter('pending',this)">Pending</button>
+      <button class="filter-btn"        data-filter="reviewed"  onclick="setFilter('reviewed',this)">Reviewed</button>
+      <button class="filter-btn"        data-filter="actioned"  onclick="setFilter('actioned',this)">Actioned</button>
+      <button class="filter-btn"        data-filter="dismissed" onclick="setFilter('dismissed',this)">Dismissed</button>
+      <input class="filter-input" id="search-input" type="text" placeholder="Search username or description…" oninput="renderList()" />
+    </div>
+
+    <div id="report-list">
+      <div class="loading-wrap"><div class="spinner"></div></div>
+    </div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+;(function () {
+  'use strict'
+  const SUPABASE_URL = window.APP_CONFIG?.supabaseUrl || ''
+  const SUPABASE_KEY = window.APP_CONFIG?.supabaseKey || ''
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+  let allReports   = []
+  let currentFilter = 'all'
+  let toastTimer    = null
+
+  const CATEGORY_LABELS = {
+    harassment:    'Harassment or threats',
+    fake_profile:  'Fake or impersonation',
+    inappropriate: 'Inappropriate behavior',
+    spam:          'Spam or scam',
+    underage:      'Underage user',
+    other:         'Other',
+  }
+
+  // ── Toast ───────────────────────────────────────────────────────────────────
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast')
+    el.textContent = msg
+    el.className   = 'show' + (type === 'error' ? ' error' : '')
+    clearTimeout(toastTimer)
+    toastTimer = setTimeout(() => { el.className = '' }, 3200)
+  }
+
+  // ── Auth gate ───────────────────────────────────────────────────────────────
+  window.gateSignIn = async function () {
+    const email    = document.getElementById('gate-email').value.trim()
+    const password = document.getElementById('gate-password').value
+    const btn      = document.getElementById('gate-btn')
+    const errEl    = document.getElementById('gate-err')
+    errEl.textContent = ''
+    if (!email || !password) { errEl.textContent = 'Please fill in both fields.'; return }
+    btn.disabled = true; btn.textContent = 'Signing in…'
+    const { error } = await sb.auth.signInWithPassword({ email, password })
+    btn.disabled = false; btn.textContent = 'Sign In'
+    if (error) { errEl.textContent = error.message || 'Sign-in failed.'; return }
+    // onAuthStateChange will handle the rest
+  }
+
+  window.signOut = async function () {
+    await sb.auth.signOut()
+    document.getElementById('app').style.display = 'none'
+    document.getElementById('auth-gate').style.display = 'flex'
+    allReports = []
+  }
+
+  // ── Auth state ──────────────────────────────────────────────────────────────
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (session?.user) {
+      // Check is_admin
+      const { data: prof } = await sb.from('profiles').select('is_admin, first_name, last_name').eq('id', session.user.id).single()
+      if (!prof?.is_admin) {
+        document.getElementById('gate-err').textContent = 'Access denied — not an admin account.'
+        await sb.auth.signOut()
+        return
+      }
+      document.getElementById('auth-gate').style.display = 'none'
+      document.getElementById('app').style.display = 'block'
+      document.getElementById('header-user').textContent = `${prof.first_name} ${prof.last_name}`
+      loadReports()
+    }
+  })
+
+  // On page load, check existing session
+  sb.auth.getSession().then(async ({ data: { session } }) => {
+    if (!session?.user) return
+    const { data: prof } = await sb.from('profiles').select('is_admin, first_name, last_name').eq('id', session.user.id).single()
+    if (!prof?.is_admin) { await sb.auth.signOut(); return }
+    document.getElementById('auth-gate').style.display = 'none'
+    document.getElementById('app').style.display = 'block'
+    document.getElementById('header-user').textContent = `${prof.first_name} ${prof.last_name}`
+    loadReports()
+  })
+
+  // ── Load reports ─────────────────────────────────────────────────────────────
+  async function loadReports() {
+    const { data, error } = await sb
+      .from('reports')
+      .select(`
+        id, category, description, status, admin_notes, created_at, reviewed_at,
+        reporter:profiles!reporter_id ( id, first_name, last_name, username, is_banned ),
+        reported:profiles!reported_id ( id, first_name, last_name, username, is_banned )
+      `)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      document.getElementById('report-list').innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><p>${error.message}</p></div>`
+      return
+    }
+    allReports = data || []
+    updateStats()
+    renderList()
+  }
+
+  function updateStats() {
+    document.getElementById('stat-total').textContent    = allReports.length
+    document.getElementById('stat-pending').textContent  = allReports.filter(r => r.status === 'pending').length
+    document.getElementById('stat-actioned').textContent = allReports.filter(r => r.status === 'actioned').length
+    document.getElementById('stat-dismissed').textContent= allReports.filter(r => r.status === 'dismissed').length
+  }
+
+  // ── Filter ──────────────────────────────────────────────────────────────────
+  window.setFilter = function (filter, btn) {
+    currentFilter = filter
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+    renderList()
+  }
+
+  // ── Render ──────────────────────────────────────────────────────────────────
+  window.renderList = function () {
+    const search  = (document.getElementById('search-input').value || '').toLowerCase()
+    const list    = document.getElementById('report-list')
+
+    let reports = allReports
+    if (currentFilter !== 'all') reports = reports.filter(r => r.status === currentFilter)
+    if (search) {
+      reports = reports.filter(r =>
+        (r.reported?.username || '').toLowerCase().includes(search) ||
+        (r.reporter?.username || '').toLowerCase().includes(search) ||
+        (r.description || '').toLowerCase().includes(search)
+      )
+    }
+
+    if (reports.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><p>No reports match this filter.</p></div>`
+      return
+    }
+
+    list.innerHTML = reports.map(r => buildCard(r)).join('')
+  }
+
+  function buildCard(r) {
+    const reporter = r.reporter || {}
+    const reported = r.reported || {}
+    const catLabel = CATEGORY_LABELS[r.category] || r.category
+    const date     = new Date(r.created_at).toLocaleString()
+    const bannedTag = reported.is_banned ? '<span class="banned-badge">Banned</span>' : ''
+
+    const notesBlock = r.admin_notes
+      ? `<div class="admin-notes-block"><div class="admin-notes-label">Admin notes</div>${esc(r.admin_notes)}</div>`
+      : ''
+
+    const statusBadge = `<span class="badge badge-${r.status}">${r.status}</span>`
+
+    return `
+<div class="report-card status-${r.status}" id="card-${r.id}">
+  <div class="card-header">
+    <div class="card-meta">
+      <span class="badge badge-cat">${esc(catLabel)}</span>
+      ${statusBadge}
+    </div>
+    <span class="card-time">${date}</span>
+  </div>
+
+  <div class="card-body">
+    <div class="user-row">
+      <div class="user-block">
+        <span class="user-label">Reporter</span>
+        <span class="user-name">${esc(reporter.first_name || '')} ${esc(reporter.last_name || '')}</span>
+        <span class="user-handle">@${esc(reporter.username || 'unknown')}</span>
+      </div>
+      <span class="arrow">→</span>
+      <div class="user-block">
+        <span class="user-label">Reported</span>
+        <span class="user-name">${esc(reported.first_name || '')} ${esc(reported.last_name || '')}${bannedTag}</span>
+        <span class="user-handle">@${esc(reported.username || 'unknown')}</span>
+      </div>
+    </div>
+
+    <div class="description-block">${esc(r.description || '')}</div>
+    ${notesBlock}
+  </div>
+
+  <div class="card-actions">
+    <input class="notes-input" id="notes-${r.id}" type="text" placeholder="Add admin note (optional)…" value="${esc(r.admin_notes || '')}" />
+    ${r.status !== 'actioned'
+      ? `<button class="btn btn-sm btn-danger" onclick="takeAction('${r.id}','ban')">Ban user</button>`
+      : `<button class="btn btn-sm btn-warn"    onclick="takeAction('${r.id}','unban','${reported.id}')">Unban user</button>`
+    }
+    ${r.status !== 'reviewed'   ? `<button class="btn btn-sm btn-muted" style="background:var(--info-bg);color:var(--info);border-color:var(--info-border)" onclick="takeAction('${r.id}','flag')">Flag</button>` : ''}
+    ${r.status !== 'dismissed'  ? `<button class="btn btn-sm btn-muted" onclick="takeAction('${r.id}','dismiss')">Dismiss</button>` : ''}
+  </div>
+</div>`
+  }
+
+  // ── Actions ─────────────────────────────────────────────────────────────────
+  window.takeAction = async function (reportId, action, profileIdForUnban) {
+    const notesEl = document.getElementById('notes-' + reportId)
+    const notes   = notesEl ? notesEl.value.trim() || null : null
+
+    // For unban, call with profileId as p_report_id
+    const rpcReportId = action === 'unban' ? profileIdForUnban : reportId
+
+    const { data, error } = await sb.rpc('admin_take_action', {
+      p_report_id: rpcReportId,
+      p_action:    action,
+      p_notes:     notes,
+    })
+
+    if (error || !data?.success) {
+      toast(error?.message || data?.error || 'Action failed.', 'error')
+      return
+    }
+
+    toast(action === 'ban'     ? 'User banned.'
+        : action === 'unban'   ? 'User unbanned.'
+        : action === 'flag'    ? 'Report flagged for review.'
+        :                        'Report dismissed.', 'success')
+
+    // Refresh the single report in allReports
+    const { data: updated } = await sb
+      .from('reports')
+      .select(`
+        id, category, description, status, admin_notes, created_at, reviewed_at,
+        reporter:profiles!reporter_id ( id, first_name, last_name, username, is_banned ),
+        reported:profiles!reported_id ( id, first_name, last_name, username, is_banned )
+      `)
+      .eq('id', reportId)
+      .single()
+
+    if (updated) {
+      const idx = allReports.findIndex(r => r.id === reportId)
+      if (idx !== -1) allReports[idx] = updated
+      // If unban, patch all reports for this user
+      if (action === 'unban' && profileIdForUnban) {
+        allReports.forEach(r => {
+          if (r.reported?.id === profileIdForUnban) r.reported.is_banned = false
+        })
+      }
+    }
+    updateStats()
+    renderList()
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+})()
+</script>
+</body>
+</html>
