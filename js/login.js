@@ -89,6 +89,10 @@
     const pw    = document.getElementById('password').value
 
     if (!email) { err.textContent = 'Please enter your email.'; err.style.display = 'block'; return }
+    if (!/^[^\s@]{1,64}@[^\s@]{1,253}\.[^\s@]{2,}$/.test(email)) {
+      err.textContent = 'Please enter a valid email address.'
+      err.style.display = 'block'; return
+    }
     if (!pw)    { err.textContent = 'Please enter your password.'; err.style.display = 'block'; return }
 
     logAuthEvent('login_attempt', 'attempt')

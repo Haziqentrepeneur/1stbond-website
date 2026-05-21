@@ -56,9 +56,21 @@
     btn.innerHTML = loading ? '<span class="spinner"></span>' : label
   }
 
+  // ── Shared sanitizer (strip null bytes, control chars, HTML tags) ─────────
+  function sanitizeInput(str, maxLen) {
+    return String(str)
+      .replace(/\0/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .replace(/<[^>]*>/g, '')
+      .slice(0, maxLen)
+      .trim()
+  }
+
+  const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'])
+
   // ── Bio ────────────────────────────────────────────────────────────────────
   async function saveBio() {
-    const bio = document.getElementById('bio-input').value.trim()
+    const bio = sanitizeInput(document.getElementById('bio-input').value, 150)
     const err = document.getElementById('bio-err')
     err.classList.add('hidden')
     setSaveLoading('bio', true, 'Save')
@@ -127,7 +139,7 @@
   async function handleAvatarUpload(input) {
     const file = input.files[0]; input.value = ''
     if (!file) return
-    if (!file.type.startsWith('image/')) { showToast('Select an image file.', 'error'); return }
+    if (!ALLOWED_IMAGE_TYPES.has(file.type)) { showToast('Select a JPEG, PNG, WEBP, or GIF image.', 'error'); return }
     if (file.size > 5 * 1024 * 1024) { showToast('Image must be under 5 MB.', 'error'); return }
 
     showUpload('Uploading photo…')
@@ -152,7 +164,7 @@
   async function handleBannerUpload(input) {
     const file = input.files[0]; input.value = ''
     if (!file) return
-    if (!file.type.startsWith('image/')) { showToast('Select an image file.', 'error'); return }
+    if (!ALLOWED_IMAGE_TYPES.has(file.type)) { showToast('Select a JPEG, PNG, WEBP, or GIF image.', 'error'); return }
     if (file.size > 10 * 1024 * 1024) { showToast('Image must be under 10 MB.', 'error'); return }
 
     showUpload('Uploading banner…')

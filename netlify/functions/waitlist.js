@@ -85,7 +85,7 @@ exports.handler = async function (event) {
   const safePlan   = ALLOWED_PLANS.has(planInterest) ? planInterest : 'General';
 
   const fields = {
-    'Name':          name.trim().slice(0, 120),
+    'Name':          name.replace(/<[^>]*>/g, '').replace(/[\x00-\x1F\x7F]/g, '').trim().slice(0, 120),
     'Email':         email.trim().toLowerCase().slice(0, 254),
     'Phone':         (phone || '').trim().slice(0, 30),
     'Notify via':    safeNotify,
