@@ -3,6 +3,9 @@
 .env.local
 .env.production
 
+# Generated at build time from Netlify env vars — never commit (contains Supabase credentials)
+js/env.js
+
 # OS / editor
 .DS_Store
 Thumbs.db

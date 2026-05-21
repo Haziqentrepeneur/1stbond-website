@@ -174,16 +174,16 @@
         <div class="input-wrap">
           <input type="password" id="password" placeholder="Your password"
                  autocomplete="current-password" />
-          <button class="eye-btn" type="button" onclick="toggleEye('password', this)" aria-label="Show password">
+          <button class="eye-btn" type="button" id="password-eye-btn" aria-label="Show password">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
 
-      <button class="forgot-link" type="button" onclick="show('view-forgot')">Forgot password?</button>
+      <button class="forgot-link" type="button" id="forgot-link-btn">Forgot password?</button>
 
       <div class="error-msg" id="login-err"></div>
-      <button class="btn-primary" id="login-btn" onclick="handleLogin()">Sign In</button>
+      <button class="btn-primary" id="login-btn">Sign In</button>
 
       <div class="divider"><div class="divider-line"></div><span class="divider-txt">Don't have the app?</span><div class="divider-line"></div></div>
       <a class="app-store-link" href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">
@@ -204,8 +204,8 @@
       </div>
 
       <div class="error-msg" id="forgot-err"></div>
-      <button class="btn-primary" id="forgot-btn" onclick="handleForgot()">Send Reset Link</button>
-      <button class="btn-ghost" type="button" onclick="show('view-login')">Back to Sign In</button>
+      <button class="btn-primary" id="forgot-btn">Send Reset Link</button>
+      <button class="btn-ghost" type="button" id="back-to-login-btn">Back to Sign In</button>
     </div>
 
     <!-- Forgot sent -->
@@ -217,85 +217,12 @@
           Check your spam folder if you don't see it within a few minutes.
         </div>
       </div>
-      <button class="btn-ghost" type="button" onclick="show('view-login')" style="margin-top:16px">Back to Sign In</button>
+      <button class="btn-ghost" type="button" id="back-to-login-sent-btn" style="margin-top:16px">Back to Sign In</button>
     </div>
   </div>
 </div>
 
-<script>
-  const SUPABASE_URL = 'https://apwxlfbbngfvvafrnafy.supabase.co'
-  const SUPABASE_KEY = 'sb_publishable_86hMdszoLnTgAuSYNiqqmQ_0_R6YWR_'
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
-  function show(id) {
-    ['view-login','view-forgot','view-forgot-sent']
-      .forEach(v => document.getElementById(v).classList.toggle('hidden', v !== id))
-  }
-
-  function toggleEye(id, btn) {
-    const el = document.getElementById(id)
-    const hidden = el.type === 'password'
-    el.type = hidden ? 'text' : 'password'
-    btn.innerHTML = hidden
-      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
-      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
-  }
-
-  function setLoading(btnId, loading, label) {
-    const btn = document.getElementById(btnId)
-    btn.disabled = loading
-    btn.innerHTML = loading ? '<span class="spinner"></span>' : label
-  }
-
-  async function handleLogin() {
-    const email = document.getElementById('email').value.trim().toLowerCase()
-    const pw    = document.getElementById('password').value
-    const err   = document.getElementById('login-err')
-    err.style.display = 'none'
-
-    if (!email) { err.textContent = 'Please enter your email.'; err.style.display = 'block'; return }
-    if (!pw)    { err.textContent = 'Please enter your password.'; err.style.display = 'block'; return }
-
-    setLoading('login-btn', true, 'Sign In')
-    const { error } = await sb.auth.signInWithPassword({ email, password: pw })
-    setLoading('login-btn', false, 'Sign In')
-
-    if (error) {
-      err.textContent = (error.message.includes('Invalid login') || error.message.includes('invalid_credentials'))
-        ? 'Incorrect email or password.'
-        : error.message
-      err.style.display = 'block'
-      return
-    }
-    window.location.href = '/account'
-  }
-
-  async function handleForgot() {
-    const email = document.getElementById('forgot-email').value.trim().toLowerCase()
-    const err   = document.getElementById('forgot-err')
-    err.style.display = 'none'
-
-    if (!email) { err.textContent = 'Please enter your email.'; err.style.display = 'block'; return }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      err.textContent = 'Please enter a valid email address.'
-      err.style.display = 'block'; return
-    }
-
-    setLoading('forgot-btn', true, 'Send Reset Link')
-    await sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://1st-bond.com/reset-password' })
-    setLoading('forgot-btn', false, 'Send Reset Link')
-    show('view-forgot-sent')
-  }
-
-  document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password').focus() })
-  document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin() })
-  document.getElementById('forgot-email').addEventListener('keydown', e => { if (e.key === 'Enter') handleForgot() })
-
-  async function init() {
-    const { data: { session } } = await sb.auth.getSession()
-    if (session) window.location.href = '/account'
-  }
-  init()
-</script>
+<script src="js/env.js"></script>
+<script src="js/login.js"></script>
 </body>
 </html>

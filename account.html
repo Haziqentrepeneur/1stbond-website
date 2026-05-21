@@ -46,7 +46,7 @@
       font-size: 13px; font-weight: 600; color: var(--mg);
       padding: 8px 18px; border-radius: 9px;
       background: var(--mg-light); border: 1px solid var(--mg-border);
-      transition: background .15s; cursor: pointer; font-family: inherit; border: 1px solid var(--mg-border);
+      transition: background .15s; cursor: pointer; font-family: inherit;
     }
     .nav-pill:hover { background: #ead5fd; }
     .btn-signout {
@@ -276,7 +276,7 @@
   </a>
   <div class="nav-right">
     <span class="nav-username" id="nav-username"></span>
-    <button class="btn-signout" onclick="handleSignOut()">Sign out</button>
+    <button class="btn-signout" id="btn-signout">Sign out</button>
   </div>
 </nav>
 
@@ -289,12 +289,12 @@
   <!-- Profile -->
   <div class="section-label">Profile</div>
   <div class="card">
-    <div class="banner-wrap" onclick="document.getElementById('banner-input').click()" title="Change banner">
+    <div class="banner-wrap" id="banner-wrap" title="Change banner">
       <img id="banner-img" alt="Banner" />
       <div class="banner-overlay"><span class="banner-hint">Change Banner</span></div>
     </div>
     <div class="avatar-row">
-      <div class="avatar-wrap" onclick="document.getElementById('avatar-input').click()" title="Change photo">
+      <div class="avatar-wrap" id="avatar-wrap" title="Change photo">
         <img id="avatar-img" alt="Avatar" />
         <div class="avatar-overlay">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -312,20 +312,20 @@
         <div class="row-label">Bio</div>
         <div class="row-value dim" id="bio-display">No bio yet</div>
       </div>
-      <button class="btn-edit" onclick="toggleEdit('bio')">Edit</button>
+      <button class="btn-edit" id="bio-edit-btn">Edit</button>
     </div>
     <div class="edit-panel" id="bio-panel">
       <textarea class="edit-input" id="bio-input" placeholder="Tell people about yourself…" maxlength="300"></textarea>
       <div class="edit-actions">
-        <button class="btn-cancel" onclick="cancelEdit('bio')">Cancel</button>
-        <button class="btn-save" id="bio-save" onclick="saveBio()">Save</button>
+        <button class="btn-cancel" id="bio-cancel-btn">Cancel</button>
+        <button class="btn-save" id="bio-save">Save</button>
       </div>
       <div class="edit-err hidden" id="bio-err"></div>
     </div>
   </div>
 
-  <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(this)" />
-  <input type="file" id="banner-input" accept="image/*" class="hidden" onchange="handleBannerUpload(this)" />
+  <input type="file" id="avatar-input" accept="image/*" class="hidden" />
+  <input type="file" id="banner-input" accept="image/*" class="hidden" />
 
   <!-- Account -->
   <div class="section-label">Account</div>
@@ -335,13 +335,13 @@
         <div class="row-label">Email</div>
         <div class="row-value" id="email-display">—</div>
       </div>
-      <button class="btn-edit" onclick="toggleEdit('email')">Edit</button>
+      <button class="btn-edit" id="email-edit-btn">Edit</button>
     </div>
     <div class="edit-panel" id="email-panel">
       <input class="edit-input" type="email" id="email-input" placeholder="New email address" maxlength="254" autocomplete="email" />
       <div class="edit-actions">
-        <button class="btn-cancel" onclick="cancelEdit('email')">Cancel</button>
-        <button class="btn-save" id="email-save" onclick="saveEmail()">Send Confirmation</button>
+        <button class="btn-cancel" id="email-cancel-btn">Cancel</button>
+        <button class="btn-save" id="email-save">Send Confirmation</button>
       </div>
       <div class="edit-err hidden" id="email-err"></div>
       <div class="edit-ok hidden" id="email-ok">Confirmation email sent — check your inbox.</div>
@@ -352,14 +352,14 @@
         <div class="row-label">Password</div>
         <div class="row-value dim">••••••••••</div>
       </div>
-      <button class="btn-edit" onclick="toggleEdit('password')">Change</button>
+      <button class="btn-edit" id="password-edit-btn">Change</button>
     </div>
     <div class="edit-panel" id="password-panel">
       <input class="edit-input" type="password" id="pw-new" placeholder="New password (min. 10 chars)" maxlength="128" autocomplete="new-password" />
       <input class="edit-input" type="password" id="pw-confirm" placeholder="Confirm new password" maxlength="128" autocomplete="new-password" />
       <div class="edit-actions">
-        <button class="btn-cancel" onclick="cancelEdit('password')">Cancel</button>
-        <button class="btn-save" id="password-save" onclick="savePassword()">Update Password</button>
+        <button class="btn-cancel" id="password-cancel-btn">Cancel</button>
+        <button class="btn-save" id="password-save">Update Password</button>
       </div>
       <div class="edit-err hidden" id="password-err"></div>
       <div class="edit-ok hidden" id="password-ok">Password updated successfully.</div>
@@ -389,7 +389,7 @@
     <div class="danger-row">
       <div class="row-label">Sign out everywhere</div>
       <div class="row-value dim" style="font-size:13px">Signs you out of all active sessions including the mobile app.</div>
-      <button class="btn-danger" onclick="handleSignOutAll()">Sign Out All Devices</button>
+      <button class="btn-danger" id="btn-signout-all">Sign Out All Devices</button>
     </div>
   </div>
 
@@ -401,269 +401,7 @@
 </div>
 <div class="toast" id="toast"></div>
 
-<script>
-  const SUPABASE_URL = 'https://apwxlfbbngfvvafrnafy.supabase.co'
-  const SUPABASE_KEY = 'sb_publishable_86hMdszoLnTgAuSYNiqqmQ_0_R6YWR_'
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
-
-  let currentUser = null
-  let currentProfile = null
-  let openPanel = null
-
-  // ── Toast ──────────────────────────────────────────────────────────────────
-  let toastTimer = null
-  function showToast(msg, type = 'success') {
-    const t = document.getElementById('toast')
-    t.textContent = msg
-    t.className = 'toast show ' + type
-    clearTimeout(toastTimer)
-    toastTimer = setTimeout(() => { t.className = 'toast' }, 3000)
-  }
-
-  function showUpload(text) {
-    document.getElementById('upload-bar-text').textContent = text
-    document.getElementById('upload-bar').classList.add('show')
-  }
-  function hideUpload() { document.getElementById('upload-bar').classList.remove('show') }
-
-  // ── Panels ─────────────────────────────────────────────────────────────────
-  function toggleEdit(name) {
-    const panel = document.getElementById(name + '-panel')
-    const isOpen = panel.classList.contains('open')
-    if (openPanel && openPanel !== name) cancelEdit(openPanel)
-    if (isOpen) { cancelEdit(name); return }
-    panel.classList.add('open')
-    openPanel = name
-    const first = panel.querySelector('input, textarea')
-    if (first) setTimeout(() => first.focus(), 40)
-  }
-
-  function cancelEdit(name) {
-    const panel = document.getElementById(name + '-panel')
-    if (!panel) return
-    panel.classList.remove('open')
-    if (openPanel === name) openPanel = null
-    panel.querySelectorAll('input, textarea').forEach(el => el.value = '')
-    ;[name + '-err', name + '-ok'].forEach(id => {
-      const el = document.getElementById(id)
-      if (el) el.classList.add('hidden')
-    })
-  }
-
-  function setSaveLoading(prefix, loading, label) {
-    const btn = document.getElementById(prefix + '-save')
-    if (!btn) return
-    btn.disabled = loading
-    btn.innerHTML = loading
-      ? '<span class="spinner"></span>'
-      : label
-  }
-
-  // ── Bio ────────────────────────────────────────────────────────────────────
-  async function saveBio() {
-    const bio = document.getElementById('bio-input').value.trim()
-    const err = document.getElementById('bio-err')
-    err.classList.add('hidden')
-    setSaveLoading('bio', true, 'Save')
-
-    const { error } = await sb.from('profiles').update({ bio }).eq('id', currentUser.id)
-    setSaveLoading('bio', false, 'Save')
-
-    if (error) { err.textContent = 'Failed to save. Please try again.'; err.classList.remove('hidden'); return }
-    currentProfile.bio = bio
-    document.getElementById('bio-display').textContent = bio || 'No bio yet'
-    document.getElementById('bio-display').className = 'row-value' + (bio ? '' : ' dim')
-    cancelEdit('bio')
-    showToast('Bio updated')
-  }
-
-  // ── Email ──────────────────────────────────────────────────────────────────
-  async function saveEmail() {
-    const email = document.getElementById('email-input').value.trim().toLowerCase()
-    const err = document.getElementById('email-err')
-    const ok  = document.getElementById('email-ok')
-    err.classList.add('hidden'); ok.classList.add('hidden')
-
-    if (!email) { err.textContent = 'Please enter a new email.'; err.classList.remove('hidden'); return }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email.'; err.classList.remove('hidden'); return }
-
-    setSaveLoading('email', true, 'Send Confirmation')
-    const { error } = await sb.auth.updateUser({ email })
-    setSaveLoading('email', false, 'Send Confirmation')
-
-    if (error) { err.textContent = error.message || 'Failed to update email.'; err.classList.remove('hidden'); return }
-    ok.classList.remove('hidden')
-  }
-
-  // ── Password ───────────────────────────────────────────────────────────────
-  function validatePassword(pw) {
-    if (!pw || pw.length < 10)    return 'Password must be at least 10 characters.'
-    if (!/[A-Z]/.test(pw))        return 'Password must contain an uppercase letter.'
-    if (!/[0-9]/.test(pw))        return 'Password must contain a number.'
-    if (!/[^a-zA-Z0-9]/.test(pw)) return 'Password must contain a special character.'
-    return null
-  }
-
-  async function savePassword() {
-    const pw1 = document.getElementById('pw-new').value
-    const pw2 = document.getElementById('pw-confirm').value
-    const err = document.getElementById('password-err')
-    const ok  = document.getElementById('password-ok')
-    err.classList.add('hidden'); ok.classList.add('hidden')
-
-    const valErr = validatePassword(pw1)
-    if (valErr) { err.textContent = valErr; err.classList.remove('hidden'); return }
-    if (pw1 !== pw2) { err.textContent = 'Passwords do not match.'; err.classList.remove('hidden'); return }
-
-    setSaveLoading('password', true, 'Update Password')
-    const { error } = await sb.auth.updateUser({ password: pw1 })
-    setSaveLoading('password', false, 'Update Password')
-
-    if (error) { err.textContent = error.message || 'Failed to update password.'; err.classList.remove('hidden'); return }
-    ok.classList.remove('hidden')
-    document.getElementById('pw-new').value = ''
-    document.getElementById('pw-confirm').value = ''
-    showToast('Password updated')
-  }
-
-  // ── Avatar upload ──────────────────────────────────────────────────────────
-  async function handleAvatarUpload(input) {
-    const file = input.files[0]; input.value = ''
-    if (!file) return
-    if (!file.type.startsWith('image/')) { showToast('Select an image file.', 'error'); return }
-    if (file.size > 5 * 1024 * 1024) { showToast('Image must be under 5 MB.', 'error'); return }
-
-    showUpload('Uploading photo…')
-    const ext  = file.name.split('.').pop().toLowerCase() || 'jpg'
-    const path = `${currentUser.id}/avatar_${Date.now()}.${ext}`
-    const { error: upErr } = await sb.storage.from('avatars').upload(path, file, { upsert: true })
-    if (upErr) { hideUpload(); showToast('Upload failed. Try again.', 'error'); return }
-
-    const { data } = sb.storage.from('avatars').getPublicUrl(path)
-    const url = data.publicUrl + '?t=' + Date.now()
-    const { error: dbErr } = await sb.from('profiles').update({ avatar_url: url }).eq('id', currentUser.id)
-    hideUpload()
-    if (dbErr) { showToast('Uploaded but could not save URL.', 'error'); return }
-
-    currentProfile.avatar_url = url
-    const img = document.getElementById('avatar-img')
-    img.src = url; img.style.display = 'block'
-    showToast('Profile photo updated')
-  }
-
-  // ── Banner upload ──────────────────────────────────────────────────────────
-  async function handleBannerUpload(input) {
-    const file = input.files[0]; input.value = ''
-    if (!file) return
-    if (!file.type.startsWith('image/')) { showToast('Select an image file.', 'error'); return }
-    if (file.size > 10 * 1024 * 1024) { showToast('Image must be under 10 MB.', 'error'); return }
-
-    showUpload('Uploading banner…')
-    const ext  = file.name.split('.').pop().toLowerCase() || 'jpg'
-    const path = `${currentUser.id}/banner_${Date.now()}.${ext}`
-    const { error: upErr } = await sb.storage.from('banners').upload(path, file, { upsert: true })
-    if (upErr) { hideUpload(); showToast('Upload failed. Try again.', 'error'); return }
-
-    const { data } = sb.storage.from('banners').getPublicUrl(path)
-    const url = data.publicUrl + '?t=' + Date.now()
-    const { error: dbErr } = await sb.from('profiles').update({ banner_image_url: url }).eq('id', currentUser.id)
-    hideUpload()
-    if (dbErr) { showToast('Uploaded but could not save URL.', 'error'); return }
-
-    currentProfile.banner_image_url = url
-    const img = document.getElementById('banner-img')
-    img.src = url; img.style.display = 'block'
-    showToast('Banner updated')
-  }
-
-  // ── Sign out ───────────────────────────────────────────────────────────────
-  async function handleSignOut() {
-    await sb.auth.signOut()
-    window.location.href = '/login'
-  }
-  async function handleSignOutAll() {
-    await sb.auth.signOut({ scope: 'global' })
-    window.location.href = '/login'
-  }
-
-  // ── Subscription ───────────────────────────────────────────────────────────
-  function renderSubscription(profile) {
-    const isPremium = profile.is_subscribed === true
-    const iconWrap = document.getElementById('sub-icon-wrap')
-    const name     = document.getElementById('sub-name')
-    const desc     = document.getElementById('sub-desc')
-    const acts     = document.getElementById('sub-actions')
-
-    if (isPremium) {
-      iconWrap.className = 'sub-icon premium'
-      iconWrap.style.color = '#b45309'
-      name.innerHTML = '<span class="badge-premium">PREMIUM</span>'
-      desc.textContent = 'You have access to all premium features including live location tracking on meetups.'
-      acts.innerHTML = `<a class="btn-sub-action" href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer">Manage subscription on Apple</a>`
-    } else {
-      iconWrap.className = 'sub-icon free'
-      iconWrap.style.color = '#a020f0'
-      name.innerHTML = '<span class="badge-free">FREE</span>'
-      desc.textContent = 'Upgrade to Premium to unlock live meetup tracking, priority placement, and more.'
-      acts.innerHTML = `<a class="btn-get-premium" href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">Get Premium in the App</a>`
-    }
-  }
-
-  // ── Render ─────────────────────────────────────────────────────────────────
-  function renderProfile(user, profile) {
-    document.getElementById('nav-username').textContent = profile.username ? '@' + profile.username : ''
-    const fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || '—'
-    document.getElementById('profile-fullname').textContent = fullName
-    document.getElementById('profile-handle').textContent = profile.username ? '@' + profile.username : ''
-    document.getElementById('bio-display').textContent = profile.bio || 'No bio yet'
-    if (!profile.bio) document.getElementById('bio-display').classList.add('dim')
-    if (profile.bio) document.getElementById('bio-input').value = profile.bio
-    document.getElementById('email-display').textContent = user.email || '—'
-
-    if (profile.avatar_url) {
-      const img = document.getElementById('avatar-img')
-      img.src = profile.avatar_url; img.style.display = 'block'
-    }
-    if (profile.banner_image_url) {
-      const img = document.getElementById('banner-img')
-      img.src = profile.banner_image_url; img.style.display = 'block'
-    }
-    renderSubscription(profile)
-  }
-
-  // ── Init ───────────────────────────────────────────────────────────────────
-  async function init() {
-    const { data: { session } } = await sb.auth.getSession()
-    if (!session) { window.location.href = '/login'; return }
-    currentUser = session.user
-
-    const { data: profile, error } = await sb
-      .from('profiles')
-      .select('first_name, last_name, username, bio, is_subscribed, avatar_url, banner_image_url')
-      .eq('id', currentUser.id)
-      .single()
-
-    if (error || !profile) {
-      document.getElementById('view-loading').innerHTML =
-        '<span style="color:var(--danger)">Failed to load profile. Please refresh.</span>'
-      return
-    }
-
-    currentProfile = profile
-    document.getElementById('view-loading').classList.add('hidden')
-    document.getElementById('view-main').classList.remove('hidden')
-    renderProfile(currentUser, profile)
-
-    sb.auth.onAuthStateChange((event, s) => {
-      if (event === 'USER_UPDATED' && s?.user?.email) {
-        document.getElementById('email-display').textContent = s.user.email
-        currentUser = s.user
-      }
-      if (event === 'SIGNED_OUT') window.location.href = '/login'
-    })
-  }
-
-  init()
-</script>
+<script src="js/env.js"></script>
+<script src="js/account.js"></script>
 </body>
 </html>

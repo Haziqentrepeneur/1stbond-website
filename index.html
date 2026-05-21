@@ -298,12 +298,11 @@
   </div>
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/env.js"></script>
 <script>
   (async () => {
-    const sb = supabase.createClient(
-      'https://apwxlfbbngfvvafrnafy.supabase.co',
-      'sb_publishable_86hMdszoLnTgAuSYNiqqmQ_0_R6YWR_'
-    )
+    if (!window.APP_CONFIG?.supabaseUrl) return
+    const sb = supabase.createClient(window.APP_CONFIG.supabaseUrl, window.APP_CONFIG.supabaseKey)
     const { data: { session } } = await sb.auth.getSession()
     const btn = document.getElementById('nav-account-btn')
     if (session) { btn.textContent = 'My Account'; btn.href = '/account' }
@@ -464,6 +463,7 @@
     <div class="footer-links">
       <a href="/privacy">Privacy Policy</a>
       <a href="/terms">Terms of Service</a>
+      <a href="/delete-account">Delete Account</a>
       <a href="mailto:support@1st-bond.com">support@1st-bond.com</a>
     </div>
     <p class="footer-copy">© 2026 1STBOND LLC · Denver, CO</p>

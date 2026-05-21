@@ -1,5 +1,6 @@
 [build]
-  publish = "."
+  command   = "node build.js"
+  publish   = "."
   functions = "netlify/functions"
 
 # ── Security headers (all pages) ──────────────────────────────────────────────
@@ -18,37 +19,41 @@
   for = "/login.html"
   [headers.values]
     Cache-Control           = "no-store, no-cache, must-revalidate"
-    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    X-Robots-Tag            = "noindex, noarchive"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
 [[headers]]
   for = "/login"
   [headers.values]
     Cache-Control           = "no-store, no-cache, must-revalidate"
-    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    X-Robots-Tag            = "noindex, noarchive"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
 [[headers]]
   for = "/account.html"
   [headers.values]
     Cache-Control           = "no-store, no-cache, must-revalidate"
-    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    X-Robots-Tag            = "noindex, noarchive"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
 [[headers]]
   for = "/account"
   [headers.values]
     Cache-Control           = "no-store, no-cache, must-revalidate"
-    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    X-Robots-Tag            = "noindex, noarchive"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://apwxlfbbngfvvafrnafy.supabase.co blob:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
 [[headers]]
   for = "/reset-password.html"
   [headers.values]
     Cache-Control           = "no-store, no-cache, must-revalidate"
-    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
 [[headers]]
   for = "/reset-password"
   [headers.values]
     Cache-Control           = "no-store, no-cache, must-revalidate"
-    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://apwxlfbbngfvvafrnafy.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
 
 # ── Auth pages: never cache (tokens in URLs) ──────────────────────────────────
 [[headers]]
@@ -70,6 +75,25 @@
   for = "/email-confirmed.html"
   [headers.values]
     Cache-Control = "no-store, no-cache, must-revalidate"
+
+# ── Force HTTPS ───────────────────────────────────────────────────────────────
+[[redirects]]
+  from   = "http://1st-bond.com/*"
+  to     = "https://1st-bond.com/:splat"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from   = "http://www.1st-bond.com/*"
+  to     = "https://1st-bond.com/:splat"
+  status = 301
+  force  = true
+
+# ── JS assets: no-cache so fixes deploy immediately ──────────────────────────
+[[headers]]
+  for = "/js/*.js"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
 
 # ── Pretty URL rewrites ───────────────────────────────────────────────────────
 [[redirects]]

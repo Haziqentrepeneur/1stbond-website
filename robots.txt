@@ -1,8 +1,14 @@
 User-agent: *
+Disallow: /login
+Disallow: /login.html
+Disallow: /account
+Disallow: /account.html
 Disallow: /reset-password
 Disallow: /reset-password.html
 Disallow: /email-confirmed
 Disallow: /email-confirmed.html
+Disallow: /delete-account
+Disallow: /delete-account.html
 Disallow: /.netlify/
 
 Allow: /
