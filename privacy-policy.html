@@ -438,8 +438,8 @@
       <div class="doc-label">Legal</div>
       <h1 class="doc-title">Privacy Policy</h1>
       <div class="doc-meta">
-        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Effective: February 22, 2026</div>
-        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Revised: February 24, 2026</div>
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Effective: April 3, 2026</div>
+        <div class="doc-meta-item"><span class="doc-meta-dot"></span>Revised: May 2026</div>
         <div class="doc-meta-item"><span class="doc-meta-dot"></span>1STBOND, LLC</div>
       </div>
     </header>
@@ -656,7 +656,7 @@
             </div>
             <div>
               <div class="contact-form-title">Get in Touch</div>
-              <div class="contact-form-subtitle">Your message will be sent to admin@1st-bond.com</div>
+              <div class="contact-form-subtitle">Your message will be sent to support@1st-bond.com</div>
             </div>
           </div>
 
@@ -765,7 +765,7 @@
           btn.textContent = 'Sending...';
           btn.disabled = true;
 
-          fetch('https://formsubmit.co/ajax/admin@1st-bond.com', {
+          fetch('https://formsubmit.co/ajax/support@1st-bond.com', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({
@@ -781,7 +781,7 @@
             document.getElementById('contactSuccess').style.display = 'block';
           })
           .catch(function() {
-            var mailto = 'mailto:admin@1st-bond.com?subject=' + encodeURIComponent('1STBOND — ' + subject) + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+            var mailto = 'mailto:support@1st-bond.com?subject=' + encodeURIComponent('1STBOND — ' + subject) + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
             window.location.href = mailto;
             btn.textContent = 'Send Message';
             btn.disabled = false;
