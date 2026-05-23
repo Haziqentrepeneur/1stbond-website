@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Email Confirmed — 1STBOND</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,140 +14,95 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --p: #a020f0;
-      --p-dim: rgba(160,32,240,.12);
-      --p-border: rgba(160,32,240,.25);
-      --bg: #080808;
-      --surface: #111;
-      --border: rgba(255,255,255,.08);
-      --text: #fff;
-      --text2: rgba(255,255,255,.6);
-      --text3: rgba(255,255,255,.35);
+      --bg: #060608;
+      --surface: #0f0f12;
+      --border: rgba(255,255,255,.07);
+      --text: #f0f0f5;
+      --text2: rgba(240,240,245,.65);
+      --text3: rgba(240,240,245,.38);
       --success: #22c55e;
-      --success-dim: rgba(34,197,94,.12);
+      --success-dim: rgba(34,197,94,.1);
+      --success-border: rgba(34,197,94,.25);
     }
-    html { scroll-behavior: smooth; }
+    html, body { height: 100%; }
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg); color: var(--text);
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 24px; -webkit-font-smoothing: antialiased;
+      padding: 24px;
     }
-    body::before {
-      content: ''; position: fixed; top: -30%; left: 50%;
-      transform: translateX(-50%); width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(160,32,240,.15) 0%, transparent 70%);
-      pointer-events: none; z-index: 0;
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 32px; text-decoration: none;
     }
+    .logo img { width: 32px; height: 32px; border-radius: 8px; }
+    .logo span { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: 0.4px; }
     .card {
-      position: relative; z-index: 1;
+      width: 100%; max-width: 420px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 24px; padding: 40px; width: 100%; max-width: 420px;
+      border-radius: 24px; padding: 40px 36px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
     }
-    .logo-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
-    .logo-wrap img { width: 36px; height: 36px; border-radius: 9px; }
-    .logo-wrap span { font-size: 15px; font-weight: 800; letter-spacing: 0.5px; }
-    .result-card { border-radius: 14px; padding: 28px; text-align: center; }
-    .result-card.success { background: var(--success-dim); border: 1px solid rgba(34,197,94,.25); }
-    .result-card.error { background: rgba(255,77,77,.10); border: 1px solid rgba(255,77,77,.25); }
-    .result-icon { font-size: 36px; margin-bottom: 12px; }
-    .result-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
-    .result-body { font-size: 14px; color: var(--text2); line-height: 1.6; }
-    .btn-open {
-      display: flex; align-items: center; justify-content: center;
-      width: 100%; background: var(--p); color: #fff;
-      border: none; border-radius: 13px; padding: 15px;
-      font-family: inherit; font-size: 16px; font-weight: 700;
-      cursor: pointer; margin-top: 20px; text-decoration: none;
-      transition: opacity .15s;
+    .icon-wrap {
+      width: 72px; height: 72px; border-radius: 20px;
+      background: var(--success-dim); border: 1px solid var(--success-border);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
     }
-    .btn-open:hover { opacity: .88; }
-    .mobile-hint { text-align: center; color: var(--text3); font-size: 13px; margin-top: 14px; line-height: 1.5; }
-    .mobile-hint a { color: var(--p); font-weight: 600; }
-    .hidden { display: none !important; }
+    .icon-wrap svg { width: 34px; height: 34px; }
+    h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 12px; }
+    p { font-size: 15px; color: var(--text2); line-height: 1.6; margin-bottom: 32px; }
+    .open-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 16px 24px; background: var(--p); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+      border: none; border-radius: 14px; cursor: pointer; text-decoration: none;
+      transition: opacity .2s; margin-bottom: 16px;
+    }
+    .open-btn:hover { opacity: 0.88; }
+    .note { font-size: 12px; color: var(--text3); line-height: 1.5; }
+    @media (max-width: 480px) { .card { padding: 32px 24px; } }
   </style>
 </head>
 <body>
-<div class="card">
-  <div class="logo-wrap">
-    <img src="logo.png" alt="1stBond" />
+
+  <a class="logo" href="/">
+    <img src="./logo.png" alt="1STBOND" />
     <span>1STBOND</span>
+  </a>
+
+  <div class="card">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6 9 17l-5-5"/>
+      </svg>
+    </div>
+
+    <h1>Email Confirmed!</h1>
+    <p>
+      Your email address has been verified. Open the 1STBOND app to complete your ID verification and start using the platform.
+    </p>
+
+    <a class="open-btn" href="firstbond://email-confirmed">
+      Open 1STBOND App
+    </a>
+
+    <p class="note">
+      If the button doesn't open the app automatically, make sure 1STBOND is installed, then open it and sign in.
+    </p>
   </div>
 
-  <!-- Mobile: open in app -->
-  <div id="view-mobile" class="hidden">
-    <div class="result-card success">
-      <div class="result-icon">✅</div>
-      <div class="result-title">Email Confirmed!</div>
-      <div class="result-body">Your email has been verified. Open the app to complete your identity verification and get started.</div>
-    </div>
-    <a id="open-app-btn" class="btn-open" href="#">Open in 1stBond App</a>
-    <div class="mobile-hint">
-      App not installed? <a href="https://apps.apple.com/app/id6744043695" target="_blank" rel="noopener noreferrer">Download from the App Store</a>
-    </div>
-  </div>
+  <script>
+    // Auto-attempt deep link after a short delay so the page renders first
+    setTimeout(function () {
+      window.location.href = 'firstbond://email-confirmed'
+    }, 800)
+  </script>
 
-  <!-- Desktop: success -->
-  <div id="view-success" class="hidden">
-    <div class="result-card success">
-      <div class="result-icon">✅</div>
-      <div class="result-title">Email Confirmed!</div>
-      <div class="result-body">Your email has been verified. Open the 1stBond app on your iPhone to sign in and complete your identity verification.</div>
-    </div>
-  </div>
-
-  <!-- Error -->
-  <div id="view-error" class="hidden">
-    <div class="result-card error">
-      <div class="result-icon">⚠️</div>
-      <div class="result-title">Invalid Link</div>
-      <div class="result-body">This confirmation link is invalid or has already been used. Open the app and tap "Didn't receive it? Resend" to get a new link.</div>
-    </div>
-  </div>
-</div>
-
-<script>
-  // No API keys here — email is already confirmed by Supabase before this page loads.
-  // Tokens in the URL are proof of confirmation; we just route the user appropriately.
-
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-
-  function show(id) {
-    ['view-mobile','view-success','view-error']
-      .forEach(v => document.getElementById(v).classList.toggle('hidden', v !== id))
-  }
-
-  function parseParams() {
-    const params = {}
-    const str = (window.location.hash.substring(1) || window.location.search.substring(1))
-    str.split('&').forEach(pair => {
-      const [k, ...rest] = pair.split('=')
-      if (k) params[k] = decodeURIComponent(rest.join('='))
-    })
-    return params
-  }
-
-  function init() {
-    const p = parseParams()
-
-    if (!p.access_token || !p.refresh_token) {
-      show('view-error')
-      return
-    }
-
-    if (isMobile) {
-      const appUrl = 'firstbond://email-confirmed#' + window.location.hash.substring(1)
-      document.getElementById('open-app-btn').href = appUrl
-      show('view-mobile')
-      setTimeout(() => { window.location.href = appUrl }, 300)
-      return
-    }
-
-    show('view-success')
-  }
-
-  init()
-</script>
 </body>
 </html>
