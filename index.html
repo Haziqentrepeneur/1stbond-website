@@ -518,7 +518,8 @@
         <h3>Message Sent!</h3>
         <p>Thanks for reaching out — we'll reply to support@1st-bond.com within 48 hours.</p>
       </div>
-      <form id="cfForm" onsubmit="submitCF(event)">
+      <form name="contact" data-netlify="true" id="cfForm" onsubmit="submitCF(event)">
+        <input type="hidden" name="form-name" value="contact" />
         <div class="cf-row">
           <div class="cf-group">
             <label for="cf-name">Your Name</label>
@@ -554,15 +555,18 @@ function submitCF(e) {
   if (!EMAIL_RE.test(email))         { err.textContent = 'Please enter a valid email address.'; err.style.display='block'; return; }
   if (!msg || msg.length > 5000)     { err.textContent = 'Please enter a message (max 5000 characters).'; err.style.display='block'; return; }
   btn.textContent = 'Sending…'; btn.disabled = true;
-  fetch('https://formsubmit.co/ajax/support@1st-bond.com', {
+  fetch('/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({ name: name, email: email, subject: '1STBOND Website Enquiry', message: msg })
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ 'form-name': 'contact', name: name, email: email, message: msg }).toString()
   })
-  .then(function(r){ return r.json(); })
-  .then(function(){ document.getElementById('cfForm').style.display='none'; document.getElementById('cfSuccess').style.display='block'; })
+  .then(function(r) {
+    if (r.ok) { document.getElementById('cfForm').style.display='none'; document.getElementById('cfSuccess').style.display='block'; }
+    else { throw new Error(); }
+  })
   .catch(function(){
-    window.location.href = 'mailto:support@1st-bond.com?subject=' + encodeURIComponent('1STBOND Enquiry') + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + msg);
+    err.textContent = 'Something went wrong. Email us directly at support@1st-bond.com.';
+    err.style.display = 'block';
     btn.textContent = 'Send Message'; btn.disabled = false;
   });
 }

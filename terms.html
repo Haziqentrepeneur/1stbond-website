@@ -578,7 +578,8 @@
         <h3>Message Sent!</h3>
         <p>We'll reply to support@1st-bond.com within 48 hours.</p>
       </div>
-      <form id="termsForm" onsubmit="submitTermsCF(event)">
+      <form name="contact-terms" data-netlify="true" id="termsForm" onsubmit="submitTermsCF(event)">
+        <input type="hidden" name="form-name" value="contact-terms" />
         <div class="cf-row" style="margin-bottom:14px;">
           <div class="cf-group" style="margin-bottom:0;">
             <label for="tf-name">Your Name</label>
@@ -612,13 +613,14 @@
     if(!_emailRe.test(email)){err.textContent='Please enter a valid email.';err.style.display='block';return;}
     if(!msg||msg.length>5000){err.textContent='Please enter a message.';err.style.display='block';return;}
     btn.textContent='Sending…';btn.disabled=true;
-    fetch('https://formsubmit.co/ajax/support@1st-bond.com',{
-      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({name:name,email:email,subject:'1STBOND Terms Enquiry',message:msg})
-    }).then(function(r){return r.json();})
-    .then(function(){document.getElementById('termsForm').style.display='none';document.getElementById('termsSuccess').style.display='block';})
-    .catch(function(){
-      window.location.href='mailto:support@1st-bond.com?subject='+encodeURIComponent('1STBOND Terms Enquiry')+'&body='+encodeURIComponent('Name: '+name+'\nEmail: '+email+'\n\n'+msg);
+    fetch(window.location.pathname,{
+      method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:new URLSearchParams({'form-name':'contact-terms',name:name,email:email,message:msg}).toString()
+    }).then(function(r){
+      if(r.ok){document.getElementById('termsForm').style.display='none';document.getElementById('termsSuccess').style.display='block';}
+      else{throw new Error();}
+    }).catch(function(){
+      err.textContent='Something went wrong. Email us at support@1st-bond.com.';err.style.display='block';
       btn.textContent='Send Message';btn.disabled=false;
     });
   }

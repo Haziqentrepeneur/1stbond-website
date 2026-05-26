@@ -666,7 +666,8 @@
             <p>Thanks for reaching out. We'll get back to you shortly.</p>
           </div>
 
-          <form id="contactForm" onsubmit="submitContactForm(event)">
+          <form name="contact-tos" data-netlify="true" id="contactForm" onsubmit="submitContactForm(event)">
+            <input type="hidden" name="form-name" value="contact-tos" />
             <div class="form-row">
               <div class="form-group">
                 <label for="cf-name">Your Name</label>
@@ -763,24 +764,25 @@
           btn.textContent = 'Sending...';
           btn.disabled = true;
 
-          fetch('https://formsubmit.co/ajax/support@1st-bond.com', {
+          fetch(window.location.pathname, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({
-              name: name,
-              email: email,
-              subject: '1STBOND Website — ' + subject,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+              'form-name': 'contact-tos',
+              name: name, email: email,
+              subject: '1STBOND — ' + subject,
               message: message
-            })
+            }).toString()
           })
-          .then(function(res) { return res.json(); })
-          .then(function() {
-            document.getElementById('contactForm').style.display = 'none';
-            document.getElementById('contactSuccess').style.display = 'block';
+          .then(function(res) {
+            if (res.ok) {
+              document.getElementById('contactForm').style.display = 'none';
+              document.getElementById('contactSuccess').style.display = 'block';
+            } else { throw new Error(); }
           })
           .catch(function() {
-            var mailto = 'mailto:support@1st-bond.com?subject=' + encodeURIComponent('1STBOND — ' + subject) + '&body=' + encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
-            window.location.href = mailto;
+            errEl.textContent = 'Something went wrong. Email us at support@1st-bond.com.';
+            errEl.style.display = 'block';
             btn.textContent = 'Send Message';
             btn.disabled = false;
           });
