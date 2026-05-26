@@ -521,8 +521,7 @@
         <h3>Message Sent!</h3>
         <p>We'll reply to privacy@1st-bond.com within 48 hours.</p>
       </div>
-      <form name="contact-privacy" data-netlify="true" id="privForm" onsubmit="submitPrivCF(event)">
-        <input type="hidden" name="form-name" value="contact-privacy" />
+      <form id="privForm" onsubmit="submitPrivCF(event)">
         <div class="cf-row" style="margin-bottom:14px;">
           <div class="cf-group" style="margin-bottom:0;">
             <label for="pf-name">Your Name</label>
@@ -556,14 +555,15 @@
     if(!_emailRe2.test(email)){err.textContent='Please enter a valid email.';err.style.display='block';return;}
     if(!msg||msg.length>5000){err.textContent='Please enter a message.';err.style.display='block';return;}
     btn.textContent='Sending…';btn.disabled=true;
-    fetch(window.location.pathname,{
-      method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:new URLSearchParams({'form-name':'contact-privacy',name:name,email:email,message:msg}).toString()
-    }).then(function(r){
-      if(r.ok){document.getElementById('privForm').style.display='none';document.getElementById('privSuccess').style.display='block';}
-      else{throw new Error();}
-    }).catch(function(){
-      err.textContent='Something went wrong. Email us at support@1st-bond.com.';err.style.display='block';
+    fetch('/.netlify/functions/contact',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:name,email:email,message:msg})
+    }).then(function(r){return r.json().then(function(d){return{ok:r.ok,data:d};});})
+    .then(function(res){
+      if(res.ok){document.getElementById('privForm').style.display='none';document.getElementById('privSuccess').style.display='block';}
+      else{throw new Error(res.data.error||'error');}
+    }).catch(function(e){
+      err.textContent=(e&&e.message&&e.message!=='error')?e.message:'Something went wrong. Email us at support@1st-bond.com.';err.style.display='block';
       btn.textContent='Send Message';btn.disabled=false;
     });
   }

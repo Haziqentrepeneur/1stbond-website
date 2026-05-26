@@ -677,8 +677,7 @@
             <p>Thanks for reaching out. We'll get back to you shortly.</p>
           </div>
 
-          <form name="contact-pp" data-netlify="true" id="contactForm" onsubmit="submitContactForm(event)">
-            <input type="hidden" name="form-name" value="contact-pp" />
+          <form id="contactForm" onsubmit="submitContactForm(event)">
             <div class="form-row">
               <div class="form-group">
                 <label for="cf-name">Your Name</label>
@@ -775,24 +774,20 @@
           btn.textContent = 'Sending...';
           btn.disabled = true;
 
-          fetch(window.location.pathname, {
+          fetch('/.netlify/functions/contact', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-              'form-name': 'contact-pp',
-              name: name, email: email,
-              subject: '1STBOND — ' + subject,
-              message: message
-            }).toString()
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, email: email, subject: subject, message: message })
           })
+          .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
           .then(function(res) {
             if (res.ok) {
               document.getElementById('contactForm').style.display = 'none';
               document.getElementById('contactSuccess').style.display = 'block';
-            } else { throw new Error(); }
+            } else { throw new Error(res.data.error || 'error'); }
           })
-          .catch(function() {
-            errEl.textContent = 'Something went wrong. Email us at support@1st-bond.com.';
+          .catch(function(e) {
+            errEl.textContent = (e && e.message && e.message !== 'error') ? e.message : 'Something went wrong. Email us at support@1st-bond.com.';
             errEl.style.display = 'block';
             btn.textContent = 'Send Message';
             btn.disabled = false;
