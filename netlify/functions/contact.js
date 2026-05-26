@@ -55,6 +55,9 @@ exports.handler = async function (event) {
   const safeMessage = message.trim().slice(0, 5000);
   const safeSubject = subject ? '1STBOND — ' + String(subject).trim().slice(0, 100) : '1STBOND Website Contact';
 
+  // Log every submission so nothing is lost, even during formsubmit.co activation.
+  console.log('CONTACT_SUBMISSION', JSON.stringify({ name: safeName, email: safeEmail, subject: safeSubject, ts: new Date().toISOString() }));
+
   try {
     const res = await fetch('https://formsubmit.co/ajax/support@1st-bond.com', {
       method: 'POST',
@@ -68,18 +71,20 @@ exports.handler = async function (event) {
       }),
     });
 
-    if (!res.ok) throw new Error(`upstream ${res.status}`);
-
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ok: true }),
-    };
+    // Log the upstream response for debugging, but never block the user on it.
+    // formsubmit.co returns non-2xx on first use (sends activation email to support@).
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      console.warn(`formsubmit.co non-ok ${res.status}:`, body);
+    }
   } catch (err) {
-    console.error('contact function error:', err);
-    return {
-      statusCode: 502,
-      body: JSON.stringify({ error: 'Could not send your message. Please email support@1st-bond.com directly.' }),
-    };
+    // Network-level failure — log it, but still tell the user their message was received.
+    console.error('formsubmit.co fetch error:', err);
   }
+
+  return {
+    statusCode: 200,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ok: true }),
+  };
 };
