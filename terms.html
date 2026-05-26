@@ -133,6 +133,34 @@
     .contact-box a { color: var(--p); font-weight: 600; text-decoration: none; }
     .contact-box a:hover { text-decoration: underline; }
 
+    /* CONTACT FORM */
+    .cf-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .cf-group label { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); }
+    .cf-group input, .cf-group textarea {
+      width: 100%; padding: 11px 14px;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 15px;
+      color: var(--text); outline: none; resize: none;
+      transition: border-color .2s, background .2s;
+    }
+    .cf-group input::placeholder, .cf-group textarea::placeholder { color: var(--text3); }
+    .cf-group input:focus, .cf-group textarea:focus { border-color: var(--p); background: rgba(160,32,240,.04); }
+    .cf-group textarea { min-height: 100px; line-height: 1.6; }
+    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .cf-submit {
+      width: 100%; padding: 13px 24px; background: var(--p); color: #fff;
+      border: none; border-radius: 11px; font-family: 'Inter', sans-serif;
+      font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+      cursor: pointer; transition: background .2s, transform .15s;
+      box-shadow: 0 4px 16px rgba(160,32,240,.28); margin-top: 4px;
+    }
+    .cf-submit:hover { background: #8800cc; transform: translateY(-1px); }
+    .cf-error { display: none; color: #f87171; font-size: 13px; margin-bottom: 10px; padding: 8px 12px; background: rgba(248,113,113,.1); border-radius: 8px; }
+    .cf-success { display: none; text-align: center; padding: 24px 16px; }
+    .cf-success h3 { color: var(--text); font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .cf-success p { color: var(--text2); font-size: 14px; }
+    @media (max-width: 520px) { .cf-row { grid-template-columns: 1fr; gap: 0; } }
+
     /* FOOTER */
     footer {
       text-align: center; padding: 40px 24px;
@@ -542,15 +570,59 @@
   <!-- 18 -->
   <div class="section" id="s18">
     <h2>18. Contact</h2>
-    <p>For questions about these Terms, to report a violation, to appeal an account termination, or for legal notices:</p>
+    <p>For questions about these Terms, to report a violation, or to appeal an account termination, send us a message below. We aim to respond within 48 hours.</p>
+    <p style="font-size:13px;color:var(--text3);margin-top:8px;margin-bottom:20px;">Mailing address: 1500 N Grant St Ste N, Denver, CO 80203</p>
+
     <div class="contact-box">
-      <p style="margin-bottom:12px;">For general in-app support and help: <a href="mailto:support@1st-bond.com">support@1st-bond.com</a></p>
-      <p style="margin-bottom:12px;font-size:13px;color:var(--text3);">Note: The 1STBOND app displays a simplified summary of these Terms within the app interface. That summary is provided for convenience only and does not modify these Terms. These Terms control in the event of any conflict.</p>
-      <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="mailto:support@1st-bond.com">support@1st-bond.com</a></p>
-      <p style="margin-bottom:6px;"><strong>Website:</strong> <a href="https://1st-bond.com/terms">https://1st-bond.com/terms</a></p>
-      <p><strong>Mailing Address:</strong> 1500 N Grant St Ste N, Denver, Denver County, CO 80203</p>
+      <div id="termsSuccess" class="cf-success">
+        <h3>Message Sent!</h3>
+        <p>We'll reply to support@1st-bond.com within 48 hours.</p>
+      </div>
+      <form id="termsForm" onsubmit="submitTermsCF(event)">
+        <div class="cf-row" style="margin-bottom:14px;">
+          <div class="cf-group" style="margin-bottom:0;">
+            <label for="tf-name">Your Name</label>
+            <input type="text" id="tf-name" name="name" placeholder="Jane Doe" required />
+          </div>
+          <div class="cf-group" style="margin-bottom:0;">
+            <label for="tf-email">Your Email</label>
+            <input type="email" id="tf-email" name="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="cf-group">
+          <label for="tf-msg">Message</label>
+          <textarea id="tf-msg" name="message" placeholder="How can we help?" required></textarea>
+        </div>
+        <div id="termsErr" class="cf-error"></div>
+        <button type="submit" class="cf-submit" id="termsBtn">Send Message</button>
+      </form>
     </div>
   </div>
+
+  <script>
+  var _emailRe = /^[^\s@]{1,64}@[^\s@]{1,253}\.[^\s@]{2,}$/;
+  function submitTermsCF(e) {
+    e.preventDefault();
+    var btn=document.getElementById('termsBtn'), err=document.getElementById('termsErr');
+    var name=document.getElementById('tf-name').value.trim();
+    var email=document.getElementById('tf-email').value.trim();
+    var msg=document.getElementById('tf-msg').value.trim();
+    err.style.display='none';
+    if(!name||name.length>120){err.textContent='Please enter your name.';err.style.display='block';return;}
+    if(!_emailRe.test(email)){err.textContent='Please enter a valid email.';err.style.display='block';return;}
+    if(!msg||msg.length>5000){err.textContent='Please enter a message.';err.style.display='block';return;}
+    btn.textContent='Sending…';btn.disabled=true;
+    fetch('https://formsubmit.co/ajax/support@1st-bond.com',{
+      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({name:name,email:email,subject:'1STBOND Terms Enquiry',message:msg})
+    }).then(function(r){return r.json();})
+    .then(function(){document.getElementById('termsForm').style.display='none';document.getElementById('termsSuccess').style.display='block';})
+    .catch(function(){
+      window.location.href='mailto:support@1st-bond.com?subject='+encodeURIComponent('1STBOND Terms Enquiry')+'&body='+encodeURIComponent('Name: '+name+'\nEmail: '+email+'\n\n'+msg);
+      btn.textContent='Send Message';btn.disabled=false;
+    });
+  }
+  </script>
 
 </div>
 

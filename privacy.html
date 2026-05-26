@@ -126,6 +126,34 @@
     .contact-box a { color: var(--p); font-weight: 600; text-decoration: none; }
     .contact-box a:hover { text-decoration: underline; }
 
+    /* CONTACT FORM */
+    .cf-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .cf-group label { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); }
+    .cf-group input, .cf-group textarea {
+      width: 100%; padding: 11px 14px;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 15px;
+      color: var(--text); outline: none; resize: none;
+      transition: border-color .2s, background .2s;
+    }
+    .cf-group input::placeholder, .cf-group textarea::placeholder { color: var(--text3); }
+    .cf-group input:focus, .cf-group textarea:focus { border-color: var(--p); background: rgba(160,32,240,.04); }
+    .cf-group textarea { min-height: 100px; line-height: 1.6; }
+    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .cf-submit {
+      width: 100%; padding: 13px 24px; background: var(--p); color: #fff;
+      border: none; border-radius: 11px; font-family: 'Inter', sans-serif;
+      font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+      cursor: pointer; transition: background .2s, transform .15s;
+      box-shadow: 0 4px 16px rgba(160,32,240,.28); margin-top: 4px;
+    }
+    .cf-submit:hover { background: #8800cc; transform: translateY(-1px); }
+    .cf-error { display: none; color: #f87171; font-size: 13px; margin-bottom: 10px; padding: 8px 12px; background: rgba(248,113,113,.1); border-radius: 8px; }
+    .cf-success { display: none; text-align: center; padding: 24px 16px; }
+    .cf-success h3 { color: var(--text); font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .cf-success p { color: var(--text2); font-size: 14px; }
+    @media (max-width: 520px) { .cf-row { grid-template-columns: 1fr; gap: 0; } }
+
     /* FOOTER */
     footer {
       text-align: center; padding: 40px 24px;
@@ -485,15 +513,59 @@
   <!-- 14 -->
   <div class="section" id="s14">
     <h2>14. Contact</h2>
-    <p>For privacy inquiries, data access requests, consent withdrawal, or to report a concern:</p>
+    <p>For privacy inquiries, data access requests, consent withdrawal, or to report a concern, send us a message below. We aim to respond within 48 hours.</p>
+    <p style="font-size:13px;color:var(--text3);margin-top:8px;margin-bottom:20px;">Mailing address: 1500 N Grant St Ste N, Denver, CO 80203</p>
+
     <div class="contact-box">
-      <p style="margin-bottom:12px;">For general support and in-app help: <a href="mailto:support@1st-bond.com">support@1st-bond.com</a></p>
-      <p style="margin-bottom:12px;font-size:13px;color:var(--text3);">Note: The Privacy &amp; Security screen within the 1STBOND app provides a plain-language summary of our data practices. In the event of any conflict between the in-app summary and this Privacy Policy, this Privacy Policy controls.</p>
-      <p style="margin-bottom:6px;"><strong>Email:</strong> <a href="mailto:privacy@1st-bond.com">privacy@1st-bond.com</a></p>
-      <p style="margin-bottom:6px;"><strong>Website:</strong> <a href="https://1st-bond.com/privacy">https://1st-bond.com/privacy</a></p>
-      <p><strong>Mailing Address:</strong> 1500 N Grant St Ste N, Denver, Denver County, CO 80203</p>
+      <div id="privSuccess" class="cf-success">
+        <h3>Message Sent!</h3>
+        <p>We'll reply to privacy@1st-bond.com within 48 hours.</p>
+      </div>
+      <form id="privForm" onsubmit="submitPrivCF(event)">
+        <div class="cf-row" style="margin-bottom:14px;">
+          <div class="cf-group" style="margin-bottom:0;">
+            <label for="pf-name">Your Name</label>
+            <input type="text" id="pf-name" name="name" placeholder="Jane Doe" required />
+          </div>
+          <div class="cf-group" style="margin-bottom:0;">
+            <label for="pf-email">Your Email</label>
+            <input type="email" id="pf-email" name="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="cf-group">
+          <label for="pf-msg">Message</label>
+          <textarea id="pf-msg" name="message" placeholder="Describe your privacy request or question..." required></textarea>
+        </div>
+        <div id="privErr" class="cf-error"></div>
+        <button type="submit" class="cf-submit" id="privBtn">Send Message</button>
+      </form>
     </div>
   </div>
+
+  <script>
+  var _emailRe2 = /^[^\s@]{1,64}@[^\s@]{1,253}\.[^\s@]{2,}$/;
+  function submitPrivCF(e) {
+    e.preventDefault();
+    var btn=document.getElementById('privBtn'), err=document.getElementById('privErr');
+    var name=document.getElementById('pf-name').value.trim();
+    var email=document.getElementById('pf-email').value.trim();
+    var msg=document.getElementById('pf-msg').value.trim();
+    err.style.display='none';
+    if(!name||name.length>120){err.textContent='Please enter your name.';err.style.display='block';return;}
+    if(!_emailRe2.test(email)){err.textContent='Please enter a valid email.';err.style.display='block';return;}
+    if(!msg||msg.length>5000){err.textContent='Please enter a message.';err.style.display='block';return;}
+    btn.textContent='Sending…';btn.disabled=true;
+    fetch('https://formsubmit.co/ajax/support@1st-bond.com',{
+      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({name:name,email:email,subject:'1STBOND Privacy Enquiry',message:msg})
+    }).then(function(r){return r.json();})
+    .then(function(){document.getElementById('privForm').style.display='none';document.getElementById('privSuccess').style.display='block';})
+    .catch(function(){
+      window.location.href='mailto:support@1st-bond.com?subject='+encodeURIComponent('1STBOND Privacy Enquiry')+'&body='+encodeURIComponent('Name: '+name+'\nEmail: '+email+'\n\n'+msg);
+      btn.textContent='Send Message';btn.disabled=false;
+    });
+  }
+  </script>
 
 </div>
 
