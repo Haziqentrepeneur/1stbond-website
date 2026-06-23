@@ -58,6 +58,11 @@
     .header-user  { font-size: 13px; color: var(--muted); }
     main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
+    /* ── View nav (tabs) ───────────────────────────────────────────────────── */
+    .view-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+    .vnav { padding: 9px 18px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--muted); font-family: inherit; transition: all .15s; }
+    .vnav.active { border-color: var(--mg); background: var(--mg); color: #fff; }
+
     /* ── Filters ───────────────────────────────────────────────────────────── */
     .filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
     .filter-btn { padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--muted); font-family: inherit; transition: all .15s; }
@@ -162,14 +167,20 @@
   </header>
 
   <main>
-    <div class="stats-row">
+    <div class="view-nav">
+      <button class="vnav active" data-view="reports"     onclick="switchView('reports',this)">User Reports</button>
+      <button class="vnav"        data-view="marketplace" onclick="switchView('marketplace',this)">Marketplace Reports</button>
+      <button class="vnav"        data-view="licenses"    onclick="switchView('licenses',this)">License Reviews</button>
+    </div>
+
+    <div class="stats-row" id="stats-row">
       <div class="stat-card stat-total">    <div class="val" id="stat-total">–</div>    <div class="lbl">Total</div></div>
       <div class="stat-card stat-pending">  <div class="val" id="stat-pending">–</div>  <div class="lbl">Pending</div></div>
       <div class="stat-card stat-actioned"> <div class="val" id="stat-actioned">–</div> <div class="lbl">Actioned</div></div>
       <div class="stat-card stat-dismissed"><div class="val" id="stat-dismissed">–</div><div class="lbl">Dismissed</div></div>
     </div>
 
-    <div class="filters">
+    <div class="filters" id="filters-row">
       <button class="filter-btn active" data-filter="all"       onclick="setFilter('all',this)">All</button>
       <button class="filter-btn"        data-filter="pending"   onclick="setFilter('pending',this)">Pending</button>
       <button class="filter-btn"        data-filter="reviewed"  onclick="setFilter('reviewed',this)">Reviewed</button>
@@ -194,7 +205,10 @@
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
   let allReports   = []
+  let allBusinesses = []
+  let licensesLoaded = false
   let currentFilter = 'all'
+  let currentView   = 'reports'   // 'reports' | 'marketplace' | 'licenses'
   let toastTimer    = null
 
   const CATEGORY_LABELS = {
@@ -204,7 +218,13 @@
     spam:          'Spam or scam',
     underage:      'Underage user',
     other:         'Other',
+    // listing report categories
+    prohibited:    'Prohibited or illegal item',
+    counterfeit:   'Counterfeit or fake',
+    misleading:    'Misleading or wrong info',
   }
+
+  const money = (c) => (c == null || c === 0) ? 'Contact' : '$' + (c / 100).toFixed(c % 100 === 0 ? 0 : 2)
 
   // ── Toast ───────────────────────────────────────────────────────────────────
   function toast(msg, type = 'success') {
@@ -272,9 +292,10 @@
     const { data, error } = await sb
       .from('reports')
       .select(`
-        id, category, description, status, admin_notes, created_at, reviewed_at,
+        id, category, description, status, admin_notes, created_at, reviewed_at, listing_id,
         reporter:profiles!reporter_id ( id, first_name, last_name, username, is_banned ),
-        reported:profiles!reported_id ( id, first_name, last_name, username, is_banned )
+        reported:profiles!reported_id ( id, first_name, last_name, username, is_banned ),
+        listing:listings!listing_id ( id, title, price_cents, status, images )
       `)
       .order('created_at', { ascending: false })
 
@@ -287,11 +308,36 @@
     renderList()
   }
 
+  // Reports for the current view: marketplace = has a listing; reports = no listing.
+  function viewReports() {
+    return currentView === 'marketplace'
+      ? allReports.filter(r => r.listing_id)
+      : allReports.filter(r => !r.listing_id)
+  }
+
   function updateStats() {
-    document.getElementById('stat-total').textContent    = allReports.length
-    document.getElementById('stat-pending').textContent  = allReports.filter(r => r.status === 'pending').length
-    document.getElementById('stat-actioned').textContent = allReports.filter(r => r.status === 'actioned').length
-    document.getElementById('stat-dismissed').textContent= allReports.filter(r => r.status === 'dismissed').length
+    const rs = viewReports()
+    document.getElementById('stat-total').textContent    = rs.length
+    document.getElementById('stat-pending').textContent  = rs.filter(r => r.status === 'pending').length
+    document.getElementById('stat-actioned').textContent = rs.filter(r => r.status === 'actioned').length
+    document.getElementById('stat-dismissed').textContent= rs.filter(r => r.status === 'dismissed').length
+  }
+
+  // ── View switching ───────────────────────────────────────────────────────────
+  window.switchView = async function (view, btn) {
+    currentView = view
+    document.querySelectorAll('.vnav').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+    const isLicenses = view === 'licenses'
+    document.getElementById('stats-row').style.display   = isLicenses ? 'none' : 'flex'
+    document.getElementById('filters-row').style.display = isLicenses ? 'none' : 'flex'
+    if (isLicenses) {
+      if (!licensesLoaded) { document.getElementById('report-list').innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>'; await loadLicenses() }
+      renderLicenses()
+    } else {
+      updateStats()
+      renderList()
+    }
   }
 
   // ── Filter ──────────────────────────────────────────────────────────────────
@@ -307,12 +353,13 @@
     const search  = (document.getElementById('search-input').value || '').toLowerCase()
     const list    = document.getElementById('report-list')
 
-    let reports = allReports
+    let reports = viewReports()
     if (currentFilter !== 'all') reports = reports.filter(r => r.status === currentFilter)
     if (search) {
       reports = reports.filter(r =>
         (r.reported?.username || '').toLowerCase().includes(search) ||
         (r.reporter?.username || '').toLowerCase().includes(search) ||
+        (r.listing?.title || '').toLowerCase().includes(search) ||
         (r.description || '').toLowerCase().includes(search)
       )
     }
@@ -322,7 +369,7 @@
       return
     }
 
-    list.innerHTML = reports.map(r => buildCard(r)).join('')
+    list.innerHTML = reports.map(r => currentView === 'marketplace' ? buildListingReportCard(r) : buildCard(r)).join('')
   }
 
   function buildCard(r) {
@@ -426,6 +473,149 @@
     }
     updateStats()
     renderList()
+  }
+
+  // ── Marketplace report cards ──────────────────────────────────────────────────
+  function buildListingReportCard(r) {
+    const reporter = r.reporter || {}
+    const seller   = r.reported || {}
+    const lst      = r.listing  || {}
+    const catLabel = CATEGORY_LABELS[r.category] || r.category
+    const date     = new Date(r.created_at).toLocaleString()
+    const removed  = lst.status === 'removed'
+    const img = (lst.images && lst.images[0])
+      ? `<img src="${esc(lst.images[0])}" style="width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--border)" />`
+      : `<div style="width:64px;height:64px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center">📦</div>`
+    const notesBlock = r.admin_notes ? `<div class="admin-notes-block"><div class="admin-notes-label">Admin notes</div>${esc(r.admin_notes)}</div>` : ''
+    return `
+<div class="report-card status-${r.status}" id="card-${r.id}">
+  <div class="card-header">
+    <div class="card-meta"><span class="badge badge-cat">${esc(catLabel)}</span><span class="badge badge-${r.status}">${r.status}</span>${removed ? '<span class="badge badge-actioned">Removed</span>' : ''}</div>
+    <span class="card-time">${date}</span>
+  </div>
+  <div class="card-body">
+    <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">
+      ${img}
+      <div>
+        <div style="font-size:15px;font-weight:700">${esc(lst.title || '(listing deleted)')}</div>
+        <div style="font-size:13px;color:var(--muted)">${money(lst.price_cents)} · seller @${esc(seller.username || 'unknown')}${seller.is_banned ? '<span class="banned-badge">Banned</span>' : ''}</div>
+        <div style="font-size:12px;color:var(--subtle)">Reported by @${esc(reporter.username || 'unknown')}</div>
+      </div>
+    </div>
+    <div class="description-block">${esc(r.description || '')}</div>
+    ${notesBlock}
+  </div>
+  <div class="card-actions">
+    <input class="notes-input" id="notes-${r.id}" type="text" placeholder="Add admin note (optional)…" value="${esc(r.admin_notes || '')}" />
+    ${!removed && lst.id ? `<button class="btn btn-sm btn-danger" onclick="removeListing('${lst.id}','${r.id}')">Remove post</button>` : ''}
+    ${seller.id && !seller.is_banned ? `<button class="btn btn-sm btn-warn" onclick="takeAction('${r.id}','ban')">Ban seller</button>` : ''}
+    ${r.status !== 'dismissed' ? `<button class="btn btn-sm btn-muted" onclick="dismissListingReport('${r.id}')">Dismiss</button>` : ''}
+  </div>
+</div>`
+  }
+
+  window.removeListing = async function (listingId, reportId) {
+    const notesEl = document.getElementById('notes-' + reportId)
+    const notes   = notesEl ? notesEl.value.trim() || null : null
+    const { data, error } = await sb.rpc('admin_remove_listing', { p_listing_id: listingId, p_notes: notes })
+    if (error || !data?.success) { toast(error?.message || data?.error || 'Action failed.', 'error'); return }
+    toast('Listing removed.')
+    await loadReports(); renderList()
+  }
+
+  window.dismissListingReport = async function (reportId) {
+    const notesEl = document.getElementById('notes-' + reportId)
+    const notes   = notesEl ? notesEl.value.trim() || null : null
+    const { data, error } = await sb.rpc('admin_dismiss_listing_report', { p_report_id: reportId, p_notes: notes })
+    if (error || !data?.success) { toast(error?.message || data?.error || 'Action failed.', 'error'); return }
+    toast('Report dismissed.')
+    await loadReports(); renderList()
+  }
+
+  // ── License reviews ───────────────────────────────────────────────────────────
+  async function loadLicenses() {
+    const { data, error } = await sb
+      .from('businesses')
+      .select(`
+        id, name, category, location, description, image_url, license_url,
+        license_status, license_reject_reason, created_at,
+        owner:profiles!owner_id ( id, first_name, last_name, username, is_banned )
+      `)
+      .order('created_at', { ascending: false })
+    if (error) {
+      document.getElementById('report-list').innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><p>${error.message}</p></div>`
+      return
+    }
+    allBusinesses = data || []
+    licensesLoaded = true
+  }
+
+  window.renderLicenses = function () {
+    const list    = document.getElementById('report-list')
+    const pending = allBusinesses.filter(b => b.license_status === 'pending')
+    const others  = allBusinesses.filter(b => b.license_status !== 'pending')
+    const ordered = [...pending, ...others]
+    if (ordered.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="empty-icon">✅</div><p>No businesses to review.</p></div>`
+      return
+    }
+    list.innerHTML = ordered.map(buildLicenseCard).join('')
+  }
+
+  function buildLicenseCard(b) {
+    const owner = b.owner || {}
+    const date  = new Date(b.created_at).toLocaleString()
+    const st    = b.license_status
+    const badge = st === 'pending'
+      ? '<span class="badge badge-pending">pending</span>'
+      : st === 'approved'
+        ? '<span class="badge" style="background:var(--success-bg);color:var(--success);border:1px solid var(--success-border)">approved</span>'
+        : '<span class="badge badge-dismissed">rejected</span>'
+    const img = b.image_url
+      ? `<img src="${esc(b.image_url)}" style="width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--border)" />`
+      : `<div style="width:64px;height:64px;border-radius:10px;background:var(--surface);display:flex;align-items:center;justify-content:center">🏪</div>`
+    const rej = b.license_reject_reason ? `<div class="admin-notes-block"><div class="admin-notes-label">Rejection reason</div>${esc(b.license_reject_reason)}</div>` : ''
+    return `
+<div class="report-card">
+  <div class="card-header">
+    <div class="card-meta">${badge}${b.category ? `<span class="badge badge-cat">${esc(b.category)}</span>` : ''}</div>
+    <span class="card-time">${date}</span>
+  </div>
+  <div class="card-body">
+    <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">
+      ${img}
+      <div>
+        <div style="font-size:15px;font-weight:700">${esc(b.name || '')}</div>
+        <div style="font-size:13px;color:var(--muted)">${esc(b.location || '')}</div>
+        <div style="font-size:12px;color:var(--subtle)">Owner @${esc(owner.username || 'unknown')}${owner.is_banned ? '<span class="banned-badge">Banned</span>' : ''}</div>
+      </div>
+    </div>
+    ${b.description ? `<div class="description-block">${esc(b.description)}</div>` : ''}
+    ${rej}
+  </div>
+  <div class="card-actions">
+    ${b.license_url
+      ? `<button class="btn btn-sm btn-muted" onclick="viewLicense('${esc(b.license_url)}')">View license</button>`
+      : '<span style="color:var(--danger);font-size:13px">No license uploaded</span>'}
+    ${st !== 'approved' ? `<button class="btn btn-sm btn-success" onclick="reviewLicense('${b.id}',true)">Approve</button>` : ''}
+    ${st !== 'rejected' ? `<button class="btn btn-sm btn-danger"  onclick="reviewLicense('${b.id}',false)">Reject</button>` : ''}
+  </div>
+</div>`
+  }
+
+  window.viewLicense = async function (path) {
+    const { data, error } = await sb.storage.from('business-licenses').createSignedUrl(path, 120)
+    if (error || !data?.signedUrl) { toast('Could not open license document.', 'error'); return }
+    window.open(data.signedUrl, '_blank')
+  }
+
+  window.reviewLicense = async function (bizId, approved) {
+    let reason = null
+    if (!approved) { reason = prompt('Reason for rejection (optional):') || null }
+    const { data, error } = await sb.rpc('review_business_license', { p_business_id: bizId, p_approved: approved, p_reason: reason })
+    if (error || !data?.success) { toast(error?.message || data?.error || 'Action failed.', 'error'); return }
+    toast(approved ? 'Business approved.' : 'Business rejected.')
+    await loadLicenses(); renderLicenses()
   }
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
