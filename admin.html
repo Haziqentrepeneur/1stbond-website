@@ -171,6 +171,7 @@
       <button class="vnav active" data-view="reports"     onclick="switchView('reports',this)">User Reports</button>
       <button class="vnav"        data-view="marketplace" onclick="switchView('marketplace',this)">Marketplace Reports</button>
       <button class="vnav"        data-view="licenses"    onclick="switchView('licenses',this)">License Reviews</button>
+      <button class="vnav"        data-view="insights"    onclick="switchView('insights',this)">Insights</button>
     </div>
 
     <div class="stats-row" id="stats-row">
@@ -328,16 +329,62 @@
     currentView = view
     document.querySelectorAll('.vnav').forEach(b => b.classList.remove('active'))
     btn.classList.add('active')
-    const isLicenses = view === 'licenses'
-    document.getElementById('stats-row').style.display   = isLicenses ? 'none' : 'flex'
-    document.getElementById('filters-row').style.display = isLicenses ? 'none' : 'flex'
-    if (isLicenses) {
+    const isList = view === 'reports' || view === 'marketplace'
+    document.getElementById('stats-row').style.display   = isList ? 'flex' : 'none'
+    document.getElementById('filters-row').style.display = isList ? 'flex' : 'none'
+    if (view === 'licenses') {
       if (!licensesLoaded) { document.getElementById('report-list').innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>'; await loadLicenses() }
       renderLicenses()
+    } else if (view === 'insights') {
+      document.getElementById('report-list').innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>'
+      await loadInsights()
+      renderInsights()
     } else {
       updateStats()
       renderList()
     }
+  }
+
+  // ── Business insights (last 30 days) ──────────────────────────────────────────
+  let insightsData = []
+  async function loadInsights() {
+    const since = new Date(Date.now() - 30 * 86400000).toISOString()
+    const { data, error } = await sb
+      .from('business_events')
+      .select('business_id, event_type, business:business_id ( name )')
+      .gte('created_at', since)
+      .limit(10000)
+    if (error) { insightsData = []; return }
+    const map = {}
+    for (const e of (data || [])) {
+      const id = e.business_id
+      if (!map[id]) map[id] = { name: e.business?.name || 'Business', views: 0, actions: 0, calls: 0, messages: 0 }
+      if (e.event_type === 'profile_view') map[id].views++
+      else if (e.event_type === 'call_tap') map[id].calls++
+      else if (e.event_type === 'message_tap') map[id].messages++
+      else map[id].actions++   // book/order/reserve/shop/quote/website taps
+    }
+    insightsData = Object.values(map).sort((a, b) => b.views - a.views)
+  }
+
+  window.renderInsights = function () {
+    const list = document.getElementById('report-list')
+    if (insightsData.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><p>No business activity in the last 30 days yet.</p></div>`
+      return
+    }
+    list.innerHTML = insightsData.map(b => `
+<div class="report-card">
+  <div class="card-body">
+    <div style="font-size:16px;font-weight:800;margin-bottom:12px">${esc(b.name)}</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <div><div style="font-size:24px;font-weight:800;color:var(--mg)">${b.views}</div><div style="font-size:12px;color:var(--muted)">Profile views</div></div>
+      <div><div style="font-size:24px;font-weight:800;color:var(--info)">${b.actions}</div><div style="font-size:12px;color:var(--muted)">Action taps</div></div>
+      <div><div style="font-size:24px;font-weight:800;color:var(--success)">${b.calls}</div><div style="font-size:12px;color:var(--muted)">Calls</div></div>
+      <div><div style="font-size:24px;font-weight:800;color:var(--warn)">${b.messages}</div><div style="font-size:12px;color:var(--muted)">Messages</div></div>
+    </div>
+  </div>
+</div>`).join('')
   }
 
   // ── Filter ──────────────────────────────────────────────────────────────────
